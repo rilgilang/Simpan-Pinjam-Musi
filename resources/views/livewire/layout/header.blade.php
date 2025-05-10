@@ -1,12 +1,12 @@
 <header x-data="{ menuToggle: false }"
-    class="z-99999 sticky top-0 flex w-full border-gray-200 bg-white lg:border-b dark:border-gray-800 dark:bg-gray-900">
+    class="sticky top-0 z-99999 flex w-full border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-900 lg:border-b">
     <div class="flex flex-grow flex-col items-center justify-between lg:flex-row lg:px-6">
         <div
-            class="flex w-full items-center justify-between gap-2 border-b border-gray-200 px-3 py-3 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4 dark:border-gray-800">
+            class="flex w-full items-center justify-between gap-2 border-b border-gray-200 px-3 py-3 dark:border-gray-800 sm:gap-4 lg:justify-normal lg:border-b-0 lg:px-0 lg:py-4">
             <!-- Hamburger Toggle BTN -->
             <button
                 :class="sidebarToggle ? 'lg:bg-transparent dark:lg:bg-transparent bg-gray-100 dark:bg-gray-800' : ''"
-                class="z-99999 flex h-10 w-10 items-center justify-center rounded-lg border-gray-200 text-gray-500 lg:h-11 lg:w-11 lg:border dark:border-gray-800 dark:text-gray-400"
+                class="z-99999 flex h-10 w-10 items-center justify-center rounded-lg border-gray-200 text-gray-500 dark:border-gray-800 dark:text-gray-400 lg:h-11 lg:w-11 lg:border"
                 @click.stop="sidebarToggle = !sidebarToggle">
                 <svg class="hidden fill-current lg:block" width="16" height="12" viewBox="0 0 16 12" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -39,7 +39,7 @@
 
             <!-- Application nav menu button -->
             <button
-                class="z-99999 flex h-10 w-10 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 lg:hidden dark:text-gray-400 dark:hover:bg-gray-800"
+                class="z-99999 flex h-10 w-10 items-center justify-center rounded-lg text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 lg:hidden"
                 :class="menuToggle ? 'bg-gray-100 dark:bg-gray-800' : ''" @click.stop="menuToggle = !menuToggle">
                 <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -62,7 +62,7 @@
                             </svg>
                         </button>
                         <input type="text" placeholder="Search or type command..."
-                            class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 placeholder:text-gray-400 focus:outline-none focus:ring xl:w-[430px] dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30" />
+                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-transparent py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[430px]" />
 
                         <button
                             class="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400">
@@ -75,8 +75,8 @@
         </div>
 
         <div :class="menuToggle ? 'flex' : 'hidden'"
-            class="shadow-theme-md w-full items-center justify-between gap-4 px-5 py-4 lg:flex lg:justify-end lg:px-0 lg:shadow-none">
-            <div class="2xsm:gap-3 flex items-center gap-2">
+            class="w-full items-center justify-between gap-4 px-5 py-4 shadow-theme-md lg:flex lg:justify-end lg:px-0 lg:shadow-none">
+            <div class="flex items-center gap-2 2xsm:gap-3">
                 <!-- Dark Mode Toggler -->
                 <button
                     class="hover:text-dark-900 relative flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
@@ -102,9 +102,9 @@
                         class="hover:text-dark-900 relative flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
                         @click.prevent="dropdownOpen = ! dropdownOpen; notifying = false">
                         <span :class="!notifying ? 'hidden' : 'flex'"
-                            class="z-1 absolute right-0 top-0.5 h-2 w-2 rounded-full bg-orange-400">
+                            class="absolute right-0 top-0.5 z-1 h-2 w-2 rounded-full bg-orange-400">
                             <span
-                                class="-z-1 absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-75"></span>
+                                class="absolute -z-1 inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-75"></span>
                         </span>
                         <svg class="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
@@ -116,7 +116,7 @@
 
                     <!-- Dropdown Start -->
                     <div x-show="dropdownOpen"
-                        class="shadow-theme-lg dark:bg-gray-dark absolute -right-[240px] mt-[17px] flex h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 sm:w-[361px] lg:right-0 dark:border-gray-800">
+                        class="absolute -right-[240px] mt-[17px] flex h-[480px] w-[350px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark sm:w-[361px] lg:right-0">
                         <div
                             class="mb-3 flex items-center justify-between border-b border-gray-100 pb-3 dark:border-gray-800">
                             <h5 class="text-lg font-semibold text-gray-800 dark:text-white/90">
@@ -135,17 +135,17 @@
 
                         <ul class="custom-scrollbar flex h-auto flex-col overflow-y-auto">
                             <li>
-                                <a class="px-4.5 flex gap-3 rounded-lg border-b border-gray-100 p-3 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
+                                <a class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
                                     href="#">
-                                    <span class="z-1 relative block h-10 w-full max-w-10 rounded-full">
+                                    <span class="relative z-1 block h-10 w-full max-w-10 rounded-full">
                                         <img src="./images/user/user-02.jpg" alt="User"
                                             class="overflow-hidden rounded-full" />
                                         <span
-                                            class="bg-success-500 absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
+                                            class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
                                     </span>
 
                                     <span class="block">
-                                        <span class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400">
+                                        <span class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400">
                                             <span class="font-medium text-gray-800 dark:text-white/90">Terry
                                                 Franci</span>
                                             requests permission to change
@@ -154,7 +154,7 @@
                                         </span>
 
                                         <span
-                                            class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                                            class="flex items-center gap-2 text-theme-xs text-gray-500 dark:text-gray-400">
                                             <span>Project</span>
                                             <span class="h-1 w-1 rounded-full bg-gray-400"></span>
                                             <span>5 min ago</span>
@@ -164,17 +164,17 @@
                             </li>
 
                             <li>
-                                <a class="px-4.5 flex gap-3 rounded-lg border-b border-gray-100 p-3 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
+                                <a class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
                                     href="#">
-                                    <span class="z-1 relative block h-10 w-full max-w-10 rounded-full">
+                                    <span class="relative z-1 block h-10 w-full max-w-10 rounded-full">
                                         <img src="./images/user/user-03.jpg" alt="User"
                                             class="overflow-hidden rounded-full" />
                                         <span
-                                            class="bg-success-500 absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
+                                            class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
                                     </span>
 
                                     <span class="block">
-                                        <span class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400">
+                                        <span class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400">
                                             <span class="font-medium text-gray-800 dark:text-white/90">Alena
                                                 Franci</span>
                                             requests permission to change
@@ -183,7 +183,7 @@
                                         </span>
 
                                         <span
-                                            class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                                            class="flex items-center gap-2 text-theme-xs text-gray-500 dark:text-gray-400">
                                             <span>Project</span>
                                             <span class="h-1 w-1 rounded-full bg-gray-400"></span>
                                             <span>8 min ago</span>
@@ -193,17 +193,17 @@
                             </li>
 
                             <li>
-                                <a class="px-4.5 flex gap-3 rounded-lg border-b border-gray-100 p-3 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
+                                <a class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
                                     href="#">
-                                    <span class="z-1 relative block h-10 w-full max-w-10 rounded-full">
+                                    <span class="relative z-1 block h-10 w-full max-w-10 rounded-full">
                                         <img src="./images/user/user-04.jpg" alt="User"
                                             class="overflow-hidden rounded-full" />
                                         <span
-                                            class="bg-success-500 absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
+                                            class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
                                     </span>
 
                                     <span class="block">
-                                        <span class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400">
+                                        <span class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400">
                                             <span class="font-medium text-gray-800 dark:text-white/90">Jocelyn
                                                 Kenter</span>
                                             requests permission to change
@@ -212,7 +212,7 @@
                                         </span>
 
                                         <span
-                                            class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                                            class="flex items-center gap-2 text-theme-xs text-gray-500 dark:text-gray-400">
                                             <span>Project</span>
                                             <span class="h-1 w-1 rounded-full bg-gray-400"></span>
                                             <span>15 min ago</span>
@@ -222,17 +222,17 @@
                             </li>
 
                             <li>
-                                <a class="px-4.5 flex gap-3 rounded-lg border-b border-gray-100 p-3 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
+                                <a class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
                                     href="#">
-                                    <span class="z-1 relative block h-10 w-full max-w-10 rounded-full">
+                                    <span class="relative z-1 block h-10 w-full max-w-10 rounded-full">
                                         <img src="./images/user/user-05.jpg" alt="User"
                                             class="overflow-hidden rounded-full" />
                                         <span
-                                            class="bg-error-500 absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
+                                            class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-error-500 dark:border-gray-900"></span>
                                     </span>
 
                                     <span class="block">
-                                        <span class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400">
+                                        <span class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400">
                                             <span class="font-medium text-gray-800 dark:text-white/90">Brandon
                                                 Philips</span>
                                             requests permission to change
@@ -241,7 +241,7 @@
                                         </span>
 
                                         <span
-                                            class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                                            class="flex items-center gap-2 text-theme-xs text-gray-500 dark:text-gray-400">
                                             <span>Project</span>
                                             <span class="h-1 w-1 rounded-full bg-gray-400"></span>
                                             <span>1 hr ago</span>
@@ -251,17 +251,17 @@
                             </li>
 
                             <li>
-                                <a class="px-4.5 flex gap-3 rounded-lg border-b border-gray-100 p-3 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
+                                <a class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
                                     href="#">
-                                    <span class="z-1 relative block h-10 w-full max-w-10 rounded-full">
+                                    <span class="relative z-1 block h-10 w-full max-w-10 rounded-full">
                                         <img src="./images/user/user-02.jpg" alt="User"
                                             class="overflow-hidden rounded-full" />
                                         <span
-                                            class="bg-success-500 absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
+                                            class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
                                     </span>
 
                                     <span class="block">
-                                        <span class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400">
+                                        <span class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400">
                                             <span class="font-medium text-gray-800 dark:text-white/90">Terry
                                                 Franci</span>
                                             requests permission to change
@@ -270,7 +270,7 @@
                                         </span>
 
                                         <span
-                                            class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                                            class="flex items-center gap-2 text-theme-xs text-gray-500 dark:text-gray-400">
                                             <span>Project</span>
                                             <span class="h-1 w-1 rounded-full bg-gray-400"></span>
                                             <span>5 min ago</span>
@@ -280,17 +280,17 @@
                             </li>
 
                             <li>
-                                <a class="px-4.5 flex gap-3 rounded-lg border-b border-gray-100 p-3 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
+                                <a class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
                                     href="#">
-                                    <span class="z-1 relative block h-10 w-full max-w-10 rounded-full">
+                                    <span class="relative z-1 block h-10 w-full max-w-10 rounded-full">
                                         <img src="./images/user/user-03.jpg" alt="User"
                                             class="overflow-hidden rounded-full" />
                                         <span
-                                            class="bg-success-500 absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
+                                            class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
                                     </span>
 
                                     <span class="block">
-                                        <span class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400">
+                                        <span class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400">
                                             <span class="font-medium text-gray-800 dark:text-white/90">Alena
                                                 Franci</span>
                                             requests permission to change
@@ -299,7 +299,7 @@
                                         </span>
 
                                         <span
-                                            class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                                            class="flex items-center gap-2 text-theme-xs text-gray-500 dark:text-gray-400">
                                             <span>Project</span>
                                             <span class="h-1 w-1 rounded-full bg-gray-400"></span>
                                             <span>8 min ago</span>
@@ -309,17 +309,17 @@
                             </li>
 
                             <li>
-                                <a class="px-4.5 flex gap-3 rounded-lg border-b border-gray-100 p-3 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
+                                <a class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
                                     href="#">
-                                    <span class="z-1 relative block h-10 w-full max-w-10 rounded-full">
+                                    <span class="relative z-1 block h-10 w-full max-w-10 rounded-full">
                                         <img src="./images/user/user-04.jpg" alt="User"
                                             class="overflow-hidden rounded-full" />
                                         <span
-                                            class="bg-success-500 absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
+                                            class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-success-500 dark:border-gray-900"></span>
                                     </span>
 
                                     <span class="block">
-                                        <span class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400">
+                                        <span class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400">
                                             <span class="font-medium text-gray-800 dark:text-white/90">Jocelyn
                                                 Kenter</span>
                                             requests permission to change
@@ -328,7 +328,7 @@
                                         </span>
 
                                         <span
-                                            class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                                            class="flex items-center gap-2 text-theme-xs text-gray-500 dark:text-gray-400">
                                             <span>Project</span>
                                             <span class="h-1 w-1 rounded-full bg-gray-400"></span>
                                             <span>15 min ago</span>
@@ -338,17 +338,17 @@
                             </li>
 
                             <li>
-                                <a class="px-4.5 flex gap-3 rounded-lg border-b border-gray-100 p-3 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
+                                <a class="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
                                     href="#">
-                                    <span class="z-1 relative block h-10 w-full max-w-10 rounded-full">
+                                    <span class="relative z-1 block h-10 w-full max-w-10 rounded-full">
                                         <img src="./images/user/user-05.jpg" alt="User"
                                             class="overflow-hidden rounded-full" />
                                         <span
-                                            class="bg-error-500 absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white dark:border-gray-900"></span>
+                                            class="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-error-500 dark:border-gray-900"></span>
                                     </span>
 
                                     <span class="block">
-                                        <span class="text-theme-sm mb-1.5 block text-gray-500 dark:text-gray-400">
+                                        <span class="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400">
                                             <span class="font-medium text-gray-800 dark:text-white/90">Brandon
                                                 Philips</span>
                                             requests permission to change
@@ -357,7 +357,7 @@
                                         </span>
 
                                         <span
-                                            class="text-theme-xs flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                                            class="flex items-center gap-2 text-theme-xs text-gray-500 dark:text-gray-400">
                                             <span>Project</span>
                                             <span class="h-1 w-1 rounded-full bg-gray-400"></span>
                                             <span>1 hr ago</span>
@@ -368,7 +368,7 @@
                         </ul>
 
                         <a href="#"
-                            class="text-theme-sm shadow-theme-xs mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-3 font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
+                            class="mt-3 flex justify-center rounded-lg border border-gray-300 bg-white p-3 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
                             View All Notification
                         </a>
                     </div>
@@ -382,10 +382,10 @@
                 <a class="flex items-center text-gray-700 dark:text-gray-400" href="#"
                     @click.prevent="dropdownOpen = ! dropdownOpen">
                     <span class="mr-3 h-11 w-11 overflow-hidden rounded-full">
-                        <img src="./images/user/user-01.jpg" alt="User" />
+                        <img src={{ asset('build/assets/profile.png') }} alt="User" />
                     </span>
 
-                    <span class="text-theme-sm mr-1 block font-medium">
+                    <span class="mr-1 block text-theme-sm font-medium">
                         Emirhan Boruch
                     </span>
 
@@ -399,12 +399,12 @@
 
                 <!-- Dropdown Start -->
                 <div x-show="dropdownOpen"
-                    class="shadow-theme-lg dark:bg-gray-dark absolute right-0 mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 dark:border-gray-800">
+                    class="absolute right-0 mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark">
                     <div>
-                        <span class="text-theme-sm block font-medium text-gray-700 dark:text-gray-400">
+                        <span class="block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
                             Emirhan Boruch
                         </span>
-                        <span class="text-theme-xs mt-0.5 block text-gray-500 dark:text-gray-400">
+                        <span class="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
                             emirhanboruch51@gmail.com
                         </span>
                     </div>
@@ -412,7 +412,7 @@
                     <ul class="flex flex-col gap-1 border-b border-gray-200 pb-3 pt-4 dark:border-gray-800">
                         <li>
                             <a href="profile.html"
-                                class="text-theme-sm group flex items-center gap-3 rounded-lg px-3 py-2 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
+                                class="group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
                                 <svg class="fill-gray-500 group-hover:fill-gray-700 dark:fill-gray-400 dark:group-hover:fill-gray-300"
                                     width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -425,7 +425,7 @@
                         </li>
                         <li>
                             <a href="messages.html"
-                                class="text-theme-sm group flex items-center gap-3 rounded-lg px-3 py-2 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
+                                class="group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
                                 <svg class="fill-gray-500 group-hover:fill-gray-700 dark:fill-gray-400 dark:group-hover:fill-gray-300"
                                     width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -438,7 +438,7 @@
                         </li>
                         <li>
                             <a href="settings.html"
-                                class="text-theme-sm group flex items-center gap-3 rounded-lg px-3 py-2 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
+                                class="group flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
                                 <svg class="fill-gray-500 group-hover:fill-gray-700 dark:fill-gray-400 dark:group-hover:fill-gray-300"
                                     width="24" height="24" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -451,7 +451,7 @@
                         </li>
                     </ul>
                     <button
-                        class="text-theme-sm group mt-3 flex items-center gap-3 rounded-lg px-3 py-2 font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
+                        class="group mt-3 flex items-center gap-3 rounded-lg px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300">
                         <svg class="fill-gray-500 group-hover:fill-gray-700 dark:group-hover:fill-gray-300"
                             width="24" height="24" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg">

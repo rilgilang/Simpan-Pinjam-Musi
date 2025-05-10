@@ -31,13 +31,12 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
         <!-- ===== Content Area Start ===== -->
         <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
             <!-- Small Device Overlay Start -->
-            <include src="./partials/overlay.html" />
+            <div @click="sidebarToggle = false" :class="sidebarToggle ? 'block lg:hidden' : 'hidden'"
+                class="fixed z-9 h-screen w-full bg-gray-900/50"></div>
             <!-- Small Device Overlay End -->
 
             <!-- ===== Header Start ===== -->
-            @if (isset($header))
-                {{ $header }}
-            @endif
+            <livewire:layout.header />
             <!-- ===== Header End ===== -->
 
             <!-- ===== Main Content Start ===== -->

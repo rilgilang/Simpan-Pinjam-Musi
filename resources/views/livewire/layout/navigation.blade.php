@@ -33,7 +33,6 @@ new class extends Component {
     </div>
     <!-- SIDEBAR HEADER -->
 
-    <!-- Responsive Navigation Menu -->
     <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
         <!-- Sidebar Menu -->
         <nav x-data="{ selected: $persist('Dashboard') }">
@@ -56,7 +55,6 @@ new class extends Component {
                 <ul class="mb-6 flex flex-col gap-4">
                     <!-- Menu Item Dashboard -->
                     <li>
-
                         <a href="#" @click.prevent="selected = (selected === 'Dashboard' ? '':'Dashboard')"
                             class="menu-item group"
                             :class="(selected === 'Dashboard') || (page === 'ecommerce' || page === 'analytics' ||
