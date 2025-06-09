@@ -8,7 +8,6 @@
 
                 <!-- ====== Chart One Start -->
                 <include src="./partials/chart/chart-01.html" />
-                <Hello world>
             </div>
             <div class="col-span-12 xl:col-span-5">
                 <!-- ====== Chart Two Start -->
