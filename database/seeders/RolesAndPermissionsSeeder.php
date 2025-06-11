@@ -23,7 +23,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $createSimpananPermission = Permission::create(['name' => 'create simpanan']);
         $createUserPermission = Permission::create(['name' => 'create user']);
         $createAnggotaPermission = Permission::create(['name' => 'create anggota']);
-        $createUserPermission = Permission::create(['name' => 'create user']);
+
         
 
         // Assign permissions to roles
