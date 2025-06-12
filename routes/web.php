@@ -19,4 +19,6 @@ Route::group(['middleware' => ['role:admin']], function () {
     Route::view('/anggota', "anggota-list");
 });
 
+// Route::post('save-anggota', [AnggotaController::class, 'saveSurvey'])->name('save-survey-response');
+
 require __DIR__.'/auth.php';
