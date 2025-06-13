@@ -5,7 +5,7 @@
         <div
             class="modal-dialog modal-dialog-scrollable modal-lg no-scrollbar relative flex w-full max-w-[700px] flex-col overflow-y-auto rounded-3xl bg-white p-6 dark:bg-gray-900 lg:p-11">
             <!-- close btn -->
-            <button
+            <button onclick="closeModal()"
                 class="modal-close-btn transition-color absolute right-5 top-5 z-999 flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-400 hover:bg-gray-200 hover:text-gray-600 dark:bg-gray-700 dark:bg-white/[0.05] dark:text-gray-400 dark:hover:bg-white/[0.07] dark:hover:text-gray-300 sm:h-11 sm:w-11">
                 <svg class="fill-current" width="24" height="24" viewBox="0 0 24 24" fill="none"
                     xmlns="http://www.w3.org/2000/svg">
@@ -25,72 +25,98 @@
                         Tambah anggota baru koperasi
                     </p>
                 </div>
-                <div class="modal-body mt-8">
-                    <div>
+
+                <form method="POST" action="{{ route('save-anggota') }}">
+                    @csrf
+                    <div class="modal-body mt-8">
                         <div>
                             <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nama
-                                </label>
-                                <input id="event-title" type="text"
-                                    class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                            </div>
-                        </div>
-
-                        <div class="mt-6">
-                            <div>
                                 <div>
                                     <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                        Email
+                                        Nama
                                     </label>
-                                    <input id="event-title" type="text"
+                                    <input id="event-title" type="text" name="name"
                                         class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                    @error('name')
+                                        <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <div>
+                                    <div>
+                                        <label
+                                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Email
+                                        </label>
+                                        <input id="event-title" type="text" name="email"
+                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                        @error('email')
+                                            <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <div>
+                                    <div>
+                                        <label
+                                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Password
+                                        </label>
+                                        <input id="event-title" type="password" name="password"
+                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                        @error('password')
+                                            <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <div>
+                                    <div>
+                                        <label
+                                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            No Hp
+                                        </label>
+                                        <input id="event-title" type="text" name="phone_number"
+                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                        @error('phone_number')
+                                            <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <div>
+                                    <div>
+                                        <label
+                                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Alamat
+                                        </label>
+                                        <input id="event-title" type="text" name="address"
+                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="mt-6">
-                            <div>
-                                <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                        No Hp
-                                    </label>
-                                    <input id="event-title" type="text"
-                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-6">
-                            <div>
-                                <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                        Alamat
-                                    </label>
-                                    <input id="event-title" type="text"
-                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
-                </div>
-                <div class="modal-footer mt-6 flex items-center gap-3 sm:justify-end">
-                    <button type="button"
-                        class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
-                        data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="button"
-                        class="btn btn-success btn-update-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto"
-                        data-fc-event-public-id="">
-                        Update changes
-                    </button>
-                    <button type="button"
-                        class="btn btn-primary btn-add-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto">
-                        Add Event
-                    </button>
-                </div>
+                    <div class="modal-footer mt-6 flex items-center gap-3 sm:justify-end">
+                        <button type="button" onclick="closeModal()"
+                            class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
+                            data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit"
+                            class="btn btn-primary btn-add-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto">
+                            Simpan
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -361,6 +387,8 @@
                                 <!-- Alpine.js Table Logic -->
                                 <script>
                                     function dataTable() {
+                                        const anggotaList = @json($result);
+
                                         return {
                                             allData: [], // All raw data
                                             currentPage: 1,
@@ -368,26 +396,7 @@
 
                                             init() {
                                                 // Fetch or define your data here
-                                                this.allData = [{
-                                                        id: 1,
-                                                        name: "Abram Schleifer",
-                                                        email: "abram@example.com",
-                                                        created_at: "2023-10-12"
-                                                    },
-                                                    {
-                                                        id: 2,
-                                                        name: "Lindsey Curtis",
-                                                        email: "lindsey@example.com",
-                                                        created_at: "2023-11-15"
-                                                    },
-                                                    {
-                                                        id: 3,
-                                                        name: "Hannah Allen",
-                                                        email: "hannah@example.com",
-                                                        created_at: "2024-01-08"
-                                                    },
-                                                    // Add more data as needed
-                                                ];
+                                                this.allData = anggotaList;
                                             },
 
                                             get paginatedData() {
@@ -469,6 +478,10 @@
         function openModal() {
             document.getElementById("eventModal").style.display = "flex";
         }
+
+        const closeModal = () => {
+            document.getElementById("eventModal").style.display = "none";
+        };
     </script>
 
 </x-app-layout>

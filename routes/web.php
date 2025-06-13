@@ -15,10 +15,10 @@ Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
 
-Route::group(['middleware' => ['role:admin']], function () {
-    Route::view('/anggota', "anggota-list");
-});
+Route::get('/anggota', [AnggotaController::class, 'anggotaList'])
+    ->middleware('role:admin')
+    ->name('list-anggota');
 
-// Route::post('save-anggota', [AnggotaController::class, 'saveSurvey'])->name('save-survey-response');
+Route::post('save-anggota', ['middleware' => ['role:admin']], [AnggotaController::class, 'anggotaSave'])->name('save-anggota');
 
 require __DIR__.'/auth.php';
