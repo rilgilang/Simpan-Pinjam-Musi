@@ -229,7 +229,7 @@ new class extends Component {
 
                     <!-- Menu Item Pinjaman -->
                     <li>
-                        <a href="profile.html" @click="selected = (selected === 'Anggota' ? '':'Anggota')"
+                        <a href="/pinjaman" @click="selected = (selected === 'Anggota' ? '':'Anggota')"
                             class="menu-item group"
                             :class="(selected === 'Anggota') && (page === 'profile') ? 'menu-item-active' :
                             'menu-item-inactive'">

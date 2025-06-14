@@ -234,7 +234,7 @@
                                         class="col-span-3 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
                                         <div class="flex w-full cursor-pointer items-center justify-between">
                                             <p class="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
-                                                Email
+                                                Jumlah Pinjaman
                                             </p>
 
                                             <span class="flex flex-col gap-0.5">
@@ -260,7 +260,7 @@
                                         class="col-span-3 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
                                         <div class="flex w-full cursor-pointer items-center justify-between">
                                             <p class="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
-                                                Tanggal Bergabung
+                                                Tanggal Pinjam
                                             </p>
 
                                             <span class="flex flex-col gap-0.5">
@@ -313,22 +313,22 @@
 
                                 <div x-data="dataTable()" x-init="init()" class="w-full">
                                     <!-- Table Body Start -->
-                                    <template x-for="person in paginatedData" :key="person.id">
+                                    <template x-for="pinjaman in paginatedData" :key="pinjaman.id">
                                         <div class="grid grid-cols-12 border-t border-gray-100 dark:border-gray-800">
                                             <div
                                                 class="col-span-3 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
                                                 <p class="block text-theme-sm font-medium text-gray-800 dark:text-white/90"
-                                                    x-text="person.name"></p>
+                                                    x-text="pinjaman.name"></p>
                                             </div>
                                             <div
                                                 class="col-span-3 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
                                                 <p class="text-theme-sm text-gray-700 dark:text-gray-400"
-                                                    x-text="person.email"></p>
+                                                    x-text="pinjaman.jumlah_pinjaman"></p>
                                             </div>
                                             <div
                                                 class="col-span-3 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
                                                 <p class="text-theme-sm text-gray-700 dark:text-gray-400"
-                                                    x-text="person.created_at"></p>
+                                                    x-text="pinjaman.created_at"></p>
                                             </div>
                                             <div class="col-span-1 flex items-center px-4 py-[17.5px]">
                                                 <div class="flex w-full items-center gap-2">

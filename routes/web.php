@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnggotaController;
+use App\Http\Controllers\PinjamanController;
 use App\Http\Controllers\SimpananController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
@@ -23,6 +24,10 @@ Route::get('/anggota', [AnggotaController::class, 'anggotaList'])
 Route::get('/simpanan', [SimpananController::class, 'simpananList'])
     ->middleware(['auth', 'verified'])
     ->name('list-simpanan');
+
+Route::get('/pinjaman', [PinjamanController::class, 'pinjamanList'])
+    ->middleware(['auth', 'verified'])
+    ->name('list-pinjaman');
 
 Route::post('save-anggota', [AnggotaController::class, 'anggotaSave'])
     ->middleware(['role:admin'])
