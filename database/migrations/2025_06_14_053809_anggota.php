@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-           Schema::create('histori_simpanan', function (Blueprint $table) {
+        Schema::create('anggota', function (Blueprint $table) {
             $table->id('id')->primary();
-            $table->integer('id_simpanan');
-            $table->enum('jenis_simpanan', ['wajib', 'sukarela']);
-            $table->float('jumlah');
+            $table->integer('id_user');
+            $table->string('alamat');
+            $table->string('nik');
+            $table->string('nomor_hp');
+            $table->string('status');
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('histori_simpanan');
+        //
     }
 };
