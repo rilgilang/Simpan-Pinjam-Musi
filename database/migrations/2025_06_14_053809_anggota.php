@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('address')->nullable();
-            $table->string('phone_number')->nullable();
+        Schema::create('anggota', function (Blueprint $table) {
+            $table->id('id')->primary();
+            $table->integer('id_user');
+            $table->string('alamat');
+            $table->string('nik');
+            $table->string('nomor_hp');
+            $table->string('status');
+            $table->timestamps();
         });
     }
 
@@ -22,8 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
+        //
     }
 };

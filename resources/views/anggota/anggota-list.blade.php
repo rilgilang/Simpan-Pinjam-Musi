@@ -80,11 +80,27 @@
                                     <div>
                                         <label
                                             class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            NIK
+                                        </label>
+                                        <input id="event-title" type="text" name="nik"
+                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                        @error('nik')
+                                            <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <div>
+                                    <div>
+                                        <label
+                                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                             No Hp
                                         </label>
-                                        <input id="event-title" type="text" name="phone_number"
+                                        <input id="event-title" type="text" name="nomor_hp"
                                             class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                        @error('phone_number')
+                                        @error('nomor_hp')
                                             <small class="text-theme-xs text-error-500">{{ $message }}</small>
                                         @enderror
                                     </div>
@@ -98,7 +114,7 @@
                                             class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                             Alamat
                                         </label>
-                                        <input id="event-title" type="text" name="address"
+                                        <input id="event-title" type="text" name="alamat"
                                             class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
                                     </div>
                                 </div>
@@ -257,7 +273,33 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="col-span-3 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
+                                        class="col-span-2 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
+                                        <div class="flex w-full cursor-pointer items-center justify-between">
+                                            <p class="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
+                                                Nomor HP
+                                            </p>
+
+                                            <span class="flex flex-col gap-0.5">
+                                                <svg class="fill-gray-300 dark:fill-gray-700" width="8"
+                                                    height="5" viewBox="0 0 8 5" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M4.40962 0.585167C4.21057 0.300808 3.78943 0.300807 3.59038 0.585166L1.05071 4.21327C0.81874 4.54466 1.05582 5 1.46033 5H6.53967C6.94418 5 7.18126 4.54466 6.94929 4.21327L4.40962 0.585167Z"
+                                                        fill=""></path>
+                                                </svg>
+
+                                                <svg class="fill-gray-300 dark:fill-gray-700" width="8"
+                                                    height="5" viewBox="0 0 8 5" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M4.40962 4.41483C4.21057 4.69919 3.78943 4.69919 3.59038 4.41483L1.05071 0.786732C0.81874 0.455343 1.05582 0 1.46033 0H6.53967C6.94418 0 7.18126 0.455342 6.94929 0.786731L4.40962 4.41483Z"
+                                                        fill=""></path>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="col-span-2 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
                                         <div class="flex w-full cursor-pointer items-center justify-between">
                                             <p class="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
                                                 Tanggal Bergabung
@@ -283,7 +325,7 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="col-span-3 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
+                                        class="col-span-2 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
                                         <div class="flex w-full cursor-pointer items-center justify-between">
                                             <p class="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
                                                 Action
@@ -326,7 +368,12 @@
                                                     x-text="person.email"></p>
                                             </div>
                                             <div
-                                                class="col-span-3 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
+                                                class="col-span-2 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
+                                                <p class="text-theme-sm text-gray-700 dark:text-gray-400"
+                                                    x-text="person.nomor_hp"></p>
+                                            </div>
+                                            <div
+                                                class="col-span-2 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
                                                 <p class="text-theme-sm text-gray-700 dark:text-gray-400"
                                                     x-text="person.created_at"></p>
                                             </div>
@@ -363,7 +410,13 @@
                                                         </svg>
                                                     </button>
 
-                                                    <button onclick="openModal()"
+                                                    <button
+                                                        @click="openModal({ 
+                                                            name: person.name, 
+                                                            email: person.email, 
+                                                            phone_number: person.phone_number, 
+                                                            alamat: person.alamat 
+                                                        })"
                                                         class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
                                                         <svg class="fill-current" width="21" height="21"
                                                             viewBox="0 0 21 21" fill="none"
@@ -475,7 +528,13 @@
 
 
     <script>
-        function openModal() {
+        function openModal(data) {
+            if (data) {
+                document.getElementsByName("name")[0].value = "asdasd";
+                document.getElementsByName("email")[0].value = data.email;
+                document.getElementsByName("phone_number")[0].value = data.phone_number;
+                document.getElementsByName("alamat")[0].value = data.alamat;
+            }
             document.getElementById("eventModal").style.display = "flex";
         }
 

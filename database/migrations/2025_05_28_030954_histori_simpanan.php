@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
            Schema::create('histori_simpanan', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('id_simpanan');
+            $table->id('id')->primary();
+            $table->integer('id_simpanan');
             $table->enum('jenis_simpanan', ['wajib', 'sukarela']);
             $table->float('jumlah');
             $table->timestamps();

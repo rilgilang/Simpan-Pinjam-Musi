@@ -10,6 +10,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
+    protected $table = 'users';
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
 
@@ -21,8 +22,6 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'phone_number',
-        'address',
         'password',
     ];
 

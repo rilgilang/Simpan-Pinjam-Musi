@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
             Schema::create('simpanan', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->uuid('id_anggota');
+            $table->id('id')->primary();
+            $table->integer('id_anggota');
             $table->float('simpanan_wajib');
             $table->float('simpanan_pokok');
             $table->float('simpanan_sukarela');

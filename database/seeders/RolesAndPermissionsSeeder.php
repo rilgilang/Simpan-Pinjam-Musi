@@ -38,8 +38,6 @@ class RolesAndPermissionsSeeder extends Seeder
             'name' => "xifutang",
             'email' => "goblog@gmail.com",
             'password' => "lucubangetrek123",
-            'phone_number' => "081234590",
-            'address' => "Jalan Ngawi Utara",
         ]);
 
         $user->assignRole('admin');

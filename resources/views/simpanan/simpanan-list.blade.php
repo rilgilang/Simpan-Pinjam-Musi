@@ -19,40 +19,90 @@
                 <div class="modal-header">
                     <h5 class="modal-title mb-2 text-theme-xl font-semibold text-gray-800 dark:text-white/90 lg:text-2xl"
                         id="eventModalLabel">
-                        Tambah Anggota
+                        Tambah Simpanan
                     </h5>
                     <p class="text-sm text-gray-500 dark:text-gray-400">
-                        Tambah anggota baru koperasi
+                        Tambah Simpanan yang di setor oleh anggota
                     </p>
                 </div>
 
-                <form method="POST" action="{{ route('save-anggota') }}">
+                <form method="POST" action="{{ route('save-simpanan') }}">
                     @csrf
                     <div class="modal-body mt-8">
                         <div>
-                            <div>
-                                <div>
-                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                        Nama
-                                    </label>
-                                    <input id="event-title" type="text" name="name"
-                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                    @error('name')
-                                        <small class="text-theme-xs text-error-500">{{ $message }}</small>
-                                    @enderror
-                                </div>
+                            <div x-data="searchableSelect()" class="relative">
+                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                    Nama Anggota
+                                </label>
+
+                                <input x-model="search" @focus="open = true" @click.away="open = false"
+                                    @keydown.escape="open = false" placeholder="Cari anggota..."
+                                    class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+
+                                <ul x-show="open"
+                                    class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-300 bg-white shadow-lg dark:bg-gray-800">
+                                    <template x-for="item in filteredOptions" :key="item.id">
+                                        <li @click="selectOption(item)"
+                                            class="cursor-pointer px-4 py-2 text-sm hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                                            x-text="item.name">
+                                        </li>
+                                    </template>
+                                </ul>
+
+                                <input type="hidden" name="id_anggota" :value="selected?.id">
+                                @error('id_anggota')
+                                    <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                @enderror
                             </div>
+
+                            <script>
+                                function searchableSelect() {
+                                    return {
+                                        search: '',
+                                        open: false,
+                                        selected: null,
+                                        options: @json($anggota_list), // Pass from controller: array of { id, name }
+                                        get filteredOptions() {
+                                            return this.options.filter(item =>
+                                                item.name.toLowerCase().includes(this.search.toLowerCase())
+                                            );
+                                        },
+                                        selectOption(item) {
+                                            this.selected = item;
+                                            this.search = item.name;
+                                            this.open = false;
+                                        },
+                                    }
+                                }
+                            </script>
 
                             <div class="mt-6">
                                 <div>
                                     <div>
                                         <label
                                             class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                            Email
+                                            Simpanan Wajib
                                         </label>
-                                        <input id="event-title" type="text" name="email"
+                                        <input id="event-title" type="text" name="simpanan_wajib"
                                             class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                        @error('email')
+                                        @error('simpanan_wajib')
+                                            <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="mt-6">
+                                <div>
+                                    <div>
+                                        <label
+                                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                            Simpanan Pokok
+                                        </label>
+                                        <input id="event-title" type="text" name="simpanan_pokok"
+                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                        @error('simpanan_pokok')
                                             <small class="text-theme-xs text-error-500">{{ $message }}</small>
                                         @enderror
                                     </div>
@@ -64,42 +114,13 @@
                                     <div>
                                         <label
                                             class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                            Password
+                                            Simpanan Sukarela
                                         </label>
-                                        <input id="event-title" type="password" name="password"
+                                        <input id="event-title" type="text" name="simpanan_sukarela"
                                             class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                        @error('password')
+                                        @error('simpanan_sukarela')
                                             <small class="text-theme-xs text-error-500">{{ $message }}</small>
                                         @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-6">
-                                <div>
-                                    <div>
-                                        <label
-                                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                            No Hp
-                                        </label>
-                                        <input id="event-title" type="text" name="phone_number"
-                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                        @error('phone_number')
-                                            <small class="text-theme-xs text-error-500">{{ $message }}</small>
-                                        @enderror
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-6">
-                                <div>
-                                    <div>
-                                        <label
-                                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                            Alamat
-                                        </label>
-                                        <input id="event-title" type="text" name="address"
-                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
                                     </div>
                                 </div>
                             </div>
@@ -133,13 +154,13 @@
                 <div class="px-5 py-4 sm:px-6 sm:py-5">
                     <div class="grid grid-cols-7">
                         <h3 class="col-span-6 text-base font-medium text-gray-800 dark:text-white/90">
-                            Daftar Pinjaman
+                            Daftar Simpanan
                         </h3>
 
                         @if (auth()->check() && auth()->user()->role('admin'))
                             <button onclick="openModal()"
                                 class="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-center text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
-                                Tambah Pinjaman
+                                Tambah Simpanan
                             </button>
                         @endif
                     </div>
@@ -205,10 +226,10 @@
                                 <!-- table header start -->
                                 <div class="grid grid-cols-12 border-t border-gray-200 dark:border-gray-800">
                                     <div
-                                        class="col-span-3 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
+                                        class="col-span-2 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
                                         <div class="flex w-full cursor-pointer items-center justify-between">
                                             <p class="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
-                                                Nama
+                                                Nama Anggota
                                             </p>
 
                                             <span class="flex flex-col gap-0.5">
@@ -231,10 +252,10 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="col-span-3 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
+                                        class="col-span-2 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
                                         <div class="flex w-full cursor-pointer items-center justify-between">
                                             <p class="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
-                                                Email
+                                                Simpanan Wajib
                                             </p>
 
                                             <span class="flex flex-col gap-0.5">
@@ -257,10 +278,64 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="col-span-3 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
+                                        class="col-span-2 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
                                         <div class="flex w-full cursor-pointer items-center justify-between">
                                             <p class="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
-                                                Tanggal Bergabung
+                                                Simpanan Pokok
+                                            </p>
+
+                                            <span class="flex flex-col gap-0.5">
+                                                <svg class="fill-gray-300 dark:fill-gray-700" width="8"
+                                                    height="5" viewBox="0 0 8 5" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M4.40962 0.585167C4.21057 0.300808 3.78943 0.300807 3.59038 0.585166L1.05071 4.21327C0.81874 4.54466 1.05582 5 1.46033 5H6.53967C6.94418 5 7.18126 4.54466 6.94929 4.21327L4.40962 0.585167Z"
+                                                        fill=""></path>
+                                                </svg>
+
+                                                <svg class="fill-gray-300 dark:fill-gray-700" width="8"
+                                                    height="5" viewBox="0 0 8 5" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M4.40962 4.41483C4.21057 4.69919 3.78943 4.69919 3.59038 4.41483L1.05071 0.786732C0.81874 0.455343 1.05582 0 1.46033 0H6.53967C6.94418 0 7.18126 0.455342 6.94929 0.786731L4.40962 4.41483Z"
+                                                        fill=""></path>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="col-span-2 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
+                                        <div class="flex w-full cursor-pointer items-center justify-between">
+                                            <p class="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
+                                                Simpanan Sukarela
+                                            </p>
+
+                                            <span class="flex flex-col gap-0.5">
+                                                <svg class="fill-gray-300 dark:fill-gray-700" width="8"
+                                                    height="5" viewBox="0 0 8 5" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M4.40962 0.585167C4.21057 0.300808 3.78943 0.300807 3.59038 0.585166L1.05071 4.21327C0.81874 4.54466 1.05582 5 1.46033 5H6.53967C6.94418 5 7.18126 4.54466 6.94929 4.21327L4.40962 0.585167Z"
+                                                        fill=""></path>
+                                                </svg>
+
+                                                <svg class="fill-gray-300 dark:fill-gray-700" width="8"
+                                                    height="5" viewBox="0 0 8 5" fill="none"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M4.40962 4.41483C4.21057 4.69919 3.78943 4.69919 3.59038 4.41483L1.05071 0.786732C0.81874 0.455343 1.05582 0 1.46033 0H6.53967C6.94418 0 7.18126 0.455342 6.94929 0.786731L4.40962 4.41483Z"
+                                                        fill=""></path>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="col-span-2 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
+                                        <div class="flex w-full cursor-pointer items-center justify-between">
+                                            <p class="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
+                                                Jumlah
                                             </p>
 
                                             <span class="flex flex-col gap-0.5">
@@ -283,7 +358,7 @@
                                         </div>
                                     </div>
                                     <div
-                                        class="col-span-3 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
+                                        class="col-span-2 flex items-center border-r border-gray-200 px-4 py-3 dark:border-gray-800">
                                         <div class="flex w-full cursor-pointer items-center justify-between">
                                             <p class="text-theme-xs font-medium text-gray-700 dark:text-gray-400">
                                                 Action
@@ -316,19 +391,30 @@
                                     <template x-for="person in paginatedData" :key="person.id">
                                         <div class="grid grid-cols-12 border-t border-gray-100 dark:border-gray-800">
                                             <div
-                                                class="col-span-3 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
+                                                class="col-span-2 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
                                                 <p class="block text-theme-sm font-medium text-gray-800 dark:text-white/90"
                                                     x-text="person.name"></p>
                                             </div>
                                             <div
-                                                class="col-span-3 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
+                                                class="col-span-2 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
                                                 <p class="text-theme-sm text-gray-700 dark:text-gray-400"
-                                                    x-text="person.email"></p>
+                                                    x-text="person.simpanan_wajib"></p>
                                             </div>
                                             <div
-                                                class="col-span-3 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
+                                                class="col-span-2 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
                                                 <p class="text-theme-sm text-gray-700 dark:text-gray-400"
-                                                    x-text="person.created_at"></p>
+                                                    x-text="person.simpanan_pokok"></p>
+                                            </div>
+                                            <div
+                                                class="col-span-2 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
+                                                <p class="text-theme-sm text-gray-700 dark:text-gray-400"
+                                                    x-text="person.simpanan_sukarela"></p>
+                                            </div>
+
+                                            <div
+                                                class="col-span-2 flex items-center border-r border-gray-100 px-4 py-[17.5px] dark:border-gray-800">
+                                                <p class="text-theme-sm text-gray-700 dark:text-gray-400"
+                                                    x-text="person.jumlah"></p>
                                             </div>
                                             <div class="col-span-1 flex items-center px-4 py-[17.5px]">
                                                 <div class="flex w-full items-center gap-2">
@@ -362,8 +448,13 @@
                                                                 fill=""></path>
                                                         </svg>
                                                     </button>
-
                                                     <button
+                                                        @click="openModal({ 
+                                                            name: person.name, 
+                                                            simpanan_wajib: person.simpanan_wajib, 
+                                                            simpanan_pokok: person.simpanan_pokok, 
+                                                            simpanan_sukarela: person.simpanan_sukarela 
+                                                        })"
                                                         class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
                                                         <svg class="fill-current" width="21" height="21"
                                                             viewBox="0 0 21 21" fill="none"
@@ -387,7 +478,7 @@
                                 <!-- Alpine.js Table Logic -->
                                 <script>
                                     function dataTable() {
-                                        const anggotaList = @json($result);
+                                        const simpananList = @json($simpanan);
 
                                         return {
                                             allData: [], // All raw data
@@ -396,7 +487,7 @@
 
                                             init() {
                                                 // Fetch or define your data here
-                                                this.allData = anggotaList;
+                                                this.allData = simpananList;
                                             },
 
                                             get paginatedData() {
@@ -475,7 +566,13 @@
 
 
     <script>
-        function openModal() {
+        function openModal(data) {
+            if (data) {
+                document.getElementsByName("name")[0].value = data.name;
+                document.getElementsByName("simpanan_wajib")[0].value = data.simpanan_wajib;
+                document.getElementsByName("simpanan_pokok")[0].value = data.simpanan_pokok;
+                document.getElementsByName("simpanan_sukarela")[0].value = data.simpanan_sukarela;
+            }
             document.getElementById("eventModal").style.display = "flex";
         }
 

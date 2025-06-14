@@ -2,32 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Anggota;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use PhpParser\Node\Expr\Cast\Bool_;
+use Illuminate\Support\Facades\DB;
 
 class AnggotaController extends Controller
 {
-     public function anggotaSave(Request $req): View
+     public function anggotaSave(Request $req)
     {
+
         $req->validate(
             [
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|max:255',
                 'password' => 'required|string|max:255',
-                'phone_number' => 'required|string|max:15',
-                'address' => 'required|string|max:300',
+                'nomor_hp' => 'required|unique:anggota|string|max:15',
+                'alamat' => 'required|string|max:300',
             ],
             [
-                'name.required' => 'Nama pemilik wajib diisi.',
+                'name.required' => 'Nama anggota wajib diisi.',
                 'email.required' => 'Email wajib diisi.',
                 'password.required' => 'Password wajib diisi.',
-                'phone_number.required' => 'Nomor Handphone wajib diisi.',
-                'address.required' => 'Alamat wajib diisi.',
+                'nomor_hp.required' => 'Nomor Handphone wajib diisi.',
+                'alamat.required' => 'Alamat wajib diisi.',
             ]
         );
-
 
         $user = User::create([
             'name' => $req['name'],
@@ -38,7 +40,15 @@ class AnggotaController extends Controller
         ]);
 
         $user->assignRole('anggota');
-        
+    
+
+        $anggota = Anggota::create([
+            'id_user' => $user['id'],
+            'alamat' => $req['alamat'],
+            'nik' => $req['nik'],
+            'nomor_hp' => $req['nomor_hp'],
+            'status' => 'aktif',
+        ]);
 
         // Mail::to($req->email)->send(new SendEmail(
         //     $req->nama_penghuni,
@@ -50,18 +60,22 @@ class AnggotaController extends Controller
 
         
         // Alert::toast('Survei Anda telah kami terima. Terima kasih atas kontribusinya dalam pengembangan layanan kami.');
-        return view('anggota-list');
+       
+        return redirect("/anggota");
     }
 
     public function anggotaList(): View{
 
-        $users = User::all();
+        $users = User::join('anggota', 'anggota.id_user', '=', 'users.id')
+        ->select('users.id', 'users.name', 'users.email', 'anggota.nik', 'anggota.alamat', 'anggota.nomor_hp', 'anggota.created_at')
+        ->get();
 
         $result = [];
 
         foreach ($users as $user) {
-            
+        
             if ($user->hasRole('anggota')){
+                $user->created_at = Carbon::parse($user['created_at'])->format('d M Y');
                 array_push($result, $user);
             }
         }
