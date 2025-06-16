@@ -24,6 +24,9 @@
                     <p class="text-sm text-gray-500 dark:text-gray-400">
                         Tambah anggota baru koperasi
                     </p>
+
+                    <p id="blok" class="text-sm text-gray-500 dark:text-gray-400">
+                    </p>
                 </div>
 
                 <form method="POST" action="{{ route('save-anggota') }}">
@@ -211,21 +214,15 @@
                                                 </p>
                                             </div>
                                         </th>
-                                        <th class="px-5 py-3 sm:px-6">
-                                            <div class="flex items-center">
-                                                <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                                                    Aksi
-                                                </p>
-                                            </div>
-                                        </th>
                                     </tr>
                                 </thead>
                                 <!-- table header end -->
                                 <!-- table body start -->
                                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                     @foreach ($result as $anggota)
-                                        <tr>
-                                            <td class="px-5 py-4 sm:px-6">
+                                        <tr onclick="window.location.href='{{ route('anggota-detail', $anggota->id) }}'"
+                                            class="hover:cursor-pointer sm:px-6">
+                                            <td class="px-5 py-4">
                                                 <div class="flex items-center">
                                                     <div class="flex items-center gap-3">
                                                         {{-- <div class="h-10 w-10 overflow-hidden rounded-full">
@@ -284,26 +281,6 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="px-5 py-4 sm:px-6">
-                                                <div class="flex w-full items-center gap-2">
-                                                    <button
-                                                        class="text-gray-500 hover:text-error-500 dark:text-gray-400 dark:hover:text-error-500">
-                                                        <!-- Trash Icon -->
-                                                        <svg class="fill-current" width="21" height="21"
-                                                            viewBox="0 0 21 21" fill="none">
-                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="..." />
-                                                        </svg>
-                                                    </button>
-                                                    <button
-                                                        class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90">
-                                                        <!-- Edit Icon -->
-                                                        <svg class="fill-current" width="21" height="21"
-                                                            viewBox="0 0 21 21" fill="none">
-                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="..." />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -316,12 +293,6 @@
     </div>
     <script>
         function openModal(data) {
-            if (data) {
-                document.getElementsByName("name")[0].value = "asdasd";
-                document.getElementsByName("email")[0].value = data.email;
-                document.getElementsByName("phone_number")[0].value = data.phone_number;
-                document.getElementsByName("alamat")[0].value = data.alamat;
-            }
             document.getElementById("eventModal").style.display = "flex";
         }
 

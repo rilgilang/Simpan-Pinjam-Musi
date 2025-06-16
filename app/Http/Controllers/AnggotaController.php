@@ -82,4 +82,14 @@ class AnggotaController extends Controller
 
         return view('anggota/anggota-list', ["result" => $result]);
     }
+
+    public function anggotaDetail($id): View{
+
+    $user = User::join('anggota', 'anggota.id_user', '=', 'users.id')
+        ->select('users.id', 'users.name', 'users.email', 'anggota.nik', 'anggota.alamat', 'anggota.nomor_hp', 'anggota.created_at')
+        ->where('users.id', $id)
+        ->first();
+
+        return view('anggota/anggota-detail', compact('user'));
+    }
 }

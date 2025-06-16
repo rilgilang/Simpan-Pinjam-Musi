@@ -33,6 +33,14 @@ Route::post('pengajuan-pinjaman', [PinjamanController::class, 'pengajuanPinjaman
     ->middleware(['role:anggota'])
     ->name('pengajuan-pinjaman');
 
+// Route::get('/anggota/:id', [AnggotaController::class, 'anggotaDetail'])
+//     ->middleware(['role:anggota|admin'])
+//     ->name('anggota-detail');
+
+Route::get('/anggota/{id}', [AnggotaController::class, 'anggotaDetail'])
+    ->middleware(['role:admin'])
+    ->name('anggota-detail');
+
 Route::post('save-anggota', [AnggotaController::class, 'anggotaSave'])
     ->middleware(['role:admin'])
     ->name('save-anggota');
