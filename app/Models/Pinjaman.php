@@ -12,6 +12,7 @@ class Pinjaman extends Model
         'id_anggota',
         'jumlah_pinjaman',
         'bunga_pinjaman_per_bulan',
+        'status',
         'angsuran_per_bulan',
         'total_pinjaman',
     ];

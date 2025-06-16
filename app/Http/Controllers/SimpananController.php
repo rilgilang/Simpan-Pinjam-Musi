@@ -28,7 +28,7 @@ class SimpananController extends Controller
             }
         }
 
-        return view('simpanan/simpanan-list', ["simpanan" => $simpanan, "anggota_list" => $anggotaList]);
+        return view('simpanan/simpanan-list', ["simpanan_list" => $simpanan, "anggota_list" => $anggotaList]);
     }
 
     public function simpananSave(Request $req)

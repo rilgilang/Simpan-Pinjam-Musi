@@ -17,6 +17,7 @@ return new class extends Migration
             $table->float('jumlah_pinjaman');
             $table->float('bunga_pinjaman_per_bulan');
             $table->float('angsuran_per_bulan');
+            $table->enum('status', ['ditolak', 'menunggu', 'disetujui']);
             $table->float('total_pinjaman');
             $table->timestamps();   
      });
