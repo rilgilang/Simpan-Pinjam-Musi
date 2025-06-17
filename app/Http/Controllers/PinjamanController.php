@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Anggota;
+use App\Models\PengajuanPinjaman;
 use App\Models\Pinjaman;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -19,6 +20,17 @@ class PinjamanController extends Controller
 
         
     return view('pinjaman/pinjaman-list', ["result" => $pinjaman]);
+    }
+
+    public function pengajuanPinjamanList(): View{
+
+        $pinjaman = PengajuanPinjaman::join('anggota', 'anggota.id', '=', 'pengajuan_pinjaman.id_anggota')
+        ->join('users', 'anggota.id_user', '=', 'users.id')
+        ->select('users.id', 'users.name', 'pengajuan_pinjaman.id_anggota', 'pengajuan_pinjaman.bunga_pinjaman_per_bulan', 'pengajuan_pinjaman.jumlah_pinjaman', 'pengajuan_pinjaman.created_at','pengajuan_pinjaman.angsuran_per_bulan', 'pengajuan_pinjaman.total_pinjaman', 'pengajuan_pinjaman.status_persetujuan_admin',  'pengajuan_pinjaman.status_persetujuan_ketua')
+        ->get();
+
+        
+    return view('pinjaman/pengajuan-pinjaman-list', ["result" => $pinjaman]);
     }
 
     public function pengajuanPinjaman(Request $req): View{
@@ -41,19 +53,18 @@ class PinjamanController extends Controller
         $anggota = Anggota::where('id_user', $userId)->first();
         
         
-         Pinjaman::create([
+         PengajuanPinjaman::create([
             'id_anggota' => $anggota['id'],
             'jumlah_pinjaman' => $req['jumlah_pinjaman'],
             'bunga_pinjaman_per_bulan' => 1,
             'angsuran_per_bulan' => $req['angsuran'],
-            'status' => 'menunggu',
             'total_pinjaman' => $req['total_pengajuan'],
+            'status_persetujuan_admin' => 'menunggu',
+            'status_persetujuan_ketua' => 'menunggu',
         ]);
 
-        $pinjaman = Pinjaman::join('anggota', 'anggota.id', '=', 'pinjaman.id_anggota')
-        ->join('users', 'anggota.id_user', '=', 'users.id')
-        ->select('users.id', 'users.name', 'pinjaman.id_anggota', 'pinjaman.bunga_pinjaman_per_bulan', 'pinjaman.jumlah_pinjaman', 'pinjaman.created_at','pinjaman.angsuran_per_bulan', 'pinjaman.status', 'pinjaman.total_pinjaman')
-        ->get();
+        $pinjaman = Pinjaman::all()->where('id_anggota', $anggota['id']);
+
     return view('pinjaman/pinjaman-list', ["result" => $pinjaman]);
     }
 }

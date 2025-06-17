@@ -11,23 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pinjaman', function (Blueprint $table) {
+         Schema::create('pengajuan_pinjaman', function (Blueprint $table) {
             $table->id('id')->primary();
             $table->integer('id_anggota');
-            $table->integer('id_pengajuan');
             $table->float('jumlah_pinjaman');
             $table->float('bunga_pinjaman_per_bulan');
             $table->float('angsuran_per_bulan');
-            $table->enum('status', ['lunas', 'belum lunas']);
+            $table->enum('status_persetujuan_admin', ['ditolak','menunggu', 'disetujui']);
+            $table->enum('status_persetujuan_ketua', ['ditolak','menunggu', 'disetujui']);
             $table->float('total_pinjaman');
             $table->timestamps();   
         });
     }
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('pinjaman');
+        Schema::dropIfExists('pengajuan_pinjaman');
     }
 };
