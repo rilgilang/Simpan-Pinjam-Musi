@@ -26,7 +26,7 @@ class PinjamanController extends Controller
 
         $pinjaman = PengajuanPinjaman::join('anggota', 'anggota.id', '=', 'pengajuan_pinjaman.id_anggota')
         ->join('users', 'anggota.id_user', '=', 'users.id')
-        ->select('users.id', 'users.name', 'pengajuan_pinjaman.id_anggota', 'pengajuan_pinjaman.bunga_pinjaman_per_bulan', 'pengajuan_pinjaman.jumlah_pinjaman', 'pengajuan_pinjaman.created_at','pengajuan_pinjaman.angsuran_per_bulan', 'pengajuan_pinjaman.total_pinjaman', 'pengajuan_pinjaman.status_persetujuan_admin',  'pengajuan_pinjaman.status_persetujuan_ketua')
+        ->select('pengajuan_pinjaman.id', 'users.name', 'pengajuan_pinjaman.id_anggota', 'pengajuan_pinjaman.bunga_pinjaman_per_bulan', 'pengajuan_pinjaman.jumlah_pinjaman', 'pengajuan_pinjaman.created_at','pengajuan_pinjaman.angsuran_per_bulan', 'pengajuan_pinjaman.total_pinjaman', 'pengajuan_pinjaman.status_persetujuan_admin',  'pengajuan_pinjaman.status_persetujuan_ketua')
         ->get();
 
         
@@ -66,5 +66,65 @@ class PinjamanController extends Controller
         $pinjaman = Pinjaman::all()->where('id_anggota', $anggota['id']);
 
     return view('pinjaman/pinjaman-list', ["result" => $pinjaman]);
+    }
+
+    public function approvePengajuanPinjaman($id): View{
+    
+        $user = Auth::user(); // Get the authenticated user
+
+        $pengajuan = PengajuanPinjaman::where('id', $id)->select('*')->first();
+
+        // dd($pengajuan);
+
+        if ($user->hasRole('admin')) {
+            PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_admin' => 'disetujui']);        
+            if ($pengajuan->status_persetujuan_admin == 'disetujui') {
+                $pinjaman = Pinjaman::create([
+                    'id_anggota' => $pengajuan['id_anggota'],
+                    'id_pengajuan' => $pengajuan['id'],
+                    'jumlah_pinjaman' => $pengajuan['jumlah_pinjaman'],
+                    'bunga_pinjaman_per_bulan' => $pengajuan['bunga_pinjaman_per_bulan'],
+                    'angsuran_per_bulan' => $pengajuan['angsuran_per_bulan'],
+                    'status' => 'belum lunas',
+                    'total_pinjaman' => $pengajuan['total_pinjaman'],
+                ]);
+            }
+        }
+
+        if ($user->hasRole('ketua')) {
+            PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_ketua' => 'disetujui']);        
+            if ($pengajuan->status_persetujuan_ketua == 'disetujui') {
+                $pinjaman = Pinjaman::create([
+                    'id_anggota' => $pengajuan['id_anggota'],
+                    'id_pengajuan' => $pengajuan['id'],
+                    'jumlah_pinjaman' => $pengajuan['jumlah_pinjaman'],
+                    'bunga_pinjaman_per_bulan' => $pengajuan['bunga_pinjaman_per_bulan'],
+                    'angsuran_per_bulan' => $pengajuan['angsuran_per_bulan'],
+                    'status' => 'belum lunas',
+                    'total_pinjaman' => $pengajuan['total_pinjaman'],
+                ]);
+            }
+        }
+
+
+
+        $pinjaman = PengajuanPinjaman::join('anggota', 'anggota.id', '=', 'pengajuan_pinjaman.id_anggota')
+        ->join('users', 'anggota.id_user', '=', 'users.id')
+        ->select('pengajuan_pinjaman.id', 'users.name', 'pengajuan_pinjaman.id_anggota', 'pengajuan_pinjaman.bunga_pinjaman_per_bulan', 'pengajuan_pinjaman.jumlah_pinjaman', 'pengajuan_pinjaman.created_at','pengajuan_pinjaman.angsuran_per_bulan', 'pengajuan_pinjaman.total_pinjaman', 'pengajuan_pinjaman.status_persetujuan_admin',  'pengajuan_pinjaman.status_persetujuan_ketua')
+        ->get();
+
+        return view('pinjaman/pinjaman-list', ["result" => $pinjaman]);
+    }
+    
+    public function generateAngsuran($tenor){
+
+
+        $angsuran = [];
+
+        for ($i=0; $i < $tenor; $i++) { 
+            
+        }
+        
+    return view('pinjaman/pengajuan-pinjaman-list', ["result" => $pinjaman]);
     }
 }

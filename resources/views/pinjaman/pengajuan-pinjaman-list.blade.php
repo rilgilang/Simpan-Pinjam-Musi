@@ -221,7 +221,7 @@
                                         <th class="px-5 py-3 sm:px-6">
                                             <div class="flex items-center">
                                                 <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                                                    Telah disetujui Ketua
+                                                    Status persetujuan Ketua
                                                 </p>
                                             </div>
                                         </th>
@@ -229,10 +229,21 @@
                                         <th class="px-5 py-3 sm:px-6">
                                             <div class="flex items-center">
                                                 <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                                                    Telah disetujui Admin
+                                                    Status persetujuan Admin
                                                 </p>
                                             </div>
                                         </th>
+
+                                        @if ((auth()->check() && auth()->user()->hasRole('admin')) || (auth()->check() && auth()->user()->hasRole('ketua')))
+                                            <th class="px-5 py-3 sm:px-6">
+                                                <div class="flex items-center">
+                                                    <p
+                                                        class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                                                        Action
+                                                    </p>
+                                                </div>
+                                            </th>
+                                        @endif
                                     </tr>
                                 </thead>
 
@@ -307,26 +318,27 @@
                                                         @if ($pinjaman->status_persetujuan_ketua == 'ditolak')
                                                             <p
                                                                 class="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm text-sm font-medium text-green-600 dark:bg-green-900/20 dark:text-green-500">
-                                                                Ditolak Admin
+                                                                Ditolak
                                                                 <span class="h-2 w-2 rounded-full bg-green-500"></span>
                                                             </p>
                                                         @elseif($pinjaman->status_persetujuan_ketua == 'menunggu')
                                                             <p
                                                                 class="inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-sm text-sm font-medium text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-500">
-                                                                Mununggu Ketua
+                                                                Mununggu
                                                                 <span
                                                                     class="h-2 w-2 rounded-full bg-yellow-500"></span>
                                                             </p>
                                                         @else
                                                             <p
-                                                                class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-500">
-                                                                Disetujui Admin
+                                                                class="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-500">
+                                                                Disetujui
                                                                 <span class="h-2 w-2 rounded-full bg-red-500"></span>
                                                             </p>
                                                         @endif
                                                     </div>
                                                 </div>
                                             </td>
+
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div class="flex items-center">
                                                     <div class="flex items-center">
@@ -334,26 +346,54 @@
                                                         @if ($pinjaman->status_persetujuan_admin == 'ditolak')
                                                             <p
                                                                 class="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm text-sm font-medium text-green-600 dark:bg-green-900/20 dark:text-green-500">
-                                                                Ditolak Admin
+                                                                Ditolak
                                                                 <span class="h-2 w-2 rounded-full bg-green-500"></span>
                                                             </p>
                                                         @elseif($pinjaman->status_persetujuan_admin == 'menunggu')
                                                             <p
                                                                 class="inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-sm text-sm font-medium text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-500">
-                                                                Mununggu Admin
+                                                                Mununggu
                                                                 <span
                                                                     class="h-2 w-2 rounded-full bg-yellow-500"></span>
                                                             </p>
                                                         @else
                                                             <p
-                                                                class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-500">
-                                                                Disetujui Admin
-                                                                <span class="h-2 w-2 rounded-full bg-red-500"></span>
+                                                                class="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm text-sm font-medium text-green-600 dark:bg-green-900/20 dark:text-green-500">
+                                                                Disetujui
+                                                                <span class="h-2 w-2 rounded-full bg-green-500"></span>
                                                             </p>
                                                         @endif
                                                     </div>
                                                 </div>
                                             </td>
+
+                                            @if ((auth()->check() && auth()->user()->hasRole('admin')) || (auth()->check() && auth()->user()->hasRole('ketua')))
+                                                @if (
+                                                    (auth()->check() && auth()->user()->hasRole('admin') && $pinjaman->status_persetujuan_admin == 'menunggu') ||
+                                                        (auth()->check() && auth()->user()->hasRole('ketua') && $pinjaman->status_persetujuan_ketua == 'menunggu'))
+                                                    <td class="px-5 py-4 sm:px-6">
+                                                        <div class="flex items-center">
+                                                            <div class="flex items-center">
+
+                                                                <a href="/reject-pengajuan/{{ $pinjaman->id }}"
+                                                                    class="mx-2 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
+                                                                    Tolak
+                                                                </a>
+
+                                                                <a href="/approve-pengajuan/{{ $pinjaman->id }}"
+                                                                    class="mx-2 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
+                                                                    Setujui
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                @else
+                                                    <td
+                                                        class="px-5 py-4 text-sm text-gray-500 dark:text-gray-400 sm:px-6">
+                                                        Telah di verifikasi
+                                                    </td>
+                                                @endif
+                                            @endif
                                         </tr>
                                     @endforeach
                                 </tbody>
