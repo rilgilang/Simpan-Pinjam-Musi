@@ -9,6 +9,7 @@ use App\Models\Pinjaman;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class PinjamanController extends Controller
 {
@@ -74,43 +75,32 @@ class PinjamanController extends Controller
         $user = Auth::user(); // Get the authenticated user
 
         $pengajuan = PengajuanPinjaman::where('id', $id)->select('*')->first();
+        
+        try { DB::beginTransaction();
 
-        // dd($pengajuan);
-
-        if ($user->hasRole('admin')) {
-            PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_admin' => 'disetujui']);        
-            if ($pengajuan->status_persetujuan_ketua == 'disetujui') {
-                $pinjaman = Pinjaman::create([
-                    'id_anggota' => $pengajuan['id_anggota'],
-                    'id_pengajuan' => $pengajuan['id'],
-                    'jumlah_pinjaman' => $pengajuan['jumlah_pinjaman'],
-                    'bunga_pinjaman_per_bulan' => $pengajuan['bunga_pinjaman_per_bulan'],
-                    'angsuran_per_bulan' => $pengajuan['angsuran_per_bulan'],
-                    'status' => 'belum lunas',
-                    'total_pinjaman' => $pengajuan['total_pinjaman'],
-                ]);
-
-                $this->generateAngsuran(10, $pinjaman);
+            if ($user->hasRole('admin')) {
+                PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_admin' => 'disetujui']);        
+                if ($pengajuan->status_persetujuan_ketua == 'disetujui') {
+                   $this->createPinjaman(10, $pengajuan);
+                }
             }
-        }
 
-        if ($user->hasRole('ketua')) {
-            PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_ketua' => 'disetujui']);        
-            if ($pengajuan->status_persetujuan_admin == 'disetujui') {
-                $pinjaman = Pinjaman::create([
-                    'id_anggota' => $pengajuan['id_anggota'],
-                    'id_pengajuan' => $pengajuan['id'],
-                    'jumlah_pinjaman' => $pengajuan['jumlah_pinjaman'],
-                    'bunga_pinjaman_per_bulan' => $pengajuan['bunga_pinjaman_per_bulan'],
-                    'angsuran_per_bulan' => $pengajuan['angsuran_per_bulan'],
-                    'status' => 'belum lunas',
-                    'total_pinjaman' => $pengajuan['total_pinjaman'],
-                ]);
-
-                $this->generateAngsuran(10, $pinjaman);
+            if ($user->hasRole('ketua')) {
+                PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_ketua' => 'disetujui']);        
+                if ($pengajuan->status_persetujuan_admin == 'disetujui') {
+                    $this->createPinjaman(10, $pengajuan);
+                }
             }
-        }
 
+            DB::commit();
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            throw $e;
+
+        }
 
 
         $pinjaman = PengajuanPinjaman::join('anggota', 'anggota.id', '=', 'pengajuan_pinjaman.id_anggota')
@@ -121,24 +111,32 @@ class PinjamanController extends Controller
         return view('pinjaman/pengajuan-pinjaman-list', ["result" => $pinjaman]);
     }
     
-    private function generateAngsuran($tenor, $pinjaman){
-
+    private function createPinjaman($tenor, $pengajuan){
+        $pinjaman = Pinjaman::create([
+            'id_anggota' => $pengajuan['id_anggota'],
+            'id_pengajuan' => $pengajuan['id'],
+            'jumlah_pinjaman' => $pengajuan['jumlah_pinjaman'],
+            'bunga_pinjaman_per_bulan' => $pengajuan['bunga_pinjaman_per_bulan'],
+            'angsuran_per_bulan' => $pengajuan['angsuran_per_bulan'],
+            'status' => 'belum lunas',
+            'total_pinjaman' => $pengajuan['total_pinjaman'],
+        ]);
 
         $angsuran_arr = [];
 
         for ($i=0; $i < $tenor; $i++) { 
             $angsuran = [
                 'id_pinjaman' => $pinjaman->id,
-                'jumlah' => $pinjaman->jumlah,
+                'jumlah' => $pinjaman->jumlah_pinjaman,
                 'pembayaran_ke' => $i + 1,
-                'status' => 'belum dibayar'
+                'status' => 'belum dibayar',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
             ];
 
             array_push($angsuran_arr, $angsuran);
         }
 
-        Angsuran::create($angsuran_arr);
-        
-    return view('pinjaman/pengajuan-pinjaman-list', ["result" => $pinjaman]);
+        Angsuran::insert($angsuran_arr);
     }
 }
