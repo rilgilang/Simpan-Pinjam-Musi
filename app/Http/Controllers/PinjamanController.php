@@ -17,7 +17,7 @@ class PinjamanController extends Controller
 
         $pinjaman = Pinjaman::join('anggota', 'anggota.id', '=', 'pinjaman.id_anggota')
         ->join('users', 'anggota.id_user', '=', 'users.id')
-        ->select('users.id', 'users.name', 'pinjaman.id_anggota', 'pinjaman.bunga_pinjaman_per_bulan', 'pinjaman.jumlah_pinjaman', 'pinjaman.created_at','pinjaman.angsuran_per_bulan', 'pinjaman.status', 'pinjaman.total_pinjaman')
+        ->select('pinjaman.id', 'users.name', 'pinjaman.id_anggota', 'pinjaman.bunga_pinjaman_per_bulan', 'pinjaman.jumlah_pinjaman', 'pinjaman.created_at','pinjaman.angsuran_per_bulan', 'pinjaman.status', 'pinjaman.total_pinjaman')
         ->get();
 
         
@@ -127,7 +127,7 @@ class PinjamanController extends Controller
         for ($i=0; $i < $tenor; $i++) { 
             $angsuran = [
                 'id_pinjaman' => $pinjaman->id,
-                'jumlah' => $pinjaman->jumlah_pinjaman,
+                'jumlah' => $pinjaman->bunga_pinjaman_per_bulan,
                 'pembayaran_ke' => $i + 1,
                 'status' => 'belum dibayar',
                 'created_at' => date('Y-m-d H:i:s'),
@@ -138,5 +138,62 @@ class PinjamanController extends Controller
         }
 
         Angsuran::insert($angsuran_arr);
+    }
+
+    public function pinjamanDetail($id): View {
+    $pinjaman = Pinjaman::leftJoin('anggota', 'anggota.id', '=', 'pinjaman.id_anggota')
+        ->leftJoin('pengajuan_pinjaman', 'pinjaman.id_pengajuan', '=', 'pengajuan_pinjaman.id')
+        ->leftJoin('users', 'anggota.id_user', '=', 'users.id')
+        ->select(
+            'users.name', 
+            'users.email',
+            'users.created_at as user_joined_at', 
+            'anggota.nik', 
+            'anggota.alamat', 
+            'anggota.nomor_hp', 
+            'pinjaman.id', 
+            'pinjaman.jumlah_pinjaman',
+            'pinjaman.bunga_pinjaman_per_bulan',
+            'pinjaman.status',
+            'pinjaman.angsuran_per_bulan',
+            'pinjaman.total_pinjaman',
+            'pinjaman.created_at',
+            'pengajuan_pinjaman.created_at as tanggal_pengajuan'
+        )
+        ->where('pinjaman.id', $id)
+        ->first();
+
+      $angsuran = Angsuran::all()->where('id_pinjaman', $id);
+      return view('pinjaman/angsuran-detail', ["pinjaman" => $pinjaman, 'angsuran' => $angsuran]); 
+    }
+
+    public function updateAngsuran(Request $request, $id) {
+      
+
+        $angsuran = Angsuran::find($id);
+
+        try { DB::beginTransaction();
+
+            Angsuran::where('id', $id)->update(['status' => $request->input('status')]);   
+
+            $allAngsuran = Angsuran::all()
+            ->where('id_pinjaman', '=', $angsuran->id_pinjaman)
+            ->where('status', '=', 'dibayar');
+
+            if (count($allAngsuran) == 10) {
+                Pinjaman::where('id', $angsuran->id_pinjaman)->update(['status' => 'lunas']);        
+            }
+
+            DB::commit();
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            throw $e;
+
+        }
+
+      return redirect("/pinjaman/".$angsuran->id_pinjaman);
     }
 }

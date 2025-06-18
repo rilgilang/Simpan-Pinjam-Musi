@@ -55,7 +55,7 @@
                                         <th class="px-5 py-3 sm:px-6">
                                             <div class="flex items-center">
                                                 <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                                                    Total Pinjaman
+                                                    Total Peminjaman
                                                 </p>
                                             </div>
                                         </th>
@@ -80,7 +80,8 @@
                                 <!-- table body start -->
                                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                                     @foreach ($result as $pinjaman)
-                                        <tr>
+                                        <tr onclick="window.location.href='{{ route('detail-pinjaman', $pinjaman->id) }}'"
+                                            class="hover:cursor-pointer sm:px-6">
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div class="flex items-center">
                                                     <div class="flex items-center gap-3">

@@ -34,9 +34,17 @@ Route::get('/pinjaman', [PinjamanController::class, 'pinjamanList'])
     ->middleware(['auth', 'verified'])
     ->name('list-pinjaman');
 
-Route::get('/pengajuan-pinjaman', [PinjamanController::class, 'pengajuanPinjamanList'])
+Route::get('/pinjaman/{pinjaman_id}', [PinjamanController::class, 'pinjamanDetail'])
     ->middleware(['auth', 'verified'])
-    ->name('list-pengajuan-pinjaman');
+    ->name('detail-pinjaman');
+
+Route::get('/pinjaman/{pinjaman_id}', [PinjamanController::class, 'pinjamanDetail'])
+    ->middleware(['auth', 'verified'])
+    ->name('detail-pinjaman');
+
+Route::patch('/update-angsuran/{ud}', [PinjamanController::class, 'updateAngsuran'])
+    ->middleware(['role:admin'])
+    ->name('update-angsuran');
 
 Route::get('/approve-pengajuan/{id}', [PinjamanController::class, 'approvePengajuanPinjaman'])
         ->middleware(['role:ketua|admin'])
