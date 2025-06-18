@@ -35,8 +35,6 @@ class AnggotaController extends Controller
             'name' => $req['name'],
             'email' => $req['email'],
             'password' => $req['password'],
-            'phone_number' => $req['phone_number'],
-            'address' => $req['address'],
         ]);
 
         $user->assignRole('anggota');

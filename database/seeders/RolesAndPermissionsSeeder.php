@@ -17,6 +17,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // Create roles
         $adminRole = Role::create(['name' => 'admin']);
+        $ketuaRole = Role::create(['name' => 'ketua']);
         $anggotaRole = Role::create(['name' => 'anggota']);
 
         // Create permissions
@@ -34,12 +35,21 @@ class RolesAndPermissionsSeeder extends Seeder
 
 
         // Create user
-        $user = User::create([
+        $admin = User::create([
             'name' => "xifutang",
             'email' => "admin1@gmail.com",
             'password' => "admin123",
         ]);
 
-        $user->assignRole('admin');
+        $admin->assignRole('admin');
+
+                // Create user
+        $ketua = User::create([
+            'name' => "xifutang",
+            'email' => "ketua1@gmail.com",
+            'password' => "ketua123",
+        ]);
+
+        $ketua->assignRole('ketua');
     }
 }

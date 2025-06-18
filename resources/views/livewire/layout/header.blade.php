@@ -403,7 +403,7 @@ new class extends Component {
                     </span>
 
                     <span class="mr-1 block text-theme-sm font-medium">
-                        Emirhan Boruch
+                        {{ auth()->user()->name }}
                     </span>
 
                     <svg :class="dropdownOpen && 'rotate-180'" class="stroke-gray-500 dark:stroke-gray-400"
@@ -419,10 +419,10 @@ new class extends Component {
                     class="absolute right-0 mt-[17px] flex w-[260px] flex-col rounded-2xl border border-gray-200 bg-white p-3 shadow-theme-lg dark:border-gray-800 dark:bg-gray-dark">
                     <div>
                         <span class="block text-theme-sm font-medium text-gray-700 dark:text-gray-400">
-                            Emirhan Boruch
+                            {{ auth()->user()->name }}
                         </span>
                         <span class="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-                            emirhanboruch51@gmail.com
+                            {{ auth()->user()->email }}
                         </span>
                     </div>
 

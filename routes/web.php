@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\PinjamanController;
 use App\Http\Controllers\SimpananController;
@@ -16,6 +17,10 @@ Route::view('dashboard', 'dashboard')
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');
+
+Route::get('/admin', [AdminController::class, 'adminList'])
+    ->middleware('role:ketua')
+    ->name('list-admin');
 
 Route::get('/anggota', [AnggotaController::class, 'anggotaList'])
     ->middleware('role:admin')
@@ -45,10 +50,6 @@ Route::post('pengajuan-pinjaman', [PinjamanController::class, 'pengajuanPinjaman
     ->middleware(['role:anggota'])
     ->name('pengajuan-pinjaman');
 
-// Route::get('/anggota/:id', [AnggotaController::class, 'anggotaDetail'])
-//     ->middleware(['role:anggota|admin'])
-//     ->name('anggota-detail');
-
 Route::get('/anggota/{id}', [AnggotaController::class, 'anggotaDetail'])
     ->middleware(['role:admin'])
     ->name('anggota-detail');
@@ -56,6 +57,14 @@ Route::get('/anggota/{id}', [AnggotaController::class, 'anggotaDetail'])
 Route::post('save-anggota', [AnggotaController::class, 'anggotaSave'])
     ->middleware(['role:admin'])
     ->name('save-anggota');
+
+Route::post('save-admin', [AdminController::class, 'adminSave'])
+    ->middleware(['role:ketua'])
+    ->name('save-admin');
+
+Route::get('/delete-admin/{id}', [AdminController::class, 'adminDelete'])
+    ->middleware(['role:ketua'])
+    ->name('admin-delete');
 
 Route::post('save-simpanan', [SimpananController::class, 'simpananSave'])
     ->middleware(['role:admin'])

@@ -11,6 +11,7 @@ class Angsuran extends Model
     protected $fillable = [
         'id_pinjaman',
         'jumlah',
-        'pembayaran_ke'
+        'pembayaran_ke',
+        'status',
     ];
 }

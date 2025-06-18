@@ -96,10 +96,11 @@ new class extends Component {
                             </span>
                         </a>
                     </li> --}}
-                    <!-- Menu Item Admin -->
-                    @if (auth()->check() && auth()->user()->hasRole('admin'))
+
+                    <!-- Menu Item Ketua -->
+                    @if (auth()->check() && auth()->user()->hasRole('ketua'))
                         <li>
-                            <a href="profile.html" @click="selected = (selected === 'Admin' ? '':'Admin')"
+                            <a href="/admin" @click="selected = (selected === 'Ketua' ? '':'Ketua')"
                                 class="menu-item group"
                                 :class="(selected === 'Admin') && (page === 'profile') ? 'menu-item-active' :
                                 'menu-item-inactive'">

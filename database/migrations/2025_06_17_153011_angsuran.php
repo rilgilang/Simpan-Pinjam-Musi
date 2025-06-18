@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer('id_pinjaman');
             $table->integer('pembayaran_ke');
             $table->float('jumlah');
+            $table->enum('status', ['belum dibayar', 'dibayar']);
             $table->timestamps();   
         });
     }

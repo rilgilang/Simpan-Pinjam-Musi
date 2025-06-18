@@ -1,34 +1,4 @@
 <x-app-layout>
-    <script>
-        function loanCalculation() {
-            const loanInput = document.getElementById("jumlah_pinjaman");
-            const angsuranInput = document.getElementById("angsuran");
-            const totalInput = document.getElementById("total_pengajuan");
-
-            const pinjaman = parseFloat(loanInput.value.replace(/,/g, ""));
-            const bunga = parseFloat(1) / 100;
-
-            if (!isNaN(pinjaman) && !isNaN(bunga)) {
-                // const total = pinjaman + (pinjaman * bunga);
-                const perBulan = pinjaman * bunga
-                const angsuran = pinjaman / 10 + perBulan;
-                const total = angsuran * 10;
-
-                angsuranInput.value = Math.round(angsuran);
-                totalInput.value = Math.round(total);
-            } else {
-                angsuranInput.value = '';
-                totalInput.value = '';
-            }
-        }
-
-        // Optional: run calculation on page load too
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById("jumlah_pinjaman").addEventListener("input", loanCalculation);
-        });
-    </script>
-
-
     <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
         <!-- Breadcrumb Start -->
         <div x-data="{ pageName: `Basic Tables` }">
@@ -43,13 +13,6 @@
                         <h3 class="col-span-6 text-base font-medium text-gray-800 dark:text-white/90">
                             Daftar Pinjaman
                         </h3>
-
-                        @if (auth()->check() && auth()->user()->hasRole('anggota'))
-                            <button onclick="openModal()"
-                                class="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-center text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
-                                Ajukan Pinjaman
-                            </button>
-                        @endif
                     </div>
 
                 </div>

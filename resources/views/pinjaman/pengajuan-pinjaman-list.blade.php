@@ -330,9 +330,9 @@
                                                             </p>
                                                         @else
                                                             <p
-                                                                class="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-500">
+                                                                class="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm text-sm font-medium text-green-600 dark:bg-green-900/20 dark:text-green-500">
                                                                 Disetujui
-                                                                <span class="h-2 w-2 rounded-full bg-red-500"></span>
+                                                                <span class="h-2 w-2 rounded-full bg-green-500"></span>
                                                             </p>
                                                         @endif
                                                     </div>
