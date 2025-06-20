@@ -58,7 +58,7 @@ Route::post('pengajuan-pinjaman', [PinjamanController::class, 'pengajuanPinjaman
     ->middleware(['role:anggota'])
     ->name('pengajuan-pinjaman');
 
-Route::post('pengajuan-pinjaman-list', [PinjamanController::class, 'pengajuanPinjamanList'])
+Route::get('pengajuan-pinjaman-list', [PinjamanController::class, 'pengajuanPinjamanList'])
     ->middleware(['auth', 'verified'])
     ->name('pengajuan-pinjaman-list');
 
