@@ -35,7 +35,7 @@ class PinjamanController extends Controller
     return view('pinjaman/pengajuan-pinjaman-list', ["result" => $pinjaman]);
     }
 
-    public function pengajuanPinjaman(Request $req): View{
+    public function pengajuanPinjaman(Request $req){
          $req->validate(
             [
                 'jumlah_pinjaman' => 'required|numeric',
@@ -67,7 +67,7 @@ class PinjamanController extends Controller
 
         $pinjaman = Pinjaman::all()->where('id_anggota', $anggota['id']);
 
-    return view('pinjaman/pengajuan-pinjaman-list', ["result" => $pinjaman]);
+    return redirect('/pengajuan-pinjaman-list');
     }
 
     public function approvePengajuanPinjaman($id): View{
