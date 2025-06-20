@@ -110,6 +110,42 @@ class PinjamanController extends Controller
 
         return view('pinjaman/pengajuan-pinjaman-list', ["result" => $pinjaman]);
     }
+
+
+    public function rejectPengajuanPinjaman($id): View{
+    
+        $user = Auth::user(); // Get the authenticated user
+
+        $pengajuan = PengajuanPinjaman::where('id', $id)->select('*')->first();
+        
+        try { DB::beginTransaction();
+
+            if ($user->hasRole('admin')) {
+                PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_admin' => 'ditolak']);        
+            }
+
+            if ($user->hasRole('ketua')) {
+                PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_ketua' => 'disetujui']);        
+            }
+
+            DB::commit();
+
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            throw $e;
+
+        }
+
+
+        $pinjaman = PengajuanPinjaman::join('anggota', 'anggota.id', '=', 'pengajuan_pinjaman.id_anggota')
+        ->join('users', 'anggota.id_user', '=', 'users.id')
+        ->select('pengajuan_pinjaman.id', 'users.name', 'pengajuan_pinjaman.id_anggota', 'pengajuan_pinjaman.bunga_pinjaman_per_bulan', 'pengajuan_pinjaman.jumlah_pinjaman', 'pengajuan_pinjaman.created_at','pengajuan_pinjaman.angsuran_per_bulan', 'pengajuan_pinjaman.total_pinjaman', 'pengajuan_pinjaman.status_persetujuan_admin',  'pengajuan_pinjaman.status_persetujuan_ketua')
+        ->get();
+
+        return view('pinjaman/pengajuan-pinjaman-list', ["result" => $pinjaman]);
+    }
     
     private function createPinjaman($tenor, $pengajuan){
         $pinjaman = Pinjaman::create([

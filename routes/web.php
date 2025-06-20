@@ -50,13 +50,17 @@ Route::get('/approve-pengajuan/{id}', [PinjamanController::class, 'approvePengaj
         ->middleware(['role:ketua|admin'])
     ->name('approve-pengajuan-pinjaman');
 
-Route::get('/reject-pengajuan/{id}', [PinjamanController::class, 'pengajuanPinjamanList'])
+Route::get('/reject-pengajuan/{id}', [PinjamanController::class, 'rejectPengajuanPinjaman'])
         ->middleware(['role:ketua|admin'])
     ->name('reject-pengajuan-pinjaman');
 
-Route::get('pengajuan-pinjaman', [PinjamanController::class, 'pengajuanPinjaman'])
+Route::post('pengajuan-pinjaman', [PinjamanController::class, 'pengajuanPinjaman'])
     ->middleware(['role:anggota'])
     ->name('pengajuan-pinjaman');
+
+Route::post('pengajuan-pinjaman-list', [PinjamanController::class, 'pengajuanPinjamanList'])
+    ->middleware(['role:anggota'])
+    ->name('pengajuan-pinjaman-list');
 
 Route::get('/anggota/{id}', [AnggotaController::class, 'anggotaDetail'])
     ->middleware(['role:admin'])

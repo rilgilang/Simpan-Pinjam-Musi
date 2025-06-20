@@ -190,7 +190,7 @@ new class extends Component {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/pengajuan-pinjaman" class="menu-dropdown-item group"
+                                    <a href="/pengajuan-pinjaman-list" class="menu-dropdown-item group"
                                         :class="page === 'analytics' ? 'menu-dropdown-item-active' :
                                             'menu-dropdown-item-inactive'">
                                         Pengajuan
