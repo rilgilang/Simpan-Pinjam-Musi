@@ -59,7 +59,7 @@ Route::post('pengajuan-pinjaman', [PinjamanController::class, 'pengajuanPinjaman
     ->name('pengajuan-pinjaman');
 
 Route::post('pengajuan-pinjaman-list', [PinjamanController::class, 'pengajuanPinjamanList'])
-    ->middleware(['role:anggota'])
+    ->middleware(['auth', 'verified'])
     ->name('pengajuan-pinjaman-list');
 
 Route::get('/anggota/{id}', [AnggotaController::class, 'anggotaDetail'])
