@@ -121,15 +121,9 @@ class PinjamanController extends Controller
         try { DB::beginTransaction();
 
             if ($user->hasRole('admin')) {
-                PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_admin' => 'disetujui']);        
-            }
-            if ($user->hasRole('admin')) {
                 PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_admin' => 'ditolak']);        
             }
-
-            if ($user->hasRole('ketua')) {
-                PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_ketua' => 'disetujui']);        
-            }
+            
             if ($user->hasRole('ketua')) {
                 PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_ketua' => 'ditolak']);        
             }
@@ -237,5 +231,33 @@ class PinjamanController extends Controller
         }
 
       return redirect("/pinjaman/".$angsuran->id_pinjaman);
+    }
+
+    private function calculateSHU($pokok, $sukarela) {
+        // Example total SHU for distribution (you can pass as parameter)
+        $totalSHU = 68065847; // from your SHU sheet
+       
+        // Get all members
+        $members = Member::all();
+
+        // Calculate total Nilai Saham
+        $totalNilaiSaham = $members->sum(function ($member) {
+            return $member->simpanan_pokok + $member->simpanan_wajib + $member->simpanan_sukarela;
+        });
+
+        // Calculate SHU per member
+        $results = $members->map(function ($member) use ($totalNilaiSaham, $totalSHU) {
+            $nilaiSaham = $member->simpanan_pokok + $member->simpanan_wajib + $member->simpanan_sukarela;
+            $shuDiterima = ($totalNilaiSaham > 0) ? ($nilaiSaham / $totalNilaiSaham) * $totalSHU : 0;
+
+            return [
+                'name' => $member->name,
+                'nilai_saham' => $nilaiSaham,
+                'shu_diterima' => round($shuDiterima, 0),
+            ];
+        });
+
+        return response()->json($results);
+    
     }
 }
