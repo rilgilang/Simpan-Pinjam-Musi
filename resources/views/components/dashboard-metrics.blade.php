@@ -12,9 +12,9 @@
 
         <div class="mt-5 flex items-end justify-between">
             <div>
-                <span class="text-sm text-gray-500 dark:text-gray-400">Total Anggota</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400">Total Anggota Aktif</span>
                 <h4 class="mt-2 text-title-sm font-bold text-gray-800 dark:text-white/90">
-                    3,782
+                    142
                 </h4>
             </div>
         </div>
@@ -34,9 +34,9 @@
 
         <div class="mt-5 flex items-end justify-between">
             <div>
-                <span class="text-sm text-gray-500 dark:text-gray-400">Total Pengeluaran</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400">Total Anggota Non-Aktif</span>
                 <h4 class="mt-2 text-title-sm font-bold text-gray-800 dark:text-white/90">
-                    Rp17.000.000
+                    5
                 </h4>
             </div>
         </div>

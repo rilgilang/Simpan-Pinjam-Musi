@@ -85,14 +85,7 @@ new #[Layout('layouts.guest')] class extends Component {
 
                         @if (Route::has('password.request'))
                             <div class="mt-5">
-                                <p
-                                    class="text-center text-sm font-normal text-gray-700 sm:text-start dark:text-gray-400">
-                                    Don't have an account?
-                                    <a href="{{ route('register') }}"
-                                        class="text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                                        wire:navigate>Sign
-                                        Up</a>
-                                </p>
+                                
                             </div>
                         @endif
                     </div>
@@ -104,10 +97,9 @@ new #[Layout('layouts.guest')] class extends Component {
             <!-- ===== Common Grid Shape End ===== -->
             <div class="flex max-w-xs flex-col items-center">
                 <a href="index.html" class="mb-4 block">
-                    <img src="./images/logo/auth-logo.svg" alt="Logo" />
+                    <img src="Logo2.PNG" alt="Logo" />
                 </a>
                 <p class="text-center text-gray-400 dark:text-white/60">
-                    Free and Open-Source Tailwind CSS Admin Dashboard Template
                 </p>
             </div>
         </div>
