@@ -121,11 +121,17 @@ class PinjamanController extends Controller
         try { DB::beginTransaction();
 
             if ($user->hasRole('admin')) {
+                PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_admin' => 'disetujui']);        
+            }
+            if ($user->hasRole('admin')) {
                 PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_admin' => 'ditolak']);        
             }
 
             if ($user->hasRole('ketua')) {
                 PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_ketua' => 'disetujui']);        
+            }
+            if ($user->hasRole('ketua')) {
+                PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_ketua' => 'ditolak']);        
             }
 
             DB::commit();

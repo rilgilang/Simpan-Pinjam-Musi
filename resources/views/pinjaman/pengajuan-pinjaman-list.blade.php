@@ -317,14 +317,14 @@
 
                                                         @if ($pinjaman->status_persetujuan_ketua == 'ditolak')
                                                             <p
-                                                                class="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm text-sm font-medium text-green-600 dark:bg-green-900/20 dark:text-green-500">
+                                                                class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm text-sm font-medium text-green-600 dark:bg-green-900/20 dark:text-green-500">
                                                                 Ditolak
                                                                 <span class="h-2 w-2 rounded-full bg-green-500"></span>
                                                             </p>
                                                         @elseif($pinjaman->status_persetujuan_ketua == 'menunggu')
                                                             <p
                                                                 class="inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-sm text-sm font-medium text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-500">
-                                                                Mununggu
+                                                                Menunggu
                                                                 <span
                                                                     class="h-2 w-2 rounded-full bg-yellow-500"></span>
                                                             </p>
@@ -345,14 +345,14 @@
 
                                                         @if ($pinjaman->status_persetujuan_admin == 'ditolak')
                                                             <p
-                                                                class="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm text-sm font-medium text-green-600 dark:bg-green-900/20 dark:text-green-500">
+                                                                class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm text-sm font-medium text-green-600 dark:bg-green-900/20 dark:text-green-500">
                                                                 Ditolak
                                                                 <span class="h-2 w-2 rounded-full bg-green-500"></span>
                                                             </p>
                                                         @elseif($pinjaman->status_persetujuan_admin == 'menunggu')
                                                             <p
                                                                 class="inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-sm text-sm font-medium text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-500">
-                                                                Mununggu
+                                                                Menunggu
                                                                 <span
                                                                     class="h-2 w-2 rounded-full bg-yellow-500"></span>
                                                             </p>
