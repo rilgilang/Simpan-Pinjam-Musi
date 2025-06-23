@@ -6,6 +6,7 @@ use App\Models\Anggota;
 use App\Models\Angsuran;
 use App\Models\PengajuanPinjaman;
 use App\Models\Pinjaman;
+use App\Models\Simpanan;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,161 +14,235 @@ use Illuminate\Support\Facades\DB;
 
 class PinjamanController extends Controller
 {
-    public function pinjamanList(): View{
+    public function pinjamanList(): View
+    {
+        $pinjaman = Pinjaman::join(
+            "anggota",
+            "anggota.id",
+            "=",
+            "pinjaman.id_anggota"
+        )
+            ->join("users", "anggota.id_user", "=", "users.id")
+            ->select(
+                "pinjaman.id",
+                "users.name",
+                "pinjaman.id_anggota",
+                "pinjaman.bunga_pinjaman_per_bulan",
+                "pinjaman.jumlah_pinjaman",
+                "pinjaman.created_at",
+                "pinjaman.angsuran_per_bulan",
+                "pinjaman.status",
+                "pinjaman.total_pinjaman"
+            )
+            ->get();
 
-        $pinjaman = Pinjaman::join('anggota', 'anggota.id', '=', 'pinjaman.id_anggota')
-        ->join('users', 'anggota.id_user', '=', 'users.id')
-        ->select('pinjaman.id', 'users.name', 'pinjaman.id_anggota', 'pinjaman.bunga_pinjaman_per_bulan', 'pinjaman.jumlah_pinjaman', 'pinjaman.created_at','pinjaman.angsuran_per_bulan', 'pinjaman.status', 'pinjaman.total_pinjaman')
-        ->get();
-
-        
-    return view('pinjaman/pinjaman-list', ["result" => $pinjaman]);
+        return view("pinjaman/pinjaman-list", ["result" => $pinjaman]);
     }
 
-    public function pengajuanPinjamanList(): View{
+    public function pengajuanPinjamanList(): View
+    {
+        $pinjaman = PengajuanPinjaman::join(
+            "anggota",
+            "anggota.id",
+            "=",
+            "pengajuan_pinjaman.id_anggota"
+        )
+            ->join("users", "anggota.id_user", "=", "users.id")
+            ->select(
+                "pengajuan_pinjaman.id",
+                "users.name",
+                "pengajuan_pinjaman.id_anggota",
+                "pengajuan_pinjaman.bunga_pinjaman_per_bulan",
+                "pengajuan_pinjaman.jumlah_pinjaman",
+                "pengajuan_pinjaman.created_at",
+                "pengajuan_pinjaman.angsuran_per_bulan",
+                "pengajuan_pinjaman.total_pinjaman",
+                "pengajuan_pinjaman.status_persetujuan_admin",
+                "pengajuan_pinjaman.status_persetujuan_ketua"
+            )
+            ->get();
 
-        $pinjaman = PengajuanPinjaman::join('anggota', 'anggota.id', '=', 'pengajuan_pinjaman.id_anggota')
-        ->join('users', 'anggota.id_user', '=', 'users.id')
-        ->select('pengajuan_pinjaman.id', 'users.name', 'pengajuan_pinjaman.id_anggota', 'pengajuan_pinjaman.bunga_pinjaman_per_bulan', 'pengajuan_pinjaman.jumlah_pinjaman', 'pengajuan_pinjaman.created_at','pengajuan_pinjaman.angsuran_per_bulan', 'pengajuan_pinjaman.total_pinjaman', 'pengajuan_pinjaman.status_persetujuan_admin',  'pengajuan_pinjaman.status_persetujuan_ketua')
-        ->get();
-
-        
-    return view('pinjaman/pengajuan-pinjaman-list', ["result" => $pinjaman]);
+        return view("pinjaman/pengajuan-pinjaman-list", [
+            "result" => $pinjaman,
+        ]);
     }
 
-    public function pengajuanPinjaman(Request $req){
-         $req->validate(
+    public function pengajuanPinjaman(Request $req)
+    {
+        $req->validate(
             [
-                'jumlah_pinjaman' => 'required|numeric',
-                'angsuran' => 'required|numeric',
-                'total_pengajuan' => 'required|numeric',
+                "jumlah_pinjaman" => "required|numeric",
+                "angsuran" => "required|numeric",
+                "total_pengajuan" => "required|numeric",
             ],
             [
-                'jumlah_pinjaman.required' => 'jumlah pinjaman anggota wajib diisi.',
-                'angsuran.required' => 'angsuran wajib diisi.',
-                'total_pengajuan.required' => 'total pengajuan wajib diisi.',
+                "jumlah_pinjaman.required" =>
+                    "jumlah pinjaman anggota wajib diisi.",
+                "angsuran.required" => "angsuran wajib diisi.",
+                "total_pengajuan.required" => "total pengajuan wajib diisi.",
             ]
         );
 
-        
         $userId = Auth::id(); // Get the current user's ID
 
-        $anggota = Anggota::where('id_user', $userId)->first();
-        
-        
-         PengajuanPinjaman::create([
-            'id_anggota' => $anggota['id'],
-            'jumlah_pinjaman' => $req['jumlah_pinjaman'],
-            'bunga_pinjaman_per_bulan' => 1,
-            'angsuran_per_bulan' => $req['angsuran'],
-            'total_pinjaman' => $req['total_pengajuan'],
-            'status_persetujuan_admin' => 'menunggu',
-            'status_persetujuan_ketua' => 'menunggu',
+        $anggota = Anggota::where("id_user", $userId)->first();
+
+        PengajuanPinjaman::create([
+            "id_anggota" => $anggota["id"],
+            "jumlah_pinjaman" => $req["jumlah_pinjaman"],
+            "bunga_pinjaman_per_bulan" => 1,
+            "angsuran_per_bulan" => $req["angsuran"],
+            "total_pinjaman" => $req["total_pengajuan"],
+            "status_persetujuan_admin" => "menunggu",
+            "status_persetujuan_ketua" => "menunggu",
         ]);
 
-        $pinjaman = Pinjaman::all()->where('id_anggota', $anggota['id']);
+        $pinjaman = Pinjaman::all()->where("id_anggota", $anggota["id"]);
 
-    return redirect('/pengajuan-pinjaman-list');
+        return redirect("/pengajuan-pinjaman-list");
     }
 
-    public function approvePengajuanPinjaman($id): View{
-    
+    public function approvePengajuanPinjaman($id): View
+    {
         $user = Auth::user(); // Get the authenticated user
 
-        $pengajuan = PengajuanPinjaman::where('id', $id)->select('*')->first();
-        
-        try { DB::beginTransaction();
+        $pengajuan = PengajuanPinjaman::where("id", $id)
+            ->select("*")
+            ->first();
 
-            if ($user->hasRole('admin')) {
-                PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_admin' => 'disetujui']);        
-                if ($pengajuan->status_persetujuan_ketua == 'disetujui') {
-                   $this->createPinjaman(10, $pengajuan);
+        try {
+            DB::beginTransaction();
+
+            if ($user->hasRole("admin")) {
+                PengajuanPinjaman::where("id", $id)->update([
+                    "status_persetujuan_admin" => "disetujui",
+                ]);
+                if ($pengajuan->status_persetujuan_ketua == "disetujui") {
+                    $this->createPinjaman(10, $pengajuan);
                 }
             }
 
-            if ($user->hasRole('ketua')) {
-                PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_ketua' => 'disetujui']);        
-                if ($pengajuan->status_persetujuan_admin == 'disetujui') {
+            if ($user->hasRole("ketua")) {
+                PengajuanPinjaman::where("id", $id)->update([
+                    "status_persetujuan_ketua" => "disetujui",
+                ]);
+                if ($pengajuan->status_persetujuan_admin == "disetujui") {
                     $this->createPinjaman(10, $pengajuan);
                 }
             }
 
             DB::commit();
-
         } catch (\Exception $e) {
-
             DB::rollback();
 
             throw $e;
-
         }
 
+        $pinjaman = PengajuanPinjaman::join(
+            "anggota",
+            "anggota.id",
+            "=",
+            "pengajuan_pinjaman.id_anggota"
+        )
+            ->join("users", "anggota.id_user", "=", "users.id")
+            ->select(
+                "pengajuan_pinjaman.id",
+                "users.name",
+                "pengajuan_pinjaman.id_anggota",
+                "pengajuan_pinjaman.bunga_pinjaman_per_bulan",
+                "pengajuan_pinjaman.jumlah_pinjaman",
+                "pengajuan_pinjaman.created_at",
+                "pengajuan_pinjaman.angsuran_per_bulan",
+                "pengajuan_pinjaman.total_pinjaman",
+                "pengajuan_pinjaman.status_persetujuan_admin",
+                "pengajuan_pinjaman.status_persetujuan_ketua"
+            )
+            ->get();
 
-        $pinjaman = PengajuanPinjaman::join('anggota', 'anggota.id', '=', 'pengajuan_pinjaman.id_anggota')
-        ->join('users', 'anggota.id_user', '=', 'users.id')
-        ->select('pengajuan_pinjaman.id', 'users.name', 'pengajuan_pinjaman.id_anggota', 'pengajuan_pinjaman.bunga_pinjaman_per_bulan', 'pengajuan_pinjaman.jumlah_pinjaman', 'pengajuan_pinjaman.created_at','pengajuan_pinjaman.angsuran_per_bulan', 'pengajuan_pinjaman.total_pinjaman', 'pengajuan_pinjaman.status_persetujuan_admin',  'pengajuan_pinjaman.status_persetujuan_ketua')
-        ->get();
-
-        return view('pinjaman/pengajuan-pinjaman-list', ["result" => $pinjaman]);
+        return view("pinjaman/pengajuan-pinjaman-list", [
+            "result" => $pinjaman,
+        ]);
     }
 
-
-    public function rejectPengajuanPinjaman($id): View{
-    
+    public function rejectPengajuanPinjaman($id): View
+    {
         $user = Auth::user(); // Get the authenticated user
 
-        $pengajuan = PengajuanPinjaman::where('id', $id)->select('*')->first();
-        
-        try { DB::beginTransaction();
+        $pengajuan = PengajuanPinjaman::where("id", $id)
+            ->select("*")
+            ->first();
 
-            if ($user->hasRole('admin')) {
-                PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_admin' => 'ditolak']);        
+        try {
+            DB::beginTransaction();
+
+            if ($user->hasRole("admin")) {
+                PengajuanPinjaman::where("id", $id)->update([
+                    "status_persetujuan_admin" => "ditolak",
+                ]);
             }
-            
-            if ($user->hasRole('ketua')) {
-                PengajuanPinjaman::where('id', $id)->update(['status_persetujuan_ketua' => 'ditolak']);        
+
+            if ($user->hasRole("ketua")) {
+                PengajuanPinjaman::where("id", $id)->update([
+                    "status_persetujuan_ketua" => "ditolak",
+                ]);
             }
 
             DB::commit();
-
         } catch (\Exception $e) {
-
             DB::rollback();
 
             throw $e;
-
         }
 
+        $pinjaman = PengajuanPinjaman::join(
+            "anggota",
+            "anggota.id",
+            "=",
+            "pengajuan_pinjaman.id_anggota"
+        )
+            ->join("users", "anggota.id_user", "=", "users.id")
+            ->select(
+                "pengajuan_pinjaman.id",
+                "users.name",
+                "pengajuan_pinjaman.id_anggota",
+                "pengajuan_pinjaman.bunga_pinjaman_per_bulan",
+                "pengajuan_pinjaman.jumlah_pinjaman",
+                "pengajuan_pinjaman.created_at",
+                "pengajuan_pinjaman.angsuran_per_bulan",
+                "pengajuan_pinjaman.total_pinjaman",
+                "pengajuan_pinjaman.status_persetujuan_admin",
+                "pengajuan_pinjaman.status_persetujuan_ketua"
+            )
+            ->get();
 
-        $pinjaman = PengajuanPinjaman::join('anggota', 'anggota.id', '=', 'pengajuan_pinjaman.id_anggota')
-        ->join('users', 'anggota.id_user', '=', 'users.id')
-        ->select('pengajuan_pinjaman.id', 'users.name', 'pengajuan_pinjaman.id_anggota', 'pengajuan_pinjaman.bunga_pinjaman_per_bulan', 'pengajuan_pinjaman.jumlah_pinjaman', 'pengajuan_pinjaman.created_at','pengajuan_pinjaman.angsuran_per_bulan', 'pengajuan_pinjaman.total_pinjaman', 'pengajuan_pinjaman.status_persetujuan_admin',  'pengajuan_pinjaman.status_persetujuan_ketua')
-        ->get();
-
-        return view('pinjaman/pengajuan-pinjaman-list', ["result" => $pinjaman]);
+        return view("pinjaman/pengajuan-pinjaman-list", [
+            "result" => $pinjaman,
+        ]);
     }
-    
-    private function createPinjaman($tenor, $pengajuan){
+
+    private function createPinjaman($tenor, $pengajuan)
+    {
         $pinjaman = Pinjaman::create([
-            'id_anggota' => $pengajuan['id_anggota'],
-            'id_pengajuan' => $pengajuan['id'],
-            'jumlah_pinjaman' => $pengajuan['jumlah_pinjaman'],
-            'bunga_pinjaman_per_bulan' => $pengajuan['bunga_pinjaman_per_bulan'],
-            'angsuran_per_bulan' => $pengajuan['angsuran_per_bulan'],
-            'status' => 'belum lunas',
-            'total_pinjaman' => $pengajuan['total_pinjaman'],
+            "id_anggota" => $pengajuan["id_anggota"],
+            "id_pengajuan" => $pengajuan["id"],
+            "jumlah_pinjaman" => $pengajuan["jumlah_pinjaman"],
+            "bunga_pinjaman_per_bulan" =>
+                $pengajuan["bunga_pinjaman_per_bulan"],
+            "angsuran_per_bulan" => $pengajuan["angsuran_per_bulan"],
+            "status" => "belum lunas",
+            "total_pinjaman" => $pengajuan["total_pinjaman"],
         ]);
 
         $angsuran_arr = [];
 
-        for ($i=0; $i < $tenor; $i++) { 
+        for ($i = 0; $i < $tenor; $i++) {
             $angsuran = [
-                'id_pinjaman' => $pinjaman->id,
-                'jumlah' => $pinjaman->bunga_pinjaman_per_bulan,
-                'pembayaran_ke' => $i + 1,
-                'status' => 'belum dibayar',
-                'created_at' => date('Y-m-d H:i:s'),
-                'updated_at' => date('Y-m-d H:i:s'),
+                "id_pinjaman" => $pinjaman->id,
+                "jumlah" => $pinjaman->bunga_pinjaman_per_bulan,
+                "pembayaran_ke" => $i + 1,
+                "status" => "belum dibayar",
+                "created_at" => date("Y-m-d H:i:s"),
+                "updated_at" => date("Y-m-d H:i:s"),
             ];
 
             array_push($angsuran_arr, $angsuran);
@@ -176,88 +251,179 @@ class PinjamanController extends Controller
         Angsuran::insert($angsuran_arr);
     }
 
-    public function pinjamanDetail($id): View {
-    $pinjaman = Pinjaman::leftJoin('anggota', 'anggota.id', '=', 'pinjaman.id_anggota')
-        ->leftJoin('pengajuan_pinjaman', 'pinjaman.id_pengajuan', '=', 'pengajuan_pinjaman.id')
-        ->leftJoin('users', 'anggota.id_user', '=', 'users.id')
-        ->select(
-            'users.name', 
-            'users.email',
-            'users.created_at as user_joined_at', 
-            'anggota.nik', 
-            'anggota.alamat', 
-            'anggota.nomor_hp', 
-            'pinjaman.id', 
-            'pinjaman.jumlah_pinjaman',
-            'pinjaman.bunga_pinjaman_per_bulan',
-            'pinjaman.status',
-            'pinjaman.angsuran_per_bulan',
-            'pinjaman.total_pinjaman',
-            'pinjaman.created_at',
-            'pengajuan_pinjaman.created_at as tanggal_pengajuan'
+    public function pinjamanDetail($id): View
+    {
+        $pinjaman = Pinjaman::leftJoin(
+            "anggota",
+            "anggota.id",
+            "=",
+            "pinjaman.id_anggota"
         )
-        ->where('pinjaman.id', $id)
-        ->first();
+            ->leftJoin(
+                "pengajuan_pinjaman",
+                "pinjaman.id_pengajuan",
+                "=",
+                "pengajuan_pinjaman.id"
+            )
+            ->leftJoin("users", "anggota.id_user", "=", "users.id")
+            ->select(
+                "users.name",
+                "users.email",
+                "users.created_at as user_joined_at",
+                "anggota.nik",
+                "anggota.alamat",
+                "anggota.nomor_hp",
+                "pinjaman.id",
+                "pinjaman.jumlah_pinjaman",
+                "pinjaman.bunga_pinjaman_per_bulan",
+                "pinjaman.status",
+                "pinjaman.angsuran_per_bulan",
+                "pinjaman.total_pinjaman",
+                "pinjaman.created_at",
+                "pengajuan_pinjaman.created_at as tanggal_pengajuan"
+            )
+            ->where("pinjaman.id", $id)
+            ->first();
 
-      $angsuran = Angsuran::all()->where('id_pinjaman', $id);
-      return view('pinjaman/angsuran-detail', ["pinjaman" => $pinjaman, 'angsuran' => $angsuran]); 
+        $angsuran = Angsuran::all()->where("id_pinjaman", $id);
+        return view("pinjaman/angsuran-detail", [
+            "pinjaman" => $pinjaman,
+            "angsuran" => $angsuran,
+        ]);
     }
 
-    public function updateAngsuran(Request $request, $id) {
-      
-
+    public function updateAngsuran(Request $request, $id)
+    {
         $angsuran = Angsuran::find($id);
 
-        try { DB::beginTransaction();
+        try {
+            DB::beginTransaction();
 
-            Angsuran::where('id', $id)->update(['status' => $request->input('status')]);   
+            Angsuran::where("id", $id)->update([
+                "status" => $request->input("status"),
+            ]);
 
             $allAngsuran = Angsuran::all()
-            ->where('id_pinjaman', '=', $angsuran->id_pinjaman)
-            ->where('status', '=', 'dibayar');
+                ->where("id_pinjaman", "=", $angsuran->id_pinjaman)
+                ->where("status", "=", "dibayar");
 
             if (count($allAngsuran) == 10) {
-                Pinjaman::where('id', $angsuran->id_pinjaman)->update(['status' => 'lunas']);        
+                Pinjaman::where("id", $angsuran->id_pinjaman)->update([
+                    "status" => "lunas",
+                ]);
             }
 
             DB::commit();
-
         } catch (\Exception $e) {
-
             DB::rollback();
 
             throw $e;
-
         }
 
-      return redirect("/pinjaman/".$angsuran->id_pinjaman);
+        return redirect("/pinjaman/" . $angsuran->id_pinjaman);
     }
 
-    private function calculateSHU($pokok, $sukarela) {
+    private function calculateSHU($pokok, $sukarela)
+    {
         // Example total SHU for distribution (you can pass as parameter)
         $totalSHU = 68065847; // from your SHU sheet
-       
+
         // Get all members
         $members = Member::all();
 
         // Calculate total Nilai Saham
         $totalNilaiSaham = $members->sum(function ($member) {
-            return $member->simpanan_pokok + $member->simpanan_wajib + $member->simpanan_sukarela;
+            return $member->simpanan_pokok +
+                $member->simpanan_wajib +
+                $member->simpanan_sukarela;
         });
 
         // Calculate SHU per member
-        $results = $members->map(function ($member) use ($totalNilaiSaham, $totalSHU) {
-            $nilaiSaham = $member->simpanan_pokok + $member->simpanan_wajib + $member->simpanan_sukarela;
-            $shuDiterima = ($totalNilaiSaham > 0) ? ($nilaiSaham / $totalNilaiSaham) * $totalSHU : 0;
+        $results = $members->map(function ($member) use (
+            $totalNilaiSaham,
+            $totalSHU
+        ) {
+            $nilaiSaham =
+                $member->simpanan_pokok +
+                $member->simpanan_wajib +
+                $member->simpanan_sukarela;
+            $shuDiterima =
+                $totalNilaiSaham > 0
+                    ? ($nilaiSaham / $totalNilaiSaham) * $totalSHU
+                    : 0;
 
             return [
-                'name' => $member->name,
-                'nilai_saham' => $nilaiSaham,
-                'shu_diterima' => round($shuDiterima, 0),
+                "name" => $member->name,
+                "nilai_saham" => $nilaiSaham,
+                "shu_diterima" => round($shuDiterima, 0),
             ];
         });
 
         return response()->json($results);
-    
     }
+
+    private function calculateSHUFromBusiness()
+    {
+        $hasilUsaha = Angsuran::join(
+            "pinjaman",
+            "pinjaman.id",
+            "=",
+            "angsuran.id_pinjaman"
+        )
+            ->where("angsuran.status", "dibayar")
+            ->whereYear("angsuran.created_at", now()->year)
+            ->sum("jumlah");
+
+        // Hitung pengeluaran (bisa dari input manual atau DB jika ada)
+        // $pengeluaran = 1550000 + 1000000 + 5000000 + 14000000 + 4583250;
+        $pengeluaran = 1000;
+
+        // Hitung SHU
+        $sisaHasilUsaha = $hasilUsaha - $pengeluaran;
+
+        // Bagi untuk anggota dan pengurus
+        $shuAnggota = $sisaHasilUsaha * 0.8;
+        // $shuPengurus = $sisaHasilUsaha * 0.20;
+
+        return [
+            "hasil_usaha" => $hasilUsaha,
+            "pengeluaran" => $pengeluaran,
+            "sisa_hasil_usaha" => $sisaHasilUsaha,
+            "shu_anggota" => $shuAnggota,
+            // 'shu_pengurus' => $shuPengurus
+        ];
+    }
+
+    public function shuList(): View
+    {
+        $shuTotal = $this->calculateSHUFromBusiness();
+
+        // Total modal anggota aktif (jumlah saham)
+        $jumlahModal = Simpanan::sum('jumlah');
+
+        // Nilai per 1 unit saham
+        $nilaiPerSaham = ($jumlahModal > 0) ? $shuTotal["shu_anggota"] / $jumlahModal : 0;
+
+        $anggotaList = Anggota::join('users', 'users.id', '=', 'anggota.id_user')
+            ->select('anggota.id', 'users.name')
+            ->get();
+
+        $result = [];
+        foreach ($anggotaList as $anggota) {
+            // Hitung nilai saham per anggota
+            $nilaiSaham = Simpanan::where('id_anggota', $anggota->id)->sum('jumlah');
+
+            $shuDiterima = $nilaiSaham * $nilaiPerSaham;
+
+            $result[] = [
+                "nama_anggota" => $anggota->name ?? "N/A",
+                "nilai_saham" => $nilaiSaham,
+                "shu_diterima" => $shuDiterima,
+                "index_saham" => ($jumlahModal > 0) ? $nilaiSaham / $jumlahModal : 0,
+            ];
+        }
+
+        return view("shu", ["result" => $result]);
+    }
+
 }

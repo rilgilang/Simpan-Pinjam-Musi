@@ -21,14 +21,13 @@ new class extends Component {
     <!-- SIDEBAR HEADER -->
     <div :class="sidebarToggle ? 'justify-center' : 'justify-between'"
         class="sidebar-header flex items-center gap-2 pb-7 pt-8">
-        <a href="index.html" class="flex flex-col items-center justify-center w-full">
+        <a href="index.html" class="flex w-full flex-col items-center justify-center">
             <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-                <img class="dark:hidden w-24 h-auto" src='logo.PNG' alt="Logo" />
-                <img class="hidden dark:block w-24 h-auto" src='logo2.PNG' alt="Logo" />
+                <img class="h-auto w-24 dark:hidden" src='logo.PNG' alt="Logo" />
+                <img class="hidden h-auto w-24 dark:block" src='logo2.PNG' alt="Logo" />
             </span>
 
-            <img class="logo-icon" :class="sidebarToggle ? 'lg:block' : 'hidden'" src='logo.PNG'
-                alt="Logo" />
+            <img class="logo-icon" :class="sidebarToggle ? 'lg:block' : 'hidden'" src='logo.PNG' alt="Logo" />
         </a>
     </div>
     <!-- SIDEBAR HEADER -->
@@ -225,8 +224,7 @@ new class extends Component {
 
                     <!-- Menu Item Sisa Hasil Usaha -->
                     <li>
-                        <a href="profile.html" @click="selected = (selected === 'SHU' ? '':'SHU')"
-                            class="menu-item group"
+                        <a href="/shu" @click="selected = (selected === 'SHU' ? '':'SHU')" class="menu-item group"
                             :class="(selected === 'SHU') && (page === 'profile') ? 'menu-item-active' :
                             'menu-item-inactive'">
                             <svg :class="(selected === 'SHU') && (page === 'profile') ? 'menu-item-icon-active' :

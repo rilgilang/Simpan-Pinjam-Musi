@@ -11,7 +11,7 @@
                 <div class="px-5 py-4 sm:px-6 sm:py-5">
                     <div class="grid grid-cols-7">
                         <h3 class="col-span-6 text-base font-medium text-gray-800 dark:text-white/90">
-                            Daftar Pinjaman
+                            Daftar SHU
                         </h3>
                     </div>
 
@@ -34,42 +34,21 @@
                                         <th class="px-5 py-3 sm:px-6">
                                             <div class="flex items-center">
                                                 <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                                                    Jumlah Pinjaman
+                                                    Index Saham
                                                 </p>
                                             </div>
                                         </th>
                                         <th class="px-5 py-3 sm:px-6">
                                             <div class="flex items-center">
                                                 <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                                                    Angsuran Perbulan
+                                                    Nilai Saham
                                                 </p>
                                             </div>
                                         </th>
                                         <th class="px-5 py-3 sm:px-6">
                                             <div class="flex items-center">
                                                 <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                                                    Bunga Perbulan
-                                                </p>
-                                            </div>
-                                        </th>
-                                        <th class="px-5 py-3 sm:px-6">
-                                            <div class="flex items-center">
-                                                <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                                                    Total Peminjaman
-                                                </p>
-                                            </div>
-                                        </th>
-                                        <th class="px-5 py-3 sm:px-6">
-                                            <div class="flex items-center">
-                                                <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                                                    Tanggal Pengajuan
-                                                </p>
-                                            </div>
-                                        </th>
-                                        <th class="px-5 py-3 sm:px-6">
-                                            <div class="flex items-center">
-                                                <p class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                                                    Status
+                                                    SHU Diterima
                                                 </p>
                                             </div>
                                         </th>
@@ -79,25 +58,18 @@
                                 <!-- table header end -->
                                 <!-- table body start -->
                                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                                    @foreach ($result as $pinjaman)
-                                        <tr onclick="window.location.href='{{ route('detail-pinjaman', $pinjaman->id) }}'"
-                                            class="hover:cursor-pointer sm:px-6">
+                                    {{ json_encode($result) }}
+                                    @foreach ($result as $shu)
+                                        <tr class="hover:cursor-pointer sm:px-6">
+                                        <tr class="hover:cursor-pointer sm:px-6">
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div class="flex items-center">
                                                     <div class="flex items-center gap-3">
-                                                        {{-- <div class="h-10 w-10 overflow-hidden rounded-full">
-                                                            <img src="./images/user/user-17.jpg" alt="brand" />
-                                                        </div> --}}
-
                                                         <div>
                                                             <span
                                                                 class="block text-theme-sm font-medium text-gray-800 dark:text-white/90">
-                                                                {{ $pinjaman->name }}
+                                                                {{ $shu['nama_anggota'] }}
                                                             </span>
-                                                            {{-- <span
-                                                            class="block text-theme-xs text-gray-500 dark:text-gray-400">
-                                                            Web Designer
-                                                        </span> --}}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -105,49 +77,22 @@
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div class="flex items-center">
                                                     <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                        {{ $pinjaman->jumlah_pinjaman }}
+                                                        {{ $shu['index_saham'] }}
                                                     </p>
                                                 </div>
                                             </td>
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div class="flex items-center">
                                                     <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                        {{ $pinjaman->angsuran_per_bulan }}
+                                                        {{ $shu['nilai_saham'] }}
                                                     </p>
                                                 </div>
                                             </td>
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div class="flex items-center">
                                                     <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                        {{ $pinjaman->bunga_pinjaman_per_bulan }}%
+                                                        {{ $shu['shu_diterima'] }}%
                                                     </p>
-                                                </div>
-                                            </td>
-                                            <td class="px-5 py-4 sm:px-6">
-                                                <div class="flex items-center">
-                                                    <div class="flex items-center">
-                                                        <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                            {{ $pinjaman->total_pinjaman }}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-5 py-4 sm:px-6">
-                                                <div class="flex items-center">
-                                                    <div class="flex items-center">
-                                                        <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                            {{ $pinjaman->created_at }}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-5 py-4 sm:px-6">
-                                                <div class="flex items-center">
-                                                    <div class="flex items-center">
-                                                        <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                            {{ $pinjaman->status }}
-                                                        </p>
-                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -160,20 +105,4 @@
             </div>
         </div>
     </div>
-    <script>
-        function openModal(data) {
-            if (data) {
-                document.getElementsByName("name")[0].value = "asdasd";
-                document.getElementsByName("email")[0].value = data.email;
-                document.getElementsByName("phone_number")[0].value = data.phone_number;
-                document.getElementsByName("alamat")[0].value = data.alamat;
-            }
-            document.getElementById("eventModal").style.display = "flex";
-        }
-
-        const closeModal = () => {
-            document.getElementById("eventModal").style.display = "none";
-        };
-    </script>
-
 </x-app-layout>

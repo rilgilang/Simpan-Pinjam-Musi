@@ -82,4 +82,8 @@ Route::post('save-simpanan', [SimpananController::class, 'simpananSave'])
     ->middleware(['role:admin'])
     ->name('save-simpanan');
     
+Route::get('/shu', [PinjamanController::class, 'shuList'])
+    ->middleware(['role:admin'])
+    ->name('shu-list');
+
 require __DIR__.'/auth.php';
