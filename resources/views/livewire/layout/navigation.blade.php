@@ -23,11 +23,11 @@ new class extends Component {
         class="sidebar-header flex items-center gap-2 pb-7 pt-8">
         <a href="index.html" class="flex w-full flex-col items-center justify-center">
             <span class="logo" :class="sidebarToggle ? 'hidden' : ''">
-                <img class="h-auto w-24 dark:hidden" src='logo.PNG' alt="Logo" />
-                <img class="hidden h-auto w-24 dark:block" src='logo2.PNG' alt="Logo" />
+                <img class="h-auto w-24 dark:hidden" src="{{ asset('assets/logo.png') }}" alt="Logo" />
+                <img class="hidden h-auto w-24 dark:block" src="{{ asset('assets/logo2.png') }}"  alt="Logo" />
             </span>
 
-            <img class="logo-icon" :class="sidebarToggle ? 'lg:block' : 'hidden'" src='logo.PNG' alt="Logo" />
+            <img class="logo-icon" :class="sidebarToggle ? 'lg:block' : 'hidden'" src="{{ asset('assets/logo.png') }}" alt="Logo" />
         </a>
     </div>
     <!-- SIDEBAR HEADER -->
