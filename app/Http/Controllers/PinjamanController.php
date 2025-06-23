@@ -237,8 +237,8 @@ class PinjamanController extends Controller
 
         for ($i = 0; $i < $tenor; $i++) {
             $angsuran = [
-                "id_pinjaman" => $pinjaman->id,
-                "jumlah" => $pinjaman->bunga_pinjaman_per_bulan,
+                "id_pinjaman" => $pinjaman['id'],
+                "jumlah" => $pengajuan["angsuran_per_bulan"],
                 "pembayaran_ke" => $i + 1,
                 "status" => "belum dibayar",
                 "created_at" => date("Y-m-d H:i:s"),
@@ -375,7 +375,7 @@ class PinjamanController extends Controller
             ->sum("jumlah");
 
         // Hitung pengeluaran (bisa dari input manual atau DB jika ada)
-        // $pengeluaran = 1550000 + 1000000 + 5000000 + 14000000 + 4583250;
+        $pengeluaran = 1550000 + 1000000 + 5000000 + 14000000 + 4583250;
         $pengeluaran = 1000;
 
         // Hitung SHU
@@ -383,7 +383,7 @@ class PinjamanController extends Controller
 
         // Bagi untuk anggota dan pengurus
         $shuAnggota = $sisaHasilUsaha * 0.8;
-        // $shuPengurus = $sisaHasilUsaha * 0.20;
+        $shuPengurus = $sisaHasilUsaha * 0.20;
 
         return [
             "hasil_usaha" => $hasilUsaha,
@@ -412,8 +412,10 @@ class PinjamanController extends Controller
         foreach ($anggotaList as $anggota) {
             // Hitung nilai saham per anggota
             $nilaiSaham = Simpanan::where('id_anggota', $anggota->id)->sum('jumlah');
+            // dd($nilaiPerSaham);
 
             $shuDiterima = $nilaiSaham * $nilaiPerSaham;
+
 
             $result[] = [
                 "nama_anggota" => $anggota->name ?? "N/A",

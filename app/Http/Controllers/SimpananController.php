@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Simpanan;
+use App\Models\Anggota;
 use App\Models\User;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -22,7 +23,6 @@ class SimpananController extends Controller
         $anggotaList = [];
 
         foreach ($users as $user) {
-            
             if ($user->hasRole('anggota')){
                 array_push($anggotaList, $user);
             }
@@ -36,22 +36,23 @@ class SimpananController extends Controller
 
         $req->validate(
             [
-                'id_anggota' => 'required|numeric',
+                'id_user' => 'required|numeric',
                 'simpanan_wajib' => 'required|numeric',
                 'simpanan_pokok' => 'required|numeric',
                 'simpanan_sukarela' => 'required|numeric',
             ],
             [
-                'id_anggota.required' => 'Nama anggota wajib diisi.',
+                'id_user.required' => 'Id User wajib diisi.',
                 'simpanan_wajib.required' => 'Simpanan wajib, wajib diisi.',
                 'simpanan_pokok.required' => 'Simpanan pokok wajib diisi.',
                 'simpanan_sukarela.required' => 'Simpanan sukarela wajib diisi.',
             ]
         );
 
+        $anggota = Anggota::where('id_user', '=', $req['id_user'])->first();
 
         $simpanan = Simpanan::create([
-            'id_anggota' => $req['id_anggota'],
+            'id_anggota' => $anggota->id,
             'simpanan_wajib' => $req['simpanan_wajib'],
             'simpanan_pokok' => $req['simpanan_pokok'],
             'simpanan_sukarela' => $req['simpanan_sukarela'],
