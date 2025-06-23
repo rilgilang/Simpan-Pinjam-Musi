@@ -49,8 +49,8 @@
                                     </template>
                                 </ul>
 
-                                <input type="hidden" name="id_anggota" :value="selected?.id">
-                                @error('id_anggota')
+                                <input type="hidden" name="id_user" :value="selected?.id">
+                                @error('id_user')
                                     <small class="text-theme-xs text-error-500">{{ $message }}</small>
                                 @enderror
                             </div>
