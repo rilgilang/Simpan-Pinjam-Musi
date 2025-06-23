@@ -58,7 +58,6 @@
                                 <!-- table header end -->
                                 <!-- table body start -->
                                 <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
-                                    {{ json_encode($result) }}
                                     @foreach ($result as $shu)
                                         <tr class="hover:cursor-pointer sm:px-6">
                                         <tr class="hover:cursor-pointer sm:px-6">
