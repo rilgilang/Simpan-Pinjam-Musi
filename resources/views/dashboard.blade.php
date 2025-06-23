@@ -1,14 +1,20 @@
 <x-app-layout>
     <div class="mx-auto max-w-screen-2xl p-4 md:p-6">
         <div class="grid grid-cols-12 gap-4 md:gap-4">
-            <div class="col-span-12 space-y-6 xl:col-span-12">
-                <!-- Metric Group One -->
-                <x-dashboard-metrics />
-                <!-- Metric Group One -->
+            @if ((auth()->check() && auth()->user()->hasRole('ketua')) || (auth()->check() && auth()->user()->hasRole('admin')))
+                <div class="col-span-6 space-y-6 xl:col-span-7">
+                    <!-- Metric Group One -->
+                    <x-dashboard-metrics />
+                    <!-- Metric Group One -->
+                </div>
+            @else
+                <div class="col-span-6 space-y-6 xl:col-span-12">
+                    <!-- Metric Group One -->
+                    <x-dashboard-metrics />
+                    <!-- Metric Group One -->
+                </div>
+            @endif
 
-                <!-- ====== Chart One Start -->
-                <include src="./partials/chart/chart-01.html" />
-            </div>
 
             @if ((auth()->check() && auth()->user()->hasRole('ketua')) || (auth()->check() && auth()->user()->hasRole('admin')))
                 <div class="col-span-12 xl:col-span-5">
