@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\PinjamanController;
+use App\Http\Controllers\SahamController;
 use App\Http\Controllers\SimpananController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
@@ -85,5 +86,13 @@ Route::post('save-simpanan', [SimpananController::class, 'simpananSave'])
 Route::get('/shu', [PinjamanController::class, 'shuList'])
     ->middleware(['role:admin'])
     ->name('shu-list');
+
+Route::get('/index-saham', [SahamController::class, 'indexSahamList'])
+    ->middleware(['role:admin|ketua'])
+    ->name('saham-list');
+
+Route::post('save-index-saham', [SahamController::class, 'indexSahamSave'])
+    ->middleware(['role:admin|ketu'])
+    ->name('save-index-saham');
 
 require __DIR__.'/auth.php';

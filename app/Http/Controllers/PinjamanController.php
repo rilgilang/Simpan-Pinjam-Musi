@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Anggota;
 use App\Models\Angsuran;
+use App\Models\IndexSaham;
 use App\Models\PengajuanPinjaman;
 use App\Models\Pinjaman;
 use App\Models\Simpanan;
@@ -323,109 +324,33 @@ class PinjamanController extends Controller
         return redirect("/pinjaman/" . $angsuran->id_pinjaman);
     }
 
-    private function calculateSHU($pokok, $sukarela)
-    {
-        // Example total SHU for distribution (you can pass as parameter)
-        $totalSHU = 68065847; // from your SHU sheet
-
-        // Get all members
-        $members = Member::all();
-
-        // Calculate total Nilai Saham
-        $totalNilaiSaham = $members->sum(function ($member) {
-            return $member->simpanan_pokok +
-                $member->simpanan_wajib +
-                $member->simpanan_sukarela;
-        });
-
-        // Calculate SHU per member
-        $results = $members->map(function ($member) use (
-            $totalNilaiSaham,
-            $totalSHU
-        ) {
-            $nilaiSaham =
-                $member->simpanan_pokok +
-                $member->simpanan_wajib +
-                $member->simpanan_sukarela;
-            $shuDiterima =
-                $totalNilaiSaham > 0
-                    ? ($nilaiSaham / $totalNilaiSaham) * $totalSHU
-                    : 0;
-
-            return [
-                "name" => $member->name,
-                "nilai_saham" => $nilaiSaham,
-                "shu_diterima" => round($shuDiterima, 0),
-            ];
-        });
-
-        return response()->json($results);
-    }
-
-    private function calculateSHUFromBusiness()
-    {
-        $hasilUsaha = Angsuran::join(
-            "pinjaman",
-            "pinjaman.id",
-            "=",
-            "angsuran.id_pinjaman"
-        )
-            ->where("angsuran.status", "dibayar")
-            ->whereYear("angsuran.created_at", now()->year)
-            ->sum("jumlah");
-
-        // Hitung pengeluaran (bisa dari input manual atau DB jika ada)
-        $pengeluaran = 1550000 + 1000000 + 5000000 + 14000000 + 4583250;
-        $pengeluaran = 1000;
-
-        // Hitung SHU
-        $sisaHasilUsaha = $hasilUsaha - $pengeluaran;
-
-        // Bagi untuk anggota dan pengurus
-        $shuAnggota = $sisaHasilUsaha * 0.8;
-        $shuPengurus = $sisaHasilUsaha * 0.20;
-
-        return [
-            "hasil_usaha" => $hasilUsaha,
-            "pengeluaran" => $pengeluaran,
-            "sisa_hasil_usaha" => $sisaHasilUsaha,
-            "shu_anggota" => $shuAnggota,
-            // 'shu_pengurus' => $shuPengurus
-        ];
-    }
-
     public function shuList(): View
     {
-        $shuTotal = $this->calculateSHUFromBusiness();
-
-        // Total modal anggota aktif (jumlah saham)
-        $jumlahModal = Simpanan::sum('jumlah');
-
-        // Nilai per 1 unit saham
-        $nilaiPerSaham = ($jumlahModal > 0) ? $shuTotal["shu_anggota"] / $jumlahModal : 0;
-
         $anggotaList = Anggota::join('users', 'users.id', '=', 'anggota.id_user')
             ->select('anggota.id', 'users.name')
             ->get();
 
+        $currentIndexSaham = IndexSaham::whereYear("index_saham.created_at", now()->year)->first();
+        $indexSaham = IndexSaham::whereYear("index_saham.created_at", now()->year)->get();
+
         $result = [];
         foreach ($anggotaList as $anggota) {
             // Hitung nilai saham per anggota
-            $nilaiSaham = Simpanan::where('id_anggota', $anggota->id)->sum('jumlah');
-            // dd($nilaiPerSaham);
+            $nilaiSaham = Simpanan::where('id_anggota', $anggota->id)            
+                            ->whereYear("simpanan.created_at", now()->year)->sum('jumlah')/1000;
 
-            $shuDiterima = $nilaiSaham * $nilaiPerSaham;
-
+            $shuDiterima = $currentIndexSaham->index_saham * $nilaiSaham;
+            
 
             $result[] = [
                 "nama_anggota" => $anggota->name ?? "N/A",
                 "nilai_saham" => $nilaiSaham,
                 "shu_diterima" => $shuDiterima,
-                "index_saham" => ($jumlahModal > 0) ? $nilaiSaham / $jumlahModal : 0,
+                "index_saham" => $currentIndexSaham->index_saham,
             ];
         }
 
-        return view("shu", ["result" => $result]);
+        return view("shu", ["result" => $result, 'index_saham' => $indexSaham]);
     }
 
 }
