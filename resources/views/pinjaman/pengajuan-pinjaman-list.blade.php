@@ -239,6 +239,17 @@
                                                 <div class="flex items-center">
                                                     <p
                                                         class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                                                        Hasil Evaluasi
+                                                    </p>
+                                                </div>
+                                            </th>
+                                        @endif
+
+                                        @if ((auth()->check() && auth()->user()->hasRole('admin')) || (auth()->check() && auth()->user()->hasRole('ketua')))
+                                            <th class="px-5 py-3 sm:px-6">
+                                                <div class="flex items-center">
+                                                    <p
+                                                        class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
                                                         Action
                                                     </p>
                                                 </div>
@@ -306,7 +317,7 @@
                                                 <div class="flex items-center">
                                                     <div class="flex items-center">
                                                         <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                            {{ $pinjaman->created_at }}
+                                                            {{ $pinjaman->pinjaman_created_at }}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -366,6 +377,17 @@
                                                     </div>
                                                 </div>
                                             </td>
+                                            @if ((auth()->check() && auth()->user()->hasRole('admin')) || (auth()->check() && auth()->user()->hasRole('ketua')))
+                                                <td class="px-5 py-4 sm:px-6">
+                                                    <div class="flex items-center">
+                                                        <div class="flex items-center">
+                                                            <p class="text-theme-sm text-gray-500 dark:text-gray-400">
+                                                                {{ $pinjaman->eligible ? 'ACC' : 'Tolak' }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            @endif
 
                                             @if ((auth()->check() && auth()->user()->hasRole('admin')) || (auth()->check() && auth()->user()->hasRole('ketua')))
                                                 @if (

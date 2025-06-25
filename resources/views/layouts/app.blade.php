@@ -42,6 +42,8 @@ $watch('darkMode', value => localStorage.setItem('darkMode', JSON.stringify(valu
             <!-- ===== Main Content Start ===== -->
             <main>
                 {{ $slot }}
+
+                @include('sweetalert::alert')
             </main>
             <!-- ===== Main Content End ===== -->
         </div>

@@ -8,10 +8,12 @@ use App\Models\IndexSaham;
 use App\Models\PengajuanPinjaman;
 use App\Models\Pinjaman;
 use App\Models\Simpanan;
+use App\Models\SimpleAdditiveWeight;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PinjamanController extends Controller
 {
@@ -40,32 +42,186 @@ class PinjamanController extends Controller
         return view("pinjaman/pinjaman-list", ["result" => $pinjaman]);
     }
 
+    private function evaluateLoanApproval($simpanan, $userCreatedAt, $pendapatan, $riwayatPinjaman, $pinjaman)
+    {
+        $weight = [
+            'c1' => 0,
+            'c2' => 0,
+            'c3' => 0,
+            'c4' => 0,
+            'c5' => 0,
+        ];
+
+            // Simpanan
+            if ($simpanan > 10000000) {
+                $weight['c1'] = 3 / 3;
+            } elseif ($simpanan >= 5000000 && $simpanan <= 10000000) {
+                $weight['c1'] = 2 / 3;
+            } else {
+                $weight['c1'] = 1 / 3;
+            }
+
+
+            // Joined
+            $diffInYears = now()->diffInYears($userCreatedAt);
+
+            if (abs($diffInYears) > 5) {
+                $weight['c2'] = 3 / 3;
+            } elseif (abs($diffInYears) >= 1 && abs($diffInYears) <= 5) {
+                $weight['c2'] = 2 / 3;
+            } else {
+                $weight['c2'] = 1/3;
+            }
+
+           // Pendapatan
+            if ($pendapatan > 5000000) {
+                $weight['c3'] = 3 / 3;
+            } elseif ($pendapatan >= 2000000 && $pendapatan <= 5000000) {
+                $weight['c3'] = 2 / 3;
+            } else {
+                $weight['c3'] = 1 / 3;
+            }
+
+            // Riwayat Pinjaman
+            if ($riwayatPinjaman == "lancar") {
+                $weight['c4'] = 3 / 3;
+            } elseif ($riwayatPinjaman == "macet") {
+                $weight['c4'] = 2 / 3;
+            } else {
+                $weight['c4'] = 1/3;
+            }
+        
+        
+        
+        // Total Pinjaman
+        if ($pinjaman > 10000000) {
+            $weight['c5'] = 1 / 3;
+        } elseif ($pinjaman >= 5000000 && $pinjaman <= 10000000) {
+            $weight['c5'] = 1 / 2;
+        } else {
+            $weight['c5'] = 1 / 1;
+        }
+
+        $result =   (0.25 * $weight['c1']) + 
+                    (0.15 * $weight['c2']) + 
+                    (0.25 * $weight['c3']) + 
+                    (0.15 * $weight['c4']) + 
+                    (0.20 * $weight['c5']);
+
+
+        if ($result > 0.777) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function pengajuanPinjamanList(): View
     {
-        $pinjaman = PengajuanPinjaman::join(
-            "anggota",
-            "anggota.id",
-            "=",
-            "pengajuan_pinjaman.id_anggota"
-        )
-            ->join("users", "anggota.id_user", "=", "users.id")
-            ->select(
-                "pengajuan_pinjaman.id",
-                "users.name",
-                "pengajuan_pinjaman.id_anggota",
-                "pengajuan_pinjaman.bunga_pinjaman_per_bulan",
-                "pengajuan_pinjaman.jumlah_pinjaman",
-                "pengajuan_pinjaman.created_at",
-                "pengajuan_pinjaman.angsuran_per_bulan",
-                "pengajuan_pinjaman.total_pinjaman",
-                "pengajuan_pinjaman.status_persetujuan_admin",
-                "pengajuan_pinjaman.status_persetujuan_ketua"
-            )
-            ->get();
+        $user = Auth::user(); // Get the authenticated user
+        $pinjaman = [];
 
-        return view("pinjaman/pengajuan-pinjaman-list", [
-            "result" => $pinjaman,
-        ]);
+            if ($user->hasRole("ketua") || $user->hasRole("admin")) {
+
+                $pinjaman = PengajuanPinjaman::join(
+                    "anggota",
+                    "anggota.id",
+                    "=",
+                    "pengajuan_pinjaman.id_anggota"
+                )
+                ->join(
+                    "simpanan",
+                    "simpanan.id_anggota",
+                    "=",
+                    "pengajuan_pinjaman.id_anggota"
+                )
+                ->join("users", "anggota.id_user", "=", "users.id")
+                ->select(
+                    DB::raw("SUM(simpanan.jumlah) as total_simpanan"),
+                    "pengajuan_pinjaman.id",
+                    "users.id as user_id",
+                    "users.created_at as user_created_at",
+                    "users.name",
+                    "anggota.pendapatan",
+                    "anggota.riwayat_pinjaman",
+                    "pengajuan_pinjaman.id_anggota",
+                    "pengajuan_pinjaman.bunga_pinjaman_per_bulan",
+                    "pengajuan_pinjaman.jumlah_pinjaman",
+                    "pengajuan_pinjaman.created_at as pengajuan_created_at",
+                    "pengajuan_pinjaman.angsuran_per_bulan",
+                    "pengajuan_pinjaman.total_pinjaman",
+                    "pengajuan_pinjaman.status_persetujuan_admin",
+                    "pengajuan_pinjaman.status_persetujuan_ketua",
+                    "pengajuan_pinjaman.created_at as pinjaman_created_at"
+                )
+                ->groupBy(
+                    "pengajuan_pinjaman.id",
+                    "users.id",
+                    "users.created_at",
+                    "users.name",
+                    "anggota.pendapatan",
+                    "anggota.riwayat_pinjaman",
+                    "pengajuan_pinjaman.id_anggota",
+                    "pengajuan_pinjaman.bunga_pinjaman_per_bulan",
+                    "pengajuan_pinjaman.jumlah_pinjaman",
+                    "pengajuan_pinjaman.created_at",
+                    "pengajuan_pinjaman.angsuran_per_bulan",
+                    "pengajuan_pinjaman.total_pinjaman",
+                    "pengajuan_pinjaman.status_persetujuan_admin",
+                    "pengajuan_pinjaman.status_persetujuan_ketua"
+                )
+                ->get();
+
+                $result = [];
+
+
+                foreach ($pinjaman as $l) {
+                    $eligable = $this->evaluateLoanApproval($l->total_simpanan, $l->user_created_at, $l->pendapatan, $l->riwayat_pinjaman, $l->jumlah_pinjaman);
+
+                    $result[] = (object)[
+                        "id" => $l->id,
+                        "name" => $l->name,
+                        "id_anggota" => $l->id_anggota,
+                        "bunga_pinjaman_per_bulan" => $l->bunga_pinjaman_per_bulan,
+                        "jumlah_pinjaman" => $l->jumlah_pinjaman,
+                        "created_at" => $l->created_at,
+                        "angsuran_per_bulan" => $l->angsuran_per_bulan,
+                        "total_pinjaman" => $l->total_pinjaman,
+                        "status_persetujuan_admin" => $l->status_persetujuan_admin,
+                        "status_persetujuan_ketua" => $l->status_persetujuan_ketua,
+                        "pinjaman_created_at" => $l->pinjaman_created_at,
+                        "eligible" => $eligable,
+                    ];
+                }
+
+            return view("pinjaman/pengajuan-pinjaman-list", [ "result" => $result ]);
+        } else {
+
+            $userId = Auth::id(); // Get the current user's ID
+            
+            $pinjaman = PengajuanPinjaman::join(
+                "anggota",
+                "anggota.id",
+                "=",
+                "pengajuan_pinjaman.id_anggota"
+            )
+                ->join("users", "anggota.id_user", "=", "users.id")
+                ->select(
+                    "pengajuan_pinjaman.id",
+                    "users.name",
+                    "pengajuan_pinjaman.id_anggota",
+                    "pengajuan_pinjaman.bunga_pinjaman_per_bulan",
+                    "pengajuan_pinjaman.jumlah_pinjaman",
+                    "pengajuan_pinjaman.created_at",
+                    "pengajuan_pinjaman.angsuran_per_bulan",
+                    "pengajuan_pinjaman.total_pinjaman",
+                    "pengajuan_pinjaman.status_persetujuan_admin",
+                    "pengajuan_pinjaman.status_persetujuan_ketua"
+                )->where('users.id', '=', $userId)
+                ->get();
+
+            return view("pinjaman/pengajuan-pinjaman-list", [ "result" => $pinjaman ]);
+        }
     }
 
     public function pengajuanPinjaman(Request $req)
@@ -87,6 +243,18 @@ class PinjamanController extends Controller
         $userId = Auth::id(); // Get the current user's ID
 
         $anggota = Anggota::where("id_user", $userId)->first();
+
+        $pengajuan = Pinjaman::where("id_anggota", "=", $anggota["id"])
+            ->where("status", "=", "belum lunas")
+            ->get();
+
+        if (count($pengajuan) >= 1) {
+            Alert::error(
+                "Pengajuan ditolak",
+                "Anda belum melunasi pinjaman anda sebelumnya"
+            );
+            return redirect("/pengajuan-pinjaman-list");
+        }
 
         PengajuanPinjaman::create([
             "id_anggota" => $anggota["id"],
@@ -238,7 +406,7 @@ class PinjamanController extends Controller
 
         for ($i = 0; $i < $tenor; $i++) {
             $angsuran = [
-                "id_pinjaman" => $pinjaman['id'],
+                "id_pinjaman" => $pinjaman["id"],
                 "jumlah" => $pengajuan["angsuran_per_bulan"],
                 "pembayaran_ke" => $i + 1,
                 "status" => "belum dibayar",
@@ -326,21 +494,33 @@ class PinjamanController extends Controller
 
     public function shuList(): View
     {
-        $anggotaList = Anggota::join('users', 'users.id', '=', 'anggota.id_user')
-            ->select('anggota.id', 'users.name')
+        $anggotaList = Anggota::join(
+            "users",
+            "users.id",
+            "=",
+            "anggota.id_user"
+        )
+            ->select("anggota.id", "users.name")
             ->get();
 
-        $currentIndexSaham = IndexSaham::whereYear("index_saham.created_at", now()->year)->first();
-        $indexSaham = IndexSaham::whereYear("index_saham.created_at", now()->year)->get();
+        $currentIndexSaham = IndexSaham::whereYear(
+            "index_saham.created_at",
+            now()->year
+        )->first();
+        $indexSaham = IndexSaham::whereYear(
+            "index_saham.created_at",
+            now()->year
+        )->get();
 
         $result = [];
         foreach ($anggotaList as $anggota) {
             // Hitung nilai saham per anggota
-            $nilaiSaham = Simpanan::where('id_anggota', $anggota->id)            
-                            ->whereYear("simpanan.created_at", now()->year)->sum('jumlah')/1000;
+            $nilaiSaham =
+                Simpanan::where("id_anggota", $anggota->id)
+                    ->whereYear("simpanan.created_at", now()->year)
+                    ->sum("jumlah") / 1000;
 
             $shuDiterima = $currentIndexSaham->index_saham * $nilaiSaham;
-            
 
             $result[] = [
                 "nama_anggota" => $anggota->name ?? "N/A",
@@ -350,7 +530,6 @@ class PinjamanController extends Controller
             ];
         }
 
-        return view("shu", ["result" => $result, 'index_saham' => $indexSaham]);
+        return view("shu", ["result" => $result, "index_saham" => $indexSaham]);
     }
-
 }
