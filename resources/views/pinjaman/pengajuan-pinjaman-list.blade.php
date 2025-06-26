@@ -17,100 +17,143 @@
 
             <div class="modal-content custom-scrollbar flex flex-col overflow-y-auto px-2">
                 <div class="modal-header">
-                    <h5 class="modal-title mb-2 text-theme-xl font-semibold text-gray-800 dark:text-white/90 lg:text-2xl"
-                        id="eventModalLabel">
-                        Ajukan Pinjaman
-                    </h5>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                        Pengajuan Pinjaman akan diverifikasi oleh admin dan ketua koperasi untuk menentukan pengajuan
-                        anda diterima atau tidak, lalu admin akan segera memproses jika pengajuan anda di terima
-                    </p>
+                    <div id="rejectFormHeader" class="hidden">
+                        <h5 class="modal-title mb-2 text-theme-xl font-semibold text-gray-800 dark:text-white/90 lg:text-2xl"
+                            id="eventModalLabel">
+                            Tolak Pengajuan Pinjaman
+                        </h5>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Berikan Alasan kenapa pengajuan ini di tolak
+                        </p>
+                    </div>
+                    <div id="pengajuanFormHeader"class="hidden">
+                        <h5 class="modal-title mb-2 text-theme-xl font-semibold text-gray-800 dark:text-white/90 lg:text-2xl"
+                            id="eventModalLabel">
+                            Ajukan Pinjaman
+                        </h5>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Pengajuan Pinjaman akan diverifikasi oleh admin dan ketua koperasi untuk menentukan
+                            pengajuan
+                            anda diterima atau tidak, lalu admin akan segera memproses jika pengajuan anda di terima
+                        </p>
+                    </div>
                 </div>
 
-                <form method="POST" action="{{ route('pengajuan-pinjaman') }}">
-                    @csrf
-                    <div class="modal-body mt-8 space-y-6">
-                        <!-- Row: Loan Amount & Interest Rate -->
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <!-- Loan Amount -->
+                {{-- <!-- Reject Form --> --}}
+                <div id="rejectForm" class="hidden">
+                    <form method="POST" action="{{ route('reject-pengajuan-pinjaman') }}">
+                        @csrf
+
+                        <input type="hidden" name="id" id="rejectFormId">
+                        <!-- This will be updated dynamically -->
+
+                        <div class="modal-body mt-8">
+                            <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                Alasan Penolakan
+                            </label>
+                            <textarea name="alasan" rows="4"
+                                class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-red-800"></textarea>
+                        </div>
+                        <div class="modal-footer mt-6 flex items-center gap-3 sm:justify-end">
+                            <button type="button" onclick="closeModal()"
+                                class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto">
+                                Close
+                            </button>
+                            <button type="submit"
+                                class="btn btn-danger btn-add-event flex w-full justify-center rounded-lg bg-red-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-600 sm:w-auto">
+                                Tolak
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                {{-- Loan Application --}}
+                <div id="pengajuanForm">
+                    <form method="POST" action="{{ route('pengajuan-pinjaman') }}">
+                        @csrf
+                        <div class="modal-body mt-8 space-y-6">
+                            <!-- Row: Loan Amount & Interest Rate -->
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                <!-- Loan Amount -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Jumlah Pinjaman
+                                    </label>
+                                    <div class="relative">
+                                        <span
+                                            class="absolute left-0 top-1/2 inline-flex h-11 -translate-y-1/2 items-center justify-center border-r border-gray-200 py-3 pl-3.5 pr-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                                            Rp
+                                        </span>
+                                        <input type="text" name="jumlah_pinjaman" id="jumlah_pinjaman"
+                                            placeholder="1000000"
+                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-[90px] text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                        @error('jumlah_pinjaman')
+                                            <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <!-- Interest Rate -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Bunga
+                                    </label>
+                                    <input type="text" name="bunga" placeholder="1%" disabled
+                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                </div>
+                            </div>
+
+                            <!-- Monthly Installment -->
                             <div>
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Jumlah Pinjaman
+                                    Angsuran Perbulan
                                 </label>
                                 <div class="relative">
                                     <span
                                         class="absolute left-0 top-1/2 inline-flex h-11 -translate-y-1/2 items-center justify-center border-r border-gray-200 py-3 pl-3.5 pr-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
                                         Rp
                                     </span>
-                                    <input type="text" name="jumlah_pinjaman" id="jumlah_pinjaman"
-                                        placeholder="1000000"
+                                    <input type="text" name="angsuran" id="angsuran" placeholder="1000000" readonly
                                         class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-[90px] text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                    @error('jumlah_pinjaman')
+                                    @error('angsuran')
                                         <small class="text-theme-xs text-error-500">{{ $message }}</small>
                                     @enderror
                                 </div>
                             </div>
-
-                            <!-- Interest Rate -->
+                            <!-- Total Loan -->
                             <div>
                                 <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Bunga
+                                    Total Pengajuan
                                 </label>
-                                <input type="text" name="bunga" placeholder="1%" disabled
-                                    class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                <div class="relative">
+                                    <span
+                                        class="absolute left-0 top-1/2 inline-flex h-11 -translate-y-1/2 items-center justify-center border-r border-gray-200 py-3 pl-3.5 pr-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                                        Rp
+                                    </span>
+                                    <input type="text" name="total_pengajuan" id="total_pengajuan"
+                                        placeholder="1000000" readonly
+                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-[90px] text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                    @error('total_pengajuan')
+                                        <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Monthly Installment -->
-                        <div>
-                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                Angsuran Perbulan
-                            </label>
-                            <div class="relative">
-                                <span
-                                    class="absolute left-0 top-1/2 inline-flex h-11 -translate-y-1/2 items-center justify-center border-r border-gray-200 py-3 pl-3.5 pr-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
-                                    Rp
-                                </span>
-                                <input type="text" name="angsuran" id="angsuran" placeholder="1000000" readonly
-                                    class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-[90px] text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                @error('angsuran')
-                                    <small class="text-theme-xs text-error-500">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </div>
-                        <!-- Total Loan -->
-                        <div>
-                            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                Total Pengajuan
-                            </label>
-                            <div class="relative">
-                                <span
-                                    class="absolute left-0 top-1/2 inline-flex h-11 -translate-y-1/2 items-center justify-center border-r border-gray-200 py-3 pl-3.5 pr-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
-                                    Rp
-                                </span>
-                                <input type="text" name="total_pengajuan" id="total_pengajuan" placeholder="1000000"
-                                    readonly
-                                    class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-[90px] text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                @error('total_pengajuan')
-                                    <small class="text-theme-xs text-error-500">{{ $message }}</small>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
 
-
-                    <div class="modal-footer mt-6 flex items-center gap-3 sm:justify-end">
-                        <button type="button" onclick="closeModal()"
-                            class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
-                            data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit"
-                            class="btn btn-primary btn-add-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto">
-                            Simpan
-                        </button>
-                    </div>
-                </form>
+                        <div class="modal-footer mt-6 flex items-center gap-3 sm:justify-end">
+                            <button type="button" onclick="closeModal()"
+                                class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
+                                data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit"
+                                class="btn btn-primary btn-add-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto">
+                                Simpan
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -409,10 +452,11 @@
                                                         <div class="flex items-center">
                                                             <div class="flex items-center">
 
-                                                                <a href="/reject-pengajuan/{{ $pinjaman->id }}"
+                                                                <button
+                                                                    onclick="openModal('reject', {{ $pinjaman->id }})"
                                                                     class="mx-2 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
                                                                     Tolak
-                                                                </a>
+                                                                </button>
 
                                                                 <a href="/approve-pengajuan/{{ $pinjaman->id }}"
                                                                     class="mx-2 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
@@ -439,9 +483,34 @@
         </div>
     </div>
     <script>
-        function openModal(data) {
+        function openModal(type, id = null) {
             document.getElementById("eventModal").style.display = "flex";
+
+            const pengajuanForm = document.getElementById("pengajuanForm");
+            const rejectForm = document.getElementById("rejectForm");
+            const pengajuanHeader = document.getElementById("pengajuanForm"); // This is reused for header and form
+            const rejectHeader = document.getElementById("rejectFormHeader");
+
+            // Hide all sections first
+            pengajuanForm.classList.add("hidden");
+            rejectForm.classList.add("hidden");
+            rejectHeader.classList.add("hidden");
+            pengajuanHeader.classList.add("hidden");
+
+            if (type === "reject") {
+                rejectForm.classList.remove("hidden");
+                rejectHeader.classList.remove("hidden");
+
+                if (id) {
+                    document.getElementById("rejectFormId").value = id;
+                }
+            } else {
+                pengajuanForm.classList.remove("hidden");
+                pengajuanFormHeader.classList.remove("hidden");
+            }
         }
+
+
 
         const closeModal = () => {
             document.getElementById("eventModal").style.display = "none";

@@ -59,7 +59,7 @@ Route::get('/approve-pengajuan/{id}', [PinjamanController::class, 'approvePengaj
         ->middleware(['role:ketua|admin'])
     ->name('approve-pengajuan-pinjaman');
 
-Route::get('/reject-pengajuan/{id}', [PinjamanController::class, 'rejectPengajuanPinjaman'])
+Route::post('/reject-pengajuan', [PinjamanController::class, 'rejectPengajuanPinjaman'])
         ->middleware(['role:ketua|admin'])
     ->name('reject-pengajuan-pinjaman');
 
