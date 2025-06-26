@@ -381,9 +381,21 @@
                                                 <td class="px-5 py-4 sm:px-6">
                                                     <div class="flex items-center">
                                                         <div class="flex items-center">
-                                                            <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                                {{ $pinjaman->eligible ? 'ACC' : 'Tolak' }}
-                                                            </p>
+                                                            @if ($pinjaman->eligible)
+                                                                <p
+                                                                    class="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm text-sm font-medium text-green-600 dark:bg-green-900/20 dark:text-green-500">
+                                                                    Acc
+                                                                    <span
+                                                                        class="h-2 w-2 rounded-full bg-green-500"></span>
+                                                                </p>
+                                                            @else
+                                                                <p
+                                                                    class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-500">
+                                                                    Ditolak
+                                                                    <span
+                                                                        class="h-2 w-2 rounded-full bg-red-500"></span>
+                                                                </p>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </td>

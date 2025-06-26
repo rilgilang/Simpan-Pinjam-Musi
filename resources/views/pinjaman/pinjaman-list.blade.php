@@ -9,10 +9,16 @@
         <div class="space-y-5 sm:space-y-6">
             <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
                 <div class="px-5 py-4 sm:px-6 sm:py-5">
-                    <div class="grid grid-cols-7">
-                        <h3 class="col-span-6 text-base font-medium text-gray-800 dark:text-white/90">
+                    <div class="grid grid-cols-12">
+
+                        <h3 class="col-span-10 text-base font-medium text-gray-800 dark:text-white/90">
                             Daftar Pinjaman
                         </h3>
+
+                        <a href="/pinjaman/export"
+                            class="col-span-2 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-center text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
+                            Ekspor Ke PDF
+                        </a>
                     </div>
 
                 </div>

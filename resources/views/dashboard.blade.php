@@ -19,7 +19,7 @@
             @if ((auth()->check() && auth()->user()->hasRole('ketua')) || (auth()->check() && auth()->user()->hasRole('admin')))
                 <div class="col-span-12 xl:col-span-5">
                     <!-- ====== Chart Two Start -->
-                    <x-dashboard-total-transaction-today />
+                    <x-dashboard-transaction-this-month />
                     <!-- ====== Chart Two End -->
                 </div>
             @endif

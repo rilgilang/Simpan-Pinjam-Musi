@@ -8,7 +8,7 @@
 
     <div class="custom-scrollbar max-w-full overflow-x-auto">
         <div class="-ml-5 min-w-[650px] pl-2 xl:min-w-full">
-            <div id="yearlyLoan" class="-ml-5 h-full min-w-[650px] pl-2 xl:min-w-full"></div>
+            <div id="yearlyLoan" class="h-[300px] w-full"></div>
         </div>
     </div>
 </div>
@@ -17,20 +17,22 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
+        const pinjaman = @json($result);
+
         const yearlyLoanOptions = {
             series: [{
-                name: "Sales",
-                data: [168, 385, 201, 298, 187, 195, 291, 110, 215, 390, 280, 112],
+                name: "Pinjaman",
+                data: pinjaman
             }],
-            colors: ["#465fff"],
             chart: {
-                fontFamily: "Outfit, sans-serif",
-                type: "bar",
-                height: 180,
+                type: 'bar',
+                height: 300,
                 toolbar: {
                     show: false
-                }
+                },
+                fontFamily: "Outfit, sans-serif",
             },
+            colors: ["#465fff"],
             plotOptions: {
                 bar: {
                     horizontal: false,
@@ -38,14 +40,6 @@
                     borderRadius: 5,
                     borderRadiusApplication: "end"
                 }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                show: true,
-                width: 4,
-                colors: ["transparent"]
             },
             xaxis: {
                 categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov",
@@ -58,6 +52,17 @@
                     show: false
                 }
             },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                show: true,
+                width: 4,
+                colors: ["transparent"]
+            },
+            yaxis: {
+                title: false
+            },
             legend: {
                 show: true,
                 position: "top",
@@ -67,9 +72,6 @@
                     radius: 99
                 }
             },
-            yaxis: {
-                title: false
-            },
             grid: {
                 yaxis: {
                     lines: {
@@ -77,16 +79,14 @@
                     }
                 }
             },
-            fill: {
-                opacity: 1
-            },
             tooltip: {
-                x: {
-                    show: false
-                },
                 y: {
                     formatter: function(val) {
-                        return val;
+                        return new Intl.NumberFormat("id-ID", {
+                            style: "currency",
+                            currency: "IDR",
+                            minimumFractionDigits: 0
+                        }).format(val);
                     }
                 }
             }

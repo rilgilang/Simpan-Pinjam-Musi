@@ -21,6 +21,7 @@
                         id="eventModalLabel">
                         Tambah Simpanan
                     </h5>
+
                     <p class="text-sm text-gray-500 dark:text-gray-400">
                         Tambah Simpanan yang di setor oleh anggota
                     </p>
@@ -158,10 +159,17 @@
                         </h3>
 
                         @if (auth()->check() && auth()->user()->hasRole('admin'))
-                            <button onclick="openModal()"
-                                class="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-center text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
-                                Tambah Simpanan
-                            </button>
+                            <div class="grid grid-cols-1">
+                                <button onclick="openModal()"
+                                    class="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-center text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
+                                    Tambah Simpanan
+                                </button>
+
+                                <a href="/simpanan/export"
+                                    class="mt-2 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-center text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
+                                    Ekspor Ke PDF
+                                </a>
+                            </div>
                         @endif
                     </div>
 

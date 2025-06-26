@@ -15,12 +15,12 @@
                 @if ((auth()->check() && auth()->user()->hasRole('ketua')) || (auth()->check() && auth()->user()->hasRole('admin')))
                     <span class="text-sm text-gray-500 dark:text-gray-400">Total Anggota Aktif</span>
                     <h4 class="mt-2 text-title-sm font-bold text-gray-800 dark:text-white/90">
-                        142
+                        {{ $result['total_anggota_aktif'] }}
                     </h4>
                 @else
                     <span class="text-sm text-gray-500 dark:text-gray-400">Saldo Simpanan</span>
                     <h4 class="mt-2 text-title-sm font-bold text-gray-800 dark:text-white/90">
-                        142
+                        {{ $result['simpanan'] }}
                     </h4>
                 @endif
 
@@ -46,12 +46,12 @@
                 @if ((auth()->check() && auth()->user()->hasRole('ketua')) || (auth()->check() && auth()->user()->hasRole('admin')))
                     <span class="text-sm text-gray-500 dark:text-gray-400">Total Anggota Non-Aktif</span>
                     <h4 class="mt-2 text-title-sm font-bold text-gray-800 dark:text-white/90">
-                        5
+                        {{ $result['total_anggota_non_aktif'] }}
                     </h4>
                 @else
                     <span class="text-sm text-gray-500 dark:text-gray-400">Total Pinjaman</span>
                     <h4 class="mt-2 text-title-sm font-bold text-gray-800 dark:text-white/90">
-                        5
+                        {{ $result['pinjaman'] }}
                     </h4>
                 @endif
             </div>
@@ -75,7 +75,7 @@
                 <div>
                     <span class="text-sm text-gray-500 dark:text-gray-400">Pinjaman Aktif</span>
                     <h4 class="mt-2 text-title-sm font-bold text-gray-800 dark:text-white/90">
-                        33
+                        {{ $result['pinjaman_aktif'] }}
                     </h4>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                 <div>
                     <span class="text-sm text-gray-500 dark:text-gray-400">Pengajuan Menunggu Persetujuan</span>
                     <h4 class="mt-2 text-title-sm font-bold text-gray-800 dark:text-white/90">
-                        21
+                        {{ $result['pengajuan_pending'] }}
                     </h4>
                 </div>
             </div>

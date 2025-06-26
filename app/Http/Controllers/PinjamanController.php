@@ -8,7 +8,8 @@ use App\Models\IndexSaham;
 use App\Models\PengajuanPinjaman;
 use App\Models\Pinjaman;
 use App\Models\Simpanan;
-use App\Models\SimpleAdditiveWeight;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -531,5 +532,29 @@ class PinjamanController extends Controller
         }
 
         return view("shu", ["result" => $result, "index_saham" => $indexSaham]);
+    }
+
+    public function exportPinjamanToPdf()
+    {
+        // Join pinjaman with anggota and users
+        $pinjaman = Pinjaman::join('anggota', 'anggota.id', '=', 'pinjaman.id_anggota')
+            ->join('users', 'users.id', '=', 'anggota.id_user')
+            ->select(
+                'pinjaman.id',
+                'users.name',
+                'pinjaman.jumlah_pinjaman',
+                'pinjaman.angsuran_per_bulan',
+                'pinjaman.bunga_pinjaman_per_bulan as bunga_per_bulan',
+                'pinjaman.total_pinjaman as total_peminjaman',
+                'pinjaman.status',
+                'pinjaman.created_at'
+            )
+            ->get();
+
+        $pdf = PDF::loadView('exports.pinjaman-list-export', [
+            'pinjaman' => $pinjaman
+        ])->setPaper('a4', 'portrait');
+
+        return $pdf->download('daftar-pinjaman-' . Carbon::now()->format('Ymd_His') . '.pdf');
     }
 }

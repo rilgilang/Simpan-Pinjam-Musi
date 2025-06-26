@@ -35,6 +35,14 @@ Route::get('/pinjaman', [PinjamanController::class, 'pinjamanList'])
     ->middleware(['auth', 'verified'])
     ->name('list-pinjaman');
 
+Route::get('/pinjaman/export', [PinjamanController::class, 'exportPinjamanToPdf'])
+    ->middleware(['role:admin|ketua'])
+    ->name('export-pinjaman');
+
+Route::get('/simpanan/export', [SimpananController::class, 'exportSimpananToPdf'])
+    ->middleware(['role:admin|ketua'])
+    ->name('export-simpanan');
+
 Route::get('/pinjaman/{pinjaman_id}', [PinjamanController::class, 'pinjamanDetail'])
     ->middleware(['auth', 'verified'])
     ->name('detail-pinjaman');
