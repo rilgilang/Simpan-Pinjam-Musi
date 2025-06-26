@@ -40,21 +40,62 @@
                 </div>
 
                 {{-- <!-- Reject Form --> --}}
-                <div id="rejectForm" class="hidden">
+                <div id="rejectForm" class="hidden h-[16rem]">
                     <form method="POST" action="{{ route('reject-pengajuan-pinjaman') }}">
                         @csrf
 
                         <input type="hidden" name="id" id="rejectFormId">
                         <!-- This will be updated dynamically -->
-
                         <div class="modal-body mt-8">
                             <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-400">
                                 Alasan Penolakan
                             </label>
-                            <textarea name="alasan" rows="4"
-                                class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-red-800"></textarea>
+                            <select id="alasanSelect" name="alasan" placeholder="Pilih alasan"
+                                class="w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-red-300 focus:outline-none focus:ring focus:ring-red-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-red-800">
+                                <option value="">Pilih alasan</option>
+                                <option
+                                    value="Mohon maaf, dokumen yang Anda lampirkan belum lengkap. Silakan lengkapi terlebih dahulu untuk dapat diproses lebih lanjut.">
+                                    Mohon maaf, dokumen yang Anda lampirkan belum lengkap. Silakan lengkapi terlebih
+                                    dahulu untuk dapat diproses lebih lanjut.</option>
+                                <option
+                                    value="Pengajuan pinjaman hanya dapat dilakukan setelah memenuhi masa keanggotaan minimum. Saat ini Anda belum memenuhi syarat tersebut.">
+                                    Pengajuan pinjaman hanya dapat dilakukan setelah memenuhi masa keanggotaan minimum.
+                                    Saat ini Anda belum memenuhi syarat tersebut.</option>
+                                <option
+                                    value="Kami menemukan adanya keterlambatan atau tunggakan dari pinjaman sebelumnya. Silakan selesaikan kewajiban tersebut terlebih dahulu.">
+                                    Kami menemukan adanya keterlambatan atau tunggakan dari pinjaman sebelumnya. Silakan
+                                    selesaikan kewajiban tersebut terlebih dahulu.</option>
+                                <option
+                                    value="Nominal pinjaman yang diajukan melebihi batas yang diperbolehkan berdasarkan ketentuan koperasi.">
+                                    Nominal pinjaman yang diajukan melebihi batas yang diperbolehkan berdasarkan
+                                    ketentuan koperasi.</option>
+                                <option
+                                    value="Setelah kami tinjau, kemampuan finansial Anda saat ini belum mencukupi untuk memenuhi kewajiban cicilan bulanan.">
+                                    Setelah kami tinjau, kemampuan finansial Anda saat ini belum mencukupi untuk
+                                    memenuhi kewajiban cicilan bulanan.</option>
+                                <option
+                                    value="Anda masih memiliki pinjaman aktif yang belum lunas. Pengajuan baru hanya dapat dilakukan setelah pinjaman sebelumnya diselesaikan.">
+                                    Anda masih memiliki pinjaman aktif yang belum lunas. Pengajuan baru hanya dapat
+                                    dilakukan setelah pinjaman sebelumnya diselesaikan.</option>
+                                <option
+                                    value="Jaminan yang Anda sertakan belum sesuai atau tidak memenuhi nilai yang disyaratkan.">
+                                    Jaminan yang Anda sertakan belum sesuai atau tidak memenuhi nilai yang disyaratkan.
+                                </option>
+                                <option
+                                    value="Tujuan penggunaan dana tidak sesuai dengan ketentuan atau belum dijelaskan secara rinci.">
+                                    Tujuan penggunaan dana tidak sesuai dengan ketentuan atau belum dijelaskan secara
+                                    rinci.</option>
+                                <option
+                                    value="Terdapat ketidaksesuaian atau keraguan atas keabsahan dokumen yang dilampirkan.">
+                                    Terdapat ketidaksesuaian atau keraguan atas keabsahan dokumen yang dilampirkan.
+                                </option>
+                                <option
+                                    value="Berdasarkan hasil evaluasi dan pertimbangan internal, kami belum dapat menyetujui pengajuan pinjaman Anda saat ini.">
+                                    Berdasarkan hasil evaluasi dan pertimbangan internal, kami belum dapat menyetujui
+                                    pengajuan pinjaman Anda saat ini.</option>
+                            </select>
                         </div>
-                        <div class="modal-footer mt-6 flex items-center gap-3 sm:justify-end">
+                        <div class="modal-footer mt-24 flex items-center gap-3 sm:justify-end">
                             <button type="button" onclick="closeModal()"
                                 class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto">
                                 Close
@@ -65,6 +106,18 @@
                             </button>
                         </div>
                     </form>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            new TomSelect('#alasanSelect', {
+                                create: false,
+                                sortField: {
+                                    field: "text",
+                                    direction: "asc"
+                                }
+                            });
+                        });
+                    </script>
                 </div>
 
                 {{-- Loan Application --}}
@@ -371,9 +424,9 @@
 
                                                         @if ($pinjaman->status_persetujuan_ketua == 'ditolak')
                                                             <p
-                                                                class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm text-sm font-medium text-green-600 dark:bg-green-900/20 dark:text-green-500">
+                                                                class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-500">
                                                                 Ditolak
-                                                                <span class="h-2 w-2 rounded-full bg-green-500"></span>
+                                                                <span class="h-2 w-2 rounded-full bg-red-500"></span>
                                                             </p>
                                                         @elseif($pinjaman->status_persetujuan_ketua == 'menunggu')
                                                             <p
@@ -399,9 +452,9 @@
 
                                                         @if ($pinjaman->status_persetujuan_admin == 'ditolak')
                                                             <p
-                                                                class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm text-sm font-medium text-green-600 dark:bg-green-900/20 dark:text-green-500">
+                                                                class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-500">
                                                                 Ditolak
-                                                                <span class="h-2 w-2 rounded-full bg-green-500"></span>
+                                                                <span class="h-2 w-2 rounded-full bg-red-500"></span>
                                                             </p>
                                                         @elseif($pinjaman->status_persetujuan_admin == 'menunggu')
                                                             <p

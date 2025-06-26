@@ -334,42 +334,43 @@ class PinjamanController extends Controller
         ]);
     }
 
-    public function rejectPengajuanPinjaman($id): View
+    public function rejectPengajuanPinjaman(Request $request)
     {
-        $user = Auth::user(); // Get the authenticated user
+        $request->validate([
+            'id' => 'required|exists:pengajuan_pinjaman,id',
+            'alasan' => 'required|string|max:1000',
+        ]);
 
-        $pengajuan = PengajuanPinjaman::where("id", $id)
-            ->select("*")
-            ->first();
+        $id = $request->id;
+        $alasan = $request->alasan;
+        $user = Auth::user();
 
         try {
             DB::beginTransaction();
 
+            $updateData = [];
+
             if ($user->hasRole("admin")) {
-                PengajuanPinjaman::where("id", $id)->update([
-                    "status_persetujuan_admin" => "ditolak",
-                ]);
+                $updateData['status_persetujuan_admin'] = "ditolak";
+                $updateData['alasan_penolakan_admin'] = $alasan;
             }
 
             if ($user->hasRole("ketua")) {
-                PengajuanPinjaman::where("id", $id)->update([
-                    "status_persetujuan_ketua" => "ditolak",
-                ]);
+                $updateData['status_persetujuan_ketua'] = "ditolak";
+                $updateData['alasan_penolakan_ketua'] = $alasan;
             }
+            
+
+            PengajuanPinjaman::where("id", $id)->update($updateData);
 
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-
             throw $e;
         }
 
-        $pinjaman = PengajuanPinjaman::join(
-            "anggota",
-            "anggota.id",
-            "=",
-            "pengajuan_pinjaman.id_anggota"
-        )
+        // Get updated list
+        $pinjaman = PengajuanPinjaman::join("anggota", "anggota.id", "=", "pengajuan_pinjaman.id_anggota")
             ->join("users", "anggota.id_user", "=", "users.id")
             ->select(
                 "pengajuan_pinjaman.id",
@@ -385,9 +386,7 @@ class PinjamanController extends Controller
             )
             ->get();
 
-        return view("pinjaman/pengajuan-pinjaman-list", [
-            "result" => $pinjaman,
-        ]);
+        return redirect("/pengajuan-pinjaman-list");
     }
 
     private function createPinjaman($tenor, $pengajuan)
