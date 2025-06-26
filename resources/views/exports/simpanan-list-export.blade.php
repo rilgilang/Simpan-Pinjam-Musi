@@ -371,7 +371,7 @@
         </div>
 
         <div class="mt-6 text-center text-sm text-gray-500 print:hidden">
-            Diekspor pada {{ \Carbon\Carbon::now()->translatedFormat('d F Y [pukul] H.i') }}
+            Diekspor pada {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
         </div>
     </div>
 </body>
