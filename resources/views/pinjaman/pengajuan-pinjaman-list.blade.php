@@ -423,11 +423,22 @@
                                                     <div class="flex items-center">
 
                                                         @if ($pinjaman->status_persetujuan_ketua == 'ditolak')
-                                                            <p
-                                                                class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-500">
-                                                                Ditolak
-                                                                <span class="h-2 w-2 rounded-full bg-red-500"></span>
-                                                            </p>
+                                                            <div x-data="{ popover: false }"
+                                                                class="relative inline-block">
+                                                                <p @click.prevent="popover = !popover"
+                                                                    class="inline-flex cursor-pointer items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-500">
+                                                                    Ditolak
+                                                                    <span
+                                                                        class="h-2 w-2 rounded-full bg-red-500"></span>
+                                                                </p>
+
+                                                                <!-- Popover -->
+                                                                <div x-show="popover" @click.outside="popover = false"
+                                                                    x-transition
+                                                                    class="absolute left-0 z-50 mt-2 w-64 rounded-lg border border-gray-300 bg-white p-4 text-sm text-gray-700 shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">
+                                                                    {{ $pinjaman->alasan_penolakan_ketua }}
+                                                                </div>
+                                                            </div>
                                                         @elseif($pinjaman->status_persetujuan_ketua == 'menunggu')
                                                             <p
                                                                 class="inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-sm text-sm font-medium text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-500">
@@ -451,11 +462,22 @@
                                                     <div class="flex items-center">
 
                                                         @if ($pinjaman->status_persetujuan_admin == 'ditolak')
-                                                            <p
-                                                                class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-500">
-                                                                Ditolak
-                                                                <span class="h-2 w-2 rounded-full bg-red-500"></span>
-                                                            </p>
+                                                            <div x-data="{ popover: false }"
+                                                                class="relative inline-block">
+                                                                <p @click.prevent="popover = !popover"
+                                                                    class="inline-flex cursor-pointer items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-500">
+                                                                    Ditolak
+                                                                    <span
+                                                                        class="h-2 w-2 rounded-full bg-red-500"></span>
+                                                                </p>
+
+                                                                <!-- Popover -->
+                                                                <div x-show="popover" @click.outside="popover = false"
+                                                                    x-transition
+                                                                    class="absolute left-0 z-50 mt-2 w-64 rounded-lg border border-gray-300 bg-white p-4 text-sm text-gray-700 shadow-lg dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100">
+                                                                    {{ $pinjaman->alasan_penolakan_admin }}
+                                                                </div>
+                                                            </div>
                                                         @elseif($pinjaman->status_persetujuan_admin == 'menunggu')
                                                             <p
                                                                 class="inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-sm text-sm font-medium text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-500">

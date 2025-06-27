@@ -47,10 +47,6 @@ Route::get('/pinjaman/{pinjaman_id}', [PinjamanController::class, 'pinjamanDetai
     ->middleware(['auth', 'verified'])
     ->name('detail-pinjaman');
 
-Route::get('/pinjaman/{pinjaman_id}', [PinjamanController::class, 'pinjamanDetail'])
-    ->middleware(['auth', 'verified'])
-    ->name('detail-pinjaman');
-
 Route::patch('/update-angsuran/{ud}', [PinjamanController::class, 'updateAngsuran'])
     ->middleware(['role:admin'])
     ->name('update-angsuran');

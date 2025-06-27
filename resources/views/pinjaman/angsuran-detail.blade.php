@@ -146,8 +146,8 @@
 
                                 {{-- Select form to change status --}}
                                 <div>
-                                    @if (auth()->check() && auth()->user()->hasRole('ketua'))
-                                        @if ($item->status === 'sudah dibayar')
+                                    @if ((auth()->check() && auth()->user()->hasRole('ketua')) || (auth()->check() && auth()->user()->hasRole('anggota')))
+                                        @if ($item->status === 'dibayar')
                                             <span
                                                 class="inline-flex items-center gap-1 rounded-full bg-emerald-600/10 px-3 py-1 text-sm font-medium text-emerald-500">
                                                 Sudah Dibayar

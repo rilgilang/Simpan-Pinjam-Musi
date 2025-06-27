@@ -84,7 +84,7 @@ class AnggotaController extends Controller
     public function anggotaDetail($id): View{
 
     $user = User::join('anggota', 'anggota.id_user', '=', 'users.id')
-        ->select('users.id', 'users.name', 'users.email', 'anggota.nik', 'anggota.alamat', 'anggota.nomor_hp', 'anggota.created_at')
+        ->select('users.id', 'users.name', 'users.email', 'anggota.nik', 'anggota.alamat', 'anggota.nomor_hp', 'anggota.created_at', 'anggota.riwayat_pinjaman')
         ->where('users.id', $id)
         ->first();
 

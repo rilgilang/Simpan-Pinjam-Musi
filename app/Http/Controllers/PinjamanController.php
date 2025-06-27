@@ -153,6 +153,8 @@ class PinjamanController extends Controller
                     "pengajuan_pinjaman.total_pinjaman",
                     "pengajuan_pinjaman.status_persetujuan_admin",
                     "pengajuan_pinjaman.status_persetujuan_ketua",
+                    "pengajuan_pinjaman.alasan_penolakan_admin",
+                    "pengajuan_pinjaman.alasan_penolakan_ketua",
                     "pengajuan_pinjaman.created_at as pinjaman_created_at"
                 )
                 ->groupBy(
@@ -169,7 +171,9 @@ class PinjamanController extends Controller
                     "pengajuan_pinjaman.angsuran_per_bulan",
                     "pengajuan_pinjaman.total_pinjaman",
                     "pengajuan_pinjaman.status_persetujuan_admin",
-                    "pengajuan_pinjaman.status_persetujuan_ketua"
+                    "pengajuan_pinjaman.status_persetujuan_ketua",
+                    "pengajuan_pinjaman.alasan_penolakan_admin",
+                    "pengajuan_pinjaman.alasan_penolakan_ketua"
                 )
                 ->get();
 
@@ -190,6 +194,8 @@ class PinjamanController extends Controller
                         "total_pinjaman" => $l->total_pinjaman,
                         "status_persetujuan_admin" => $l->status_persetujuan_admin,
                         "status_persetujuan_ketua" => $l->status_persetujuan_ketua,
+                        "alasan_penolakan_admin" => $l->alasan_penolakan_admin,
+                        "alasan_penolakan_ketua" => $l->alasan_penolakan_ketua,
                         "pinjaman_created_at" => $l->pinjaman_created_at,
                         "eligible" => $eligable,
                     ];

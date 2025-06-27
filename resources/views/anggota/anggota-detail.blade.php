@@ -193,11 +193,31 @@
                                     <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
                                         Kategori Performa
                                     </p>
-                                    <p
-                                        class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-500">
-                                        Jelek
-                                        <span class="h-2 w-2 rounded-full bg-red-500"></span>
-                                    </p>
+
+                                    @switch($user->riwayat_pinjaman)
+                                        @case('macet')
+                                            <p
+                                                class="inline-flex items-center gap-2 rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-600 dark:bg-red-900/20 dark:text-red-500">
+                                                Macet
+                                                <span class="h-2 w-2 rounded-full bg-red-500"></span>
+                                            </p>
+                                        @break
+
+                                        @case('nunggak')
+                                            <p
+                                                class="inline-flex items-center gap-2 rounded-full bg-yellow-100 px-3 py-1 text-sm font-medium text-yellow-600 dark:bg-yellow-900/20 dark:text-yellow-500">
+                                                Nunggak
+                                                <span class="h-2 w-2 rounded-full bg-yellow-500"></span>
+                                            </p>
+                                        @break
+
+                                        @default
+                                            <p
+                                                class="inline-flex items-center gap-2 rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-600 dark:bg-green-900/20 dark:text-green-500">
+                                                Lancar
+                                                <span class="h-2 w-2 rounded-full bg-green-500"></span>
+                                            </p>
+                                    @endswitch
                                 </div>
                             </div>
                         </div>
