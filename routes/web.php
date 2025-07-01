@@ -87,8 +87,8 @@ Route::post('save-simpanan', [SimpananController::class, 'simpananSave'])
     ->middleware(['role:admin'])
     ->name('save-simpanan');
     
-Route::get('/shu', [SahamController::class, 'shuList'])
-    ->middleware(['role:admin'])
+Route::get('/shu', [PinjamanController::class, 'shuList'])
+    ->middleware(['role:admin|ketua'])
     ->name('shu-list');
 
 Route::get('/index-saham', [SahamController::class, 'indexSahamList'])
