@@ -10,27 +10,50 @@ use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class SimpananController extends Controller
 {
     public function simpananList(): View{
-        $simpanan = Simpanan::join('anggota', 'anggota.id', '=', 'simpanan.id_anggota')
-        ->join('users', 'users.id', '=', 'anggota.id_user')
-        ->select('users.name', 'simpanan.simpanan_wajib', 'simpanan.simpanan_pokok', 'simpanan.simpanan_sukarela', 'simpanan.jumlah')
-        ->get();
+        $userId = Auth::id(); // Get the current user's ID
+        $user = Auth::user(); // Get the authenticated user
+        if ($user->hasRole("ketua") || $user->hasRole("admin")) {
+            $simpanan = Simpanan::join('anggota', 'anggota.id', '=', 'simpanan.id_anggota')
+            ->join('users', 'users.id', '=', 'anggota.id_user')
+            ->select('users.name', 'simpanan.simpanan_wajib', 'simpanan.simpanan_pokok', 'simpanan.simpanan_sukarela', 'simpanan.jumlah')
+            ->get();
 
-        $users = User::all();
+            $users = User::all();
 
-        $anggotaList = [];
+            $anggotaList = [];
 
-        foreach ($users as $user) {
-            if ($user->hasRole('anggota')){
-                array_push($anggotaList, $user);
+            foreach ($users as $user) {
+                if ($user->hasRole('anggota')){
+                    array_push($anggotaList, $user);
+                }
             }
+                
+            return view('simpanan/simpanan-list', ["simpanan_list" => $simpanan, "anggota_list" => $anggotaList]);
+        }else {
+            $simpanan = Simpanan::join('anggota', 'anggota.id', '=', 'simpanan.id_anggota')
+            ->join('users', 'users.id', '=', 'anggota.id_user')
+            ->select('users.name', 'simpanan.simpanan_wajib', 'simpanan.simpanan_pokok', 'simpanan.simpanan_sukarela', 'simpanan.jumlah')
+            ->where('users.id', '=', $userId)
+            ->get();
+
+            $users = User::all();
+
+            $anggotaList = [];
+
+            foreach ($users as $user) {
+                if ($user->hasRole('anggota')){
+                    array_push($anggotaList, $user);
+                }
+            }
+                
+            return view('simpanan/simpanan-list', ["simpanan_list" => $simpanan, "anggota_list" => $anggotaList]);            
         }
-            
-        return view('simpanan/simpanan-list', ["simpanan_list" => $simpanan, "anggota_list" => $anggotaList]);
     }
 
      public function exportSimpananToPdf(){
