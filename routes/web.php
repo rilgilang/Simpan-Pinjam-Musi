@@ -87,7 +87,7 @@ Route::post('save-simpanan', [SimpananController::class, 'simpananSave'])
     ->middleware(['role:admin'])
     ->name('save-simpanan');
     
-Route::get('/shu', [PinjamanController::class, 'shuList'])
+Route::get('/shu', [ShuController::class, 'shu-list'])
     ->middleware(['role:admin'])
     ->name('shu-list');
 
