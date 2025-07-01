@@ -57,8 +57,8 @@ class SimpananController extends Controller
     }
 
      public function exportSimpananToPdf(){
-       $simpanan = DB::table('simpanan')
-        ->join('users', 'users.id', '=', 'simpanan.id_anggota')
+        $simpanan = Simpanan::join('anggota', 'anggota.id', '=', 'simpanan.id_anggota')
+            ->join('users', 'users.id', '=', 'anggota.id_user')
         ->select(
             'users.name',
             DB::raw('SUM(simpanan.simpanan_wajib) as total_wajib'),
