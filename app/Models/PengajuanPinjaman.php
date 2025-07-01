@@ -15,6 +15,8 @@ class PengajuanPinjaman extends Model
         'angsuran_per_bulan',
         'status_persetujuan_admin',
         'status_persetujuan_ketua',
+        'alasan_penolakan_admin',
+        'alasan_penolakan_ketua',
         'total_pinjaman'
     ];
 }

@@ -88,7 +88,7 @@ Route::post('save-simpanan', [SimpananController::class, 'simpananSave'])
     ->name('save-simpanan');
     
 Route::get('/shu', [PinjamanController::class, 'shuList'])
-    ->middleware(['role:admin'])
+    ->middleware(['role:admin|ketua'])
     ->name('shu-list');
 
 Route::get('/index-saham', [SahamController::class, 'indexSahamList'])
@@ -96,7 +96,7 @@ Route::get('/index-saham', [SahamController::class, 'indexSahamList'])
     ->name('saham-list');
 
 Route::post('save-index-saham', [SahamController::class, 'indexSahamSave'])
-    ->middleware(['role:admin|ketu'])
+    ->middleware(['role:admin|ketua'])
     ->name('save-index-saham');
 
 require __DIR__.'/auth.php';

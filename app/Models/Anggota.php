@@ -12,6 +12,7 @@ class Anggota extends Model
         'id_user',
         'alamat',
         'nik',
+        'pendapatan',
         'nomor_hp',
         'status',
     ];
