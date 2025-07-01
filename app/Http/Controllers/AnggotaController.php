@@ -18,6 +18,7 @@ class AnggotaController extends Controller
             [
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|max:255',
+                'pendapatan' => 'required|numeric',
                 'password' => 'required|string|max:255',
                 'nomor_hp' => 'required|unique:anggota|string|max:15',
                 'alamat' => 'required|string|max:300',
@@ -25,6 +26,7 @@ class AnggotaController extends Controller
             [
                 'name.required' => 'Nama anggota wajib diisi.',
                 'email.required' => 'Email wajib diisi.',
+                'pendapatan.required' => 'Pendapatan wajib diisi.',
                 'password.required' => 'Password wajib diisi.',
                 'nomor_hp.required' => 'Nomor Handphone wajib diisi.',
                 'alamat.required' => 'Alamat wajib diisi.',
@@ -44,6 +46,7 @@ class AnggotaController extends Controller
             'id_user' => $user['id'],
             'alamat' => $req['alamat'],
             'nik' => $req['nik'],
+            'pendapatan' => $req['pendapatan'],
             'nomor_hp' => $req['nomor_hp'],
             'status' => 'aktif',
         ]);

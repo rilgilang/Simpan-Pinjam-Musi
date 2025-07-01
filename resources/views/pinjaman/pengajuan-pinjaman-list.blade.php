@@ -413,7 +413,7 @@
                                                 <div class="flex items-center">
                                                     <div class="flex items-center">
                                                         <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                            {{ $pinjaman->pinjaman_created_at }}
+                                                            {{ $pinjaman->created_at }}
                                                         </p>
                                                     </div>
                                                 </div>

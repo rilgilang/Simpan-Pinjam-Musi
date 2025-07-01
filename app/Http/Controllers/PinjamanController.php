@@ -109,8 +109,10 @@ class PinjamanController extends Controller
                     (0.15 * $weight['c4']) + 
                     (0.20 * $weight['c5']);
 
+        
 
-        if ($result > 0.777) {
+        if ($result > 0.7) {
+            // dd($result);
             return true;
         }
 
@@ -141,33 +143,33 @@ class PinjamanController extends Controller
                     DB::raw("SUM(simpanan.jumlah) as total_simpanan"),
                     "pengajuan_pinjaman.id",
                     "users.id as user_id",
-                    "users.created_at as user_created_at",
+                    // "users.created_at as user_created_at",
                     "users.name",
                     "anggota.pendapatan",
                     "anggota.riwayat_pinjaman",
                     "pengajuan_pinjaman.id_anggota",
                     "pengajuan_pinjaman.bunga_pinjaman_per_bulan",
                     "pengajuan_pinjaman.jumlah_pinjaman",
-                    "pengajuan_pinjaman.created_at as pengajuan_created_at",
+                    // "pengajuan_pinjaman.created_at as pengajuan_created_at",
                     "pengajuan_pinjaman.angsuran_per_bulan",
                     "pengajuan_pinjaman.total_pinjaman",
                     "pengajuan_pinjaman.status_persetujuan_admin",
                     "pengajuan_pinjaman.status_persetujuan_ketua",
                     "pengajuan_pinjaman.alasan_penolakan_admin",
                     "pengajuan_pinjaman.alasan_penolakan_ketua",
-                    "pengajuan_pinjaman.created_at as pinjaman_created_at"
+                    "pengajuan_pinjaman.created_at"
                 )
                 ->groupBy(
                     "pengajuan_pinjaman.id",
                     "users.id",
-                    "users.created_at",
+                    // "users.created_at",
                     "users.name",
                     "anggota.pendapatan",
                     "anggota.riwayat_pinjaman",
                     "pengajuan_pinjaman.id_anggota",
                     "pengajuan_pinjaman.bunga_pinjaman_per_bulan",
                     "pengajuan_pinjaman.jumlah_pinjaman",
-                    "pengajuan_pinjaman.created_at",
+                    // "pengajuan_pinjaman.pinjaman_created_at",
                     "pengajuan_pinjaman.angsuran_per_bulan",
                     "pengajuan_pinjaman.total_pinjaman",
                     "pengajuan_pinjaman.status_persetujuan_admin",
@@ -223,7 +225,9 @@ class PinjamanController extends Controller
                     "pengajuan_pinjaman.angsuran_per_bulan",
                     "pengajuan_pinjaman.total_pinjaman",
                     "pengajuan_pinjaman.status_persetujuan_admin",
-                    "pengajuan_pinjaman.status_persetujuan_ketua"
+                    "pengajuan_pinjaman.status_persetujuan_ketua",
+                    "pengajuan_pinjaman.alasan_penolakan_admin",
+                    "pengajuan_pinjaman.alasan_penolakan_ketua"
                 )->where('users.id', '=', $userId)
                 ->get();
 
@@ -271,6 +275,8 @@ class PinjamanController extends Controller
             "total_pinjaman" => $req["total_pengajuan"],
             "status_persetujuan_admin" => "menunggu",
             "status_persetujuan_ketua" => "menunggu",
+            "alasan_penolakan_admin" => "",
+            "alasan_penolakan_ketua" => "",
         ]);
 
         $pinjaman = Pinjaman::all()->where("id_anggota", $anggota["id"]);

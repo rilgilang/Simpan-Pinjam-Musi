@@ -15,8 +15,8 @@ use Illuminate\Support\Facades\Redirect;
 class SimpananController extends Controller
 {
     public function simpananList(): View{
-        $simpanan = DB::table('simpanan')
-        ->join('users', 'users.id', '=', 'simpanan.id_anggota')
+        $simpanan = Simpanan::join('anggota', 'anggota.id', '=', 'simpanan.id_anggota')
+        ->join('users', 'users.id', '=', 'anggota.id_user')
         ->select('users.name', 'simpanan.simpanan_wajib', 'simpanan.simpanan_pokok', 'simpanan.simpanan_sukarela', 'simpanan.jumlah')
         ->get();
 
@@ -29,7 +29,7 @@ class SimpananController extends Controller
                 array_push($anggotaList, $user);
             }
         }
-
+            
         return view('simpanan/simpanan-list', ["simpanan_list" => $simpanan, "anggota_list" => $anggotaList]);
     }
 

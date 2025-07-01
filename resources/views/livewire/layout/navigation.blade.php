@@ -258,27 +258,6 @@ new class extends Component {
                                 </svg>
                             </a>
 
-                            <!-- Dropdown Saham Start -->
-                            <div class="translate transform overflow-hidden"
-                                :class="(selected === 'Saham') ? 'block' : 'hidden'">
-                                <ul :class="sidebarToggle ? 'lg:hidden' : 'flex'"
-                                    class="menu-dropdown mt-2 flex flex-col gap-1 pl-9">
-                                    <li>
-                                        <a href="/shu" class="menu-dropdown-item group"
-                                            :class="page === 'daftar-shu' ? 'menu-dropdown-item-active' :
-                                                'menu-dropdown-item-inactive'">
-                                            Sisa Hasil Usaha
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/index-saham" class="menu-dropdown-item group"
-                                            :class="page === 'analytics' ? 'menu-dropdown-item-active' :
-                                                'menu-dropdown-item-inactive'">
-                                            Index Saham
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
                             <!-- Dropdown Pinjaman End -->
                         </li>
 
