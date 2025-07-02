@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Anggota;
+use App\Models\Pinjaman;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
@@ -91,6 +92,22 @@ class AnggotaController extends Controller
         ->where('users.id', $id)
         ->first();
 
-        return view('anggota/anggota-detail', compact('user'));
+    $pinjaman = Pinjaman::join('anggota', 'pinjaman.id_anggota', '=', 'anggota.id')
+        ->join('users', 'anggota.id_user', '=', 'users.id')
+        ->leftJoin('angsuran', 'angsuran.id_pinjaman', '=', 'pinjaman.id')
+        ->where('pinjaman.status', '=', 'belum lunas')
+        ->select(
+        'pinjaman.status', 
+        'pinjaman.total_pinjaman',
+        DB::raw("COALESCE(SUM(CASE WHEN angsuran.status = 'belum dibayar' THEN angsuran.jumlah ELSE 0 END), 0) as total_belum_dibayar"),
+        DB::raw("COALESCE(COUNT(CASE WHEN angsuran.status = 'belum dibayar' THEN 1 END), 0) as total_bulan_belum_bayar")
+        )
+        ->groupBy(
+                    "pinjaman.status",
+                    "pinjaman.total_pinjaman"
+        )
+        ->first();
+        
+        return view('anggota/anggota-detail', compact('user', 'pinjaman'));
     }
 }

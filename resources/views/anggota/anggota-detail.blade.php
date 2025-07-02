@@ -167,7 +167,7 @@
                                         Total Pinjaman
                                     </p>
                                     <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                        Rp12.000.000
+                                        Rp{{ number_format($pinjaman->total_pinjaman, 0, ',', '.') }}
                                     </p>
                                 </div>
 
@@ -176,16 +176,17 @@
                                         Jumlah Tunggakan
                                     </p>
                                     <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                        2 bulan (Rp2.000.000)
+                                        {{ $pinjaman->total_bulan_belum_bayar }} bulan
+                                        (Rp{{ number_format($pinjaman->total_belum_dibayar, 0, ',', '.') }})
                                     </p>
                                 </div>
 
                                 <div>
                                     <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                                        Status Terakhir
+                                        Status Pinjaman Terakhir
                                     </p>
                                     <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                        Menunggak
+                                        {{ $pinjaman->status }}
                                     </p>
                                 </div>
 
