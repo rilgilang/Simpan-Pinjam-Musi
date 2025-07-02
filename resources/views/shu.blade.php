@@ -15,63 +15,127 @@
             </button>
 
             <div class="modal-content custom-scrollbar flex flex-col overflow-y-auto px-2">
-                <div class="modal-header">
-                    <h5 class="modal-title mb-2 text-theme-xl font-semibold text-gray-800 dark:text-white/90 lg:text-2xl"
-                        id="eventModalLabel">
-                        Tambah Index Saham
-                    </h5>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                        Tambah Index Saham Tahun Buku {{ date('Y') - 1 }} - {{ date('Y') }}
-                    </p>
-                </div>
+                <div id="addIndexSaham" class="hidden">
+                    <div class="modal-header">
+                        <h5 class="modal-title mb-2 text-theme-xl font-semibold text-gray-800 dark:text-white/90 lg:text-2xl"
+                            id="eventModalLabel">
+                            Tambah Index Saham
+                        </h5>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Tambah Index Saham Tahun Buku {{ date('Y') - 1 }} - {{ date('Y') }}
+                        </p>
+                    </div>
 
-                <form method="POST" action="{{ route('save-index-saham') }}">
-                    @csrf
-                    <div class="modal-body mt-8 space-y-6">
-                        <!-- Row: Loan Amount & Interest Rate -->
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <!-- Loan Amount -->
-                            <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nilai Index Saham
-                                </label>
-                                <div class="relative">
-                                    <span
-                                        class="absolute left-0 top-1/2 inline-flex h-11 -translate-y-1/2 items-center justify-center border-r border-gray-200 py-3 pl-3.5 pr-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+                    <form method="POST" action="{{ route('save-index-saham') }}">
+                        @csrf
+                        <div class="modal-body mt-8 space-y-6">
+                            <!-- Row: Loan Amount & Interest Rate -->
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                <!-- Loan Amount -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Nilai Index Saham
+                                    </label>
+                                    <div class="relative">
+                                        <span
+                                            class="absolute left-0 top-1/2 inline-flex h-11 -translate-y-1/2 items-center justify-center border-r border-gray-200 py-3 pl-3.5 pr-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
 
-                                    </span>
-                                    <input type="text" name="index_saham" id="index_saham" placeholder="6.9"
-                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-[90px] text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                    @error('index_saham')
-                                        <small class="text-theme-xs text-error-500">{{ $message }}</small>
-                                    @enderror
+                                        </span>
+                                        <input type="text" name="index_saham" id="index_saham" placeholder="6.9"
+                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-[90px] text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                        @error('index_saham')
+                                            <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <!-- Interest Rate -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Tahun
+                                    </label>
+                                    <input type="text" name="tahun" placeholder="{{ date('Y') }}"
+                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Interest Rate -->
-                            <div>
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Tahun
-                                </label>
-                                <input type="text" name="tahun" placeholder="{{ date('Y') }}"
-                                    class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+
+                        <div class="modal-footer mt-6 flex items-center gap-3 sm:justify-end">
+                            <button type="button" onclick="closeModal()"
+                                class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
+                                data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit"
+                                class="btn btn-primary btn-add-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto">
+                                Simpan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="updateIndexSaham" class="hidden">
+                    <div class="modal-header">
+                        <h5 class="modal-title mb-2 text-theme-xl font-semibold text-gray-800 dark:text-white/90 lg:text-2xl"
+                            id="eventModalLabel">
+                            Update Index Saham
+                        </h5>
+                        {{-- <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Update
+                        </p> --}}
+                    </div>
+
+                    <form method="POST" action="{{ route('update-index-saham') }}">
+                        @csrf
+                        <input type="text" name="id" id="indexSahamId" hidden>
+                        <div class="modal-body mt-8 space-y-6">
+                            <!-- Row: Loan Amount & Interest Rate -->
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                <!-- Loan Amount -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Nilai Index Saham
+                                    </label>
+                                    <div class="relative">
+                                        <span
+                                            class="absolute left-0 top-1/2 inline-flex h-11 -translate-y-1/2 items-center justify-center border-r border-gray-200 py-3 pl-3.5 pr-3 text-gray-500 dark:border-gray-800 dark:text-gray-400">
+
+                                        </span>
+                                        <input type="text" name="index_saham" id="update_index_saham"
+                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-[90px] text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                        @error('index_saham')
+                                            <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <!-- Interest Rate -->
+                                <div>
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Tahun
+                                    </label>
+                                    <input type="text" name="tahun" id="update_tahun_index_saham"
+                                        placeholder="{{ date('Y') }}"
+                                        class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                </div>
                             </div>
                         </div>
-                    </div>
 
 
-                    <div class="modal-footer mt-6 flex items-center gap-3 sm:justify-end">
-                        <button type="button" onclick="closeModal()"
-                            class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
-                            data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit"
-                            class="btn btn-primary btn-add-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto">
-                            Simpan
-                        </button>
-                    </div>
-                </form>
+                        <div class="modal-footer mt-6 flex items-center gap-3 sm:justify-end">
+                            <button type="button" onclick="closeModal()"
+                                class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
+                                data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit"
+                                class="btn btn-primary btn-add-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto">
+                                Simpan
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -196,10 +260,16 @@
                                 </h3>
 
 
-                                <button onclick="openModal()"
-                                    class="col-span-1 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-center text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
-                                    +
+                                <button onclick="openModal('addIndexSahamEvent')"
+                                    class="col-span-1 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
+
+                                    <!-- Plus Icon (Heroicons) -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                                    </svg>
                                 </button>
+
 
                             </div>
 
@@ -228,6 +298,14 @@
                                                         </p>
                                                     </div>
                                                 </th>
+                                                <th class="px-5 py-3 sm:px-6">
+                                                    <div class="flex items-center">
+                                                        <p
+                                                            class="text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                                                            Action
+                                                        </p>
+                                                    </div>
+                                                </th>
                                             </tr>
                                         </thead>
 
@@ -250,12 +328,30 @@
                                                         </div>
                                                     </td>
                                                     <td class="px-5 py-4 sm:px-6">
-                                                        <div class="flex items-center">
-                                                            <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                                {{ $shu->tahun }}
-                                                            </p>
+                                                        <p class="text-theme-sm text-gray-500 dark:text-gray-400">
+                                                            {{ $shu->tahun }}
+                                                        </p>
+                                                    </td>
+
+                                                    <td class="px-5 py-4 sm:px-6">
+
+                                                        <div class="flex space-x-2">
+                                                            <!-- Edit Button -->
+                                                            <button class="text-blue-500 hover:text-blue-700"
+                                                                onclick="openModal('updateIndexSahamEvent', {{ $shu->id }},{{ $shu->index_saham }}, {{ $shu->tahun }})"
+                                                                title="Edit">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="h-5 w-5" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    stroke-width="2">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                                                </svg>
+                                                            </button>
                                                         </div>
                                                     </td>
+
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -270,10 +366,25 @@
     </div>
 
     <script>
-        function openModal(data) {
+        function openModal(event, id, value, tahun) {
             document.getElementById("eventModal").style.display = "flex";
-        }
 
+            const addIndexSahamForm = document.getElementById("addIndexSaham");
+            const updateIndexSahamForm = document.getElementById("updateIndexSaham");
+
+            addIndexSahamForm.classList.add("hidden");
+            updateIndexSahamForm.classList.add("hidden");
+
+            if (event === "addIndexSahamEvent") {
+                addIndexSahamForm.classList.remove("hidden");
+            } else {
+                updateIndexSahamForm.classList.remove("hidden");
+
+                document.getElementById("indexSahamId").value = id;
+                document.getElementById("update_index_saham").value = value;
+                document.getElementById("update_tahun_index_saham").value = tahun;
+            }
+        }
         const closeModal = () => {
             document.getElementById("eventModal").style.display = "none";
         };

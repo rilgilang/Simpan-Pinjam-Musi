@@ -99,4 +99,8 @@ Route::post('save-index-saham', [SahamController::class, 'indexSahamSave'])
     ->middleware(['role:admin|ketua'])
     ->name('save-index-saham');
 
+Route::post('update-index-saham', [SahamController::class, 'updateSaham'])
+        ->middleware(['role:ketua|admin'])
+    ->name('update-index-saham');
+
 require __DIR__.'/auth.php';

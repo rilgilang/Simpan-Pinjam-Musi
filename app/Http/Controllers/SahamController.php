@@ -41,4 +41,25 @@ class SahamController extends Controller
         return redirect('shu');
     }
 
+    public function updateSaham(Request $req)
+    {
+
+        $req->validate(
+            [
+                'index_saham' => 'required|numeric',
+                'tahun' => 'required|numeric',
+            ],
+            [
+                'index_saham.required' => 'Id User wajib diisi.',
+                'tahun.required' => 'Simpanan wajib, wajib diisi.',
+            ]
+        );
+
+        IndexSaham::where("id", $req['id'])->update([
+            'index_saham' => $req['index_saham'],
+            'tahun' => $req['tahun'],
+        ]);
+    
+        return redirect('shu');
+    }
 }
