@@ -483,18 +483,9 @@ class PinjamanController extends Controller
 
     public function pinjamanDetail($id): View
     {
-        $pinjaman = Pinjaman::leftJoin(
-            "anggota",
-            "anggota.id",
-            "=",
-            "pinjaman.id_anggota"
-        )
-            ->leftJoin(
-                "pengajuan_pinjaman",
-                "pinjaman.id_pengajuan",
-                "=",
-                "pengajuan_pinjaman.id"
-            )
+        $pinjaman = Pinjaman::leftJoin("anggota", "anggota.id", "=", "pinjaman.id_anggota")
+            ->leftJoin("pengajuan_pinjaman", "pinjaman.id_pengajuan", "=", "pengajuan_pinjaman.id")
+            ->leftJoin("angsuran", "angsuran.id_pinjaman", "=", "pinjaman.id")
             ->leftJoin("users", "anggota.id_user", "=", "users.id")
             ->select(
                 "users.name",
@@ -510,9 +501,27 @@ class PinjamanController extends Controller
                 "pinjaman.angsuran_per_bulan",
                 "pinjaman.total_pinjaman",
                 "pinjaman.created_at",
-                "pengajuan_pinjaman.created_at as tanggal_pengajuan"
+                "pengajuan_pinjaman.created_at as tanggal_pengajuan",
+                DB::raw("COALESCE(SUM(CASE WHEN angsuran.status = 'belum dibayar' THEN angsuran.jumlah ELSE 0 END), 0) as total_belum_dibayar"),
+                DB::raw("COALESCE(COUNT(CASE WHEN angsuran.status = 'belum dibayar' THEN 1 END), 0) as total_bulan_belum_bayar")
             )
             ->where("pinjaman.id", $id)
+            ->groupBy(
+                "users.name",
+                "users.email",
+                "users.created_at",
+                "anggota.nik",
+                "anggota.alamat",
+                "anggota.nomor_hp",
+                "pinjaman.id",
+                "pinjaman.jumlah_pinjaman",
+                "pinjaman.bunga_pinjaman_per_bulan",
+                "pinjaman.status",
+                "pinjaman.angsuran_per_bulan",
+                "pinjaman.total_pinjaman",
+                "pinjaman.created_at",
+                "pengajuan_pinjaman.created_at"
+            )
             ->first();
 
         $angsuran = Angsuran::all()->where("id_pinjaman", $id);

@@ -78,7 +78,7 @@
                                         Bunga Perbulan
                                     </p>
                                     <p class="text-sm font-medium text-gray-800 dark:text-white/90">
-                                        {{ $pinjaman->bunga_pinjaman_per_bulan }}
+                                        {{ $pinjaman->bunga_pinjaman_per_bulan }}%
                                     </p>
                                 </div>
 
@@ -125,6 +125,16 @@
                                     </p>
                                     <p class="text-sm font-medium text-gray-800 dark:text-white/90">
                                         {{ \Carbon\Carbon::parse($pinjaman->tanggal_pengajuan)->translatedFormat('d M Y') }}
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p class="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
+                                        Total yang belum dibayar
+                                    </p>
+                                    <p class="text-sm font-medium text-gray-800 dark:text-white/90">
+                                        {{ $pinjaman->total_bulan_belum_bayar }} bulan
+                                        (Rp{{ number_format($pinjaman->total_belum_dibayar, 0, ',', '.') }})
                                     </p>
                                 </div>
                             </div>
