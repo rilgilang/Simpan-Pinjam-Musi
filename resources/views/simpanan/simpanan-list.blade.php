@@ -247,21 +247,21 @@
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div class="flex items-center">
                                                     <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                        {{ $simpanan->simpanan_wajib }}
+                                                        Rp{{ number_format($simpanan->simpanan_wajib, 0, ',', '.') }}
                                                     </p>
                                                 </div>
                                             </td>
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div class="flex items-center">
                                                     <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                        {{ $simpanan->simpanan_pokok }}
+                                                        Rp{{ number_format($simpanan->simpanan_pokok, 0, ',', '.') }}
                                                     </p>
                                                 </div>
                                             </td>
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div class="flex items-center">
                                                     <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                        {{ $simpanan->simpanan_sukarela }}
+                                                        Rp{{ number_format($simpanan->simpanan_sukarela, 0, ',', '.') }}
                                                     </p>
                                                 </div>
                                             </td>
@@ -269,7 +269,7 @@
                                                 <div class="flex items-center">
                                                     <div class="flex items-center">
                                                         <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                            {{ $simpanan->jumlah }}
+                                                            Rp{{ number_format($simpanan->jumlah, 0, ',', '.') }}
                                                         </p>
                                                     </div>
                                                 </div>

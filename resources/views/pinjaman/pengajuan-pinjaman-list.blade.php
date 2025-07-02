@@ -382,14 +382,14 @@
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div class="flex items-center">
                                                     <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                        {{ $pinjaman->jumlah_pinjaman }}
+                                                        Rp{{ number_format($pinjaman->jumlah_pinjaman, 0, ',', '.') }}
                                                     </p>
                                                 </div>
                                             </td>
                                             <td class="px-5 py-4 sm:px-6">
                                                 <div class="flex items-center">
                                                     <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                        {{ $pinjaman->angsuran_per_bulan }}
+                                                        Rp{{ number_format($pinjaman->angsuran_per_bulan, 0, ',', '.') }}
                                                     </p>
                                                 </div>
                                             </td>
@@ -404,7 +404,7 @@
                                                 <div class="flex items-center">
                                                     <div class="flex items-center">
                                                         <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                            {{ $pinjaman->total_pinjaman }}
+                                                            Rp{{ number_format($pinjaman->total_pinjaman, 0, ',', '.') }}
                                                         </p>
                                                     </div>
                                                 </div>

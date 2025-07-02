@@ -172,7 +172,7 @@
                                                     <td class="px-5 py-4 sm:px-6">
                                                         <div class="flex items-center">
                                                             <p class="text-theme-sm text-gray-500 dark:text-gray-400">
-                                                                {{ $shu['shu_diterima'] }}
+                                                                Rp{{ number_format($shu['shu_diterima'], 0, ',', '.') }}
                                                             </p>
                                                         </div>
                                                     </td>

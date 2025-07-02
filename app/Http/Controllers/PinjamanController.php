@@ -24,14 +24,22 @@ class PinjamanController extends Controller
         $user = Auth::user(); // Get the authenticated user
 
         if ($user->hasRole("ketua") || $user->hasRole("admin")) {
-            $pinjaman = Pinjaman::join(
-                "anggota",
-                "anggota.id",
-                "=",
-                "pinjaman.id_anggota"
-            )
-                ->join("users", "anggota.id_user", "=", "users.id")
+            $pinjaman = Pinjaman::join('anggota', 'anggota.id', '=', 'pinjaman.id_anggota')
+                ->join('users', 'anggota.id_user', '=', 'users.id')
+                ->leftJoin('angsuran', 'angsuran.id_pinjaman', '=', 'pinjaman.id')
                 ->select(
+                    "pinjaman.id",
+                    "users.name",
+                    "pinjaman.id_anggota",
+                    "pinjaman.bunga_pinjaman_per_bulan",
+                    "pinjaman.jumlah_pinjaman",
+                    "pinjaman.created_at",
+                    "pinjaman.angsuran_per_bulan",
+                    "pinjaman.status",
+                    "pinjaman.total_pinjaman",
+                    DB::raw("COALESCE(SUM(CASE WHEN angsuran.status = 'belum dibayar' THEN angsuran.jumlah ELSE 0 END), 0) as total_belum_dibayar")
+                )
+                ->groupBy(
                     "pinjaman.id",
                     "users.name",
                     "pinjaman.id_anggota",
@@ -62,7 +70,8 @@ class PinjamanController extends Controller
                     "pinjaman.created_at",
                     "pinjaman.angsuran_per_bulan",
                     "pinjaman.status",
-                    "pinjaman.total_pinjaman"
+                    "pinjaman.total_pinjaman",
+                    DB::raw("COALESCE(SUM(CASE WHEN angsuran.status = 'belum dibayar' THEN angsuran.jumlah ELSE 0 END), 0) as total_belum_dibayar")
                 )->where('users.id', '=' , $userId)
                 ->get();
 
@@ -196,7 +205,7 @@ class PinjamanController extends Controller
                     "pengajuan_pinjaman.id_anggota",
                     "pengajuan_pinjaman.bunga_pinjaman_per_bulan",
                     "pengajuan_pinjaman.jumlah_pinjaman",
-                    // "pengajuan_pinjaman.pinjaman_created_at",
+                    "pengajuan_pinjaman.created_at",
                     "pengajuan_pinjaman.angsuran_per_bulan",
                     "pengajuan_pinjaman.total_pinjaman",
                     "pengajuan_pinjaman.status_persetujuan_admin",
