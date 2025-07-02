@@ -61,6 +61,7 @@ class PinjamanController extends Controller
                 "pinjaman.id_anggota"
             )
                 ->join("users", "anggota.id_user", "=", "users.id")
+                ->leftJoin('angsuran', 'angsuran.id_pinjaman', '=', 'pinjaman.id')
                 ->select(
                     "pinjaman.id",
                     "users.name",
@@ -73,6 +74,17 @@ class PinjamanController extends Controller
                     "pinjaman.total_pinjaman",
                     DB::raw("COALESCE(SUM(CASE WHEN angsuran.status = 'belum dibayar' THEN angsuran.jumlah ELSE 0 END), 0) as total_belum_dibayar")
                 )->where('users.id', '=' , $userId)
+                  ->groupBy(
+                    "pinjaman.id",
+                    "users.name",
+                    "pinjaman.id_anggota",
+                    "pinjaman.bunga_pinjaman_per_bulan",
+                    "pinjaman.jumlah_pinjaman",
+                    "pinjaman.created_at",
+                    "pinjaman.angsuran_per_bulan",
+                    "pinjaman.status",
+                    "pinjaman.total_pinjaman"
+                )
                 ->get();
 
             return view("pinjaman/pinjaman-list", ["result" => $pinjaman]);
