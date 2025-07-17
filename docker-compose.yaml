@@ -5,7 +5,7 @@ services:
     volumes:
       - .:/var/www/html
     ports:
-      - "9000:9000"
+      - "6969:6969"
     networks:
       - proxy
 
