@@ -4,6 +4,10 @@ services:
     image: ghcr.io/rilgilang/larapeler-simpan-pinjam-musi
     volumes:
       - .:/var/www/html
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.larapelersimpanpinjam.rule=Host(`larapelersimpanpinjam.localhost`)"
+      - "traefik.http.services.larapeler-simpan-pinjam.loadbalancer.server.port=9000"
     ports:
       - "9000:9000"
     networks:
