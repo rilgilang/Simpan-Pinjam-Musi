@@ -37,5 +37,4 @@ USER www-data
 
 EXPOSE 6969
 
-RUN sed -i 's|listen = 9000|listen = 9070|' /usr/local/etc/php-fpm.d/www.conf
 CMD ["php-fpm"]
