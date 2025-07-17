@@ -59,8 +59,11 @@ jobs:
               echo "Pulling latest docker-compose.yaml..."
               cd $VPS_APP_PATH
 
-              echo "Stopping existing container..."
-              docker compose down
+              echo "Starting new container..."
+              docker compose up -d
+
+              # echo "Stopping existing container..."
+              # docker compose down
 
               echo "Delete unused images"
               docker image prune -a -f
