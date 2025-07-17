@@ -35,6 +35,6 @@ RUN chown -R www-data:www-data /var/www/html/
 
 USER www-data
 
-EXPOSE 6969
+EXPOSE 9000
 
 CMD ["php-fpm"]
