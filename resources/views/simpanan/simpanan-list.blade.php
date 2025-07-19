@@ -14,131 +14,263 @@
                         fill="" />
                 </svg>
             </button>
+            <div id="addSimpanan" class="hidden">
+                <div class="modal-content custom-scrollbar flex flex-col overflow-y-auto px-2">
+                    <div class="modal-header">
+                        <h5 class="modal-title mb-2 text-theme-xl font-semibold text-gray-800 dark:text-white/90 lg:text-2xl"
+                            id="eventModalLabel">
+                            Tambah Simpanan
+                        </h5>
 
-            <div class="modal-content custom-scrollbar flex flex-col overflow-y-auto px-2">
-                <div class="modal-header">
-                    <h5 class="modal-title mb-2 text-theme-xl font-semibold text-gray-800 dark:text-white/90 lg:text-2xl"
-                        id="eventModalLabel">
-                        Tambah Simpanan
-                    </h5>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Tambah Simpanan yang di setor oleh anggota
+                        </p>
+                    </div>
 
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
-                        Tambah Simpanan yang di setor oleh anggota
-                    </p>
-                </div>
+                    <form method="POST" action="{{ route('save-simpanan') }}">
+                        @csrf
+                        <div class="modal-body mt-8">
+                            <div>
+                                <div x-data="searchableSelect()" class="relative">
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Nama Anggota
+                                    </label>
 
-                <form method="POST" action="{{ route('save-simpanan') }}">
-                    @csrf
-                    <div class="modal-body mt-8">
-                        <div>
-                            <div x-data="searchableSelect()" class="relative">
-                                <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                    Nama Anggota
-                                </label>
+                                    <input x-model="search" @focus="open = true" @click.away="open = false"
+                                        @keydown.escape="open = false" placeholder="Cari anggota..."
+                                        class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
 
-                                <input x-model="search" @focus="open = true" @click.away="open = false"
-                                    @keydown.escape="open = false" placeholder="Cari anggota..."
-                                    class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30" />
+                                    <ul x-show="open"
+                                        class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-300 bg-white shadow-lg dark:bg-gray-800">
+                                        <template x-for="item in filteredOptions" :key="item.id">
+                                            <li @click="selectOption(item)"
+                                                class="cursor-pointer px-4 py-2 text-sm hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                                                x-text="item.name">
+                                            </li>
+                                        </template>
+                                    </ul>
 
-                                <ul x-show="open"
-                                    class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border border-gray-300 bg-white shadow-lg dark:bg-gray-800">
-                                    <template x-for="item in filteredOptions" :key="item.id">
-                                        <li @click="selectOption(item)"
-                                            class="cursor-pointer px-4 py-2 text-sm hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                                            x-text="item.name">
-                                        </li>
-                                    </template>
-                                </ul>
+                                    <input type="hidden" name="id_user" :value="selected?.id">
+                                    @error('id_user')
+                                        <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                    @enderror
+                                </div>
 
-                                <input type="hidden" name="id_user" :value="selected?.id">
-                                @error('id_user')
-                                    <small class="text-theme-xs text-error-500">{{ $message }}</small>
-                                @enderror
-                            </div>
-
-                            <script>
-                                function searchableSelect() {
-                                    return {
-                                        search: '',
-                                        open: false,
-                                        selected: null,
-                                        options: @json($anggota_list), // Pass from controller: array of { id, name }
-                                        get filteredOptions() {
-                                            return this.options.filter(item =>
-                                                item.name.toLowerCase().includes(this.search.toLowerCase())
-                                            );
-                                        },
-                                        selectOption(item) {
-                                            this.selected = item;
-                                            this.search = item.name;
-                                            this.open = false;
-                                        },
+                                <script>
+                                    function searchableSelect() {
+                                        return {
+                                            search: '',
+                                            open: false,
+                                            selected: null,
+                                            options: @json($anggota_list), // Pass from controller: array of { id, name }
+                                            get filteredOptions() {
+                                                return this.options.filter(item =>
+                                                    item.name.toLowerCase().includes(this.search.toLowerCase())
+                                                );
+                                            },
+                                            selectOption(item) {
+                                                this.selected = item;
+                                                this.search = item.name;
+                                                this.open = false;
+                                            },
+                                        }
                                     }
-                                }
-                            </script>
+                                </script>
 
-                            <div class="mt-6">
-                                <div>
+                                <div class="mt-6">
                                     <div>
-                                        <label
-                                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                            Simpanan Wajib
-                                        </label>
-                                        <input id="event-title" type="text" name="simpanan_wajib"
-                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                        @error('simpanan_wajib')
-                                            <small class="text-theme-xs text-error-500">{{ $message }}</small>
-                                        @enderror
+                                        <div>
+                                            <label
+                                                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                                Simpanan Wajib
+                                            </label>
+                                            <input id="event-title" type="text" name="simpanan_wajib"
+                                                class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                            @error('simpanan_wajib')
+                                                <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
 
-                            <div class="mt-6">
-                                <div>
+                                <div class="mt-6">
                                     <div>
-                                        <label
-                                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                            Simpanan Pokok
-                                        </label>
-                                        <input id="event-title" type="text" name="simpanan_pokok"
-                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                        @error('simpanan_pokok')
-                                            <small class="text-theme-xs text-error-500">{{ $message }}</small>
-                                        @enderror
+                                        <div>
+                                            <label
+                                                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                                Simpanan Pokok
+                                            </label>
+                                            <input id="event-title" type="text" name="simpanan_pokok"
+                                                class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                            @error('simpanan_pokok')
+                                                <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="mt-6">
-                                <div>
+                                <div class="mt-6">
                                     <div>
-                                        <label
-                                            class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                                            Simpanan Sukarela
-                                        </label>
-                                        <input id="event-title" type="text" name="simpanan_sukarela"
-                                            class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
-                                        @error('simpanan_sukarela')
-                                            <small class="text-theme-xs text-error-500">{{ $message }}</small>
-                                        @enderror
+                                        <div>
+                                            <label
+                                                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                                Simpanan Sukarela
+                                            </label>
+                                            <input id="event-title" type="text" name="simpanan_sukarela"
+                                                class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                            @error('simpanan_sukarela')
+                                                <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="modal-footer mt-6 flex items-center gap-3 sm:justify-end">
+                            <button type="button" onclick="closeModal()"
+                                class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
+                                data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit"
+                                class="btn btn-primary btn-add-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto">
+                                Simpan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="updateSimpanan" class="hidden">
+                <div class="modal-content custom-scrollbar flex flex-col overflow-y-auto px-2">
+                    <div class="modal-header">
+                        <h5 class="modal-title mb-2 text-theme-xl font-semibold text-gray-800 dark:text-white/90 lg:text-2xl"
+                            id="eventModalLabel">
+                            Update
+                        </h5>
+
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Update Simpanan yang di setor oleh anggota
+                        </p>    
                     </div>
-                    <div class="modal-footer mt-6 flex items-center gap-3 sm:justify-end">
-                        <button type="button" onclick="closeModal()"
-                            class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
-                            data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit"
-                            class="btn btn-primary btn-add-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto">
-                            Simpan
-                        </button>
+
+                    <form method="POST" action="{{ route('update-simpanan') }}">
+                        @csrf
+                        <div class="modal-body mt-8">
+                            <input type="text" name="id" id="simpananId" hidden>
+                            <div>
+                                <div x-data="searchableSelect()" class="relative">
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Nama Anggota
+                                    </label>
+
+                                   <p id="saver_name"></p>
+                                </div>
+
+                                <div class="mt-6">
+                                    <div>
+                                        <div>
+                                            <label
+                                                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                                Simpanan Wajib
+                                            </label>
+                                            <input id="event-title" type="text" name="simpanan_wajib"
+                                                class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                            @error('simpanan_wajib')
+                                                <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="mt-6">
+                                    <div>
+                                        <div>
+                                            <label
+                                                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                                Simpanan Pokok
+                                            </label>
+                                            <input id="event-title" type="text" name="simpanan_pokok"
+                                                class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                            @error('simpanan_pokok')
+                                                <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-6">
+                                    <div>
+                                        <div>
+                                            <label
+                                                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                                Simpanan Sukarela
+                                            </label>
+                                            <input id="event-title" type="text" name="simpanan_sukarela"
+                                                class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-none focus:ring focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800" />
+                                            @error('simpanan_sukarela')
+                                                <small class="text-theme-xs text-error-500">{{ $message }}</small>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer mt-6 flex items-center gap-3 sm:justify-end">
+                            <button type="button" onclick="closeModal()"
+                                class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
+                                data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit"
+                                class="btn btn-primary btn-add-event flex w-full justify-center rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-brand-600 sm:w-auto">
+                                Simpan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="deleteSimpanan" class="hidden">
+                <div class="modal-content custom-scrollbar flex flex-col overflow-y-auto px-2">
+                    <div class="modal-header">
+                        <h5 class="modal-title mb-2 text-theme-xl font-semibold text-gray-800 dark:text-white/90 lg:text-2xl"
+                            id="eventModalLabel">
+                            Delete Simpanan
+                        </h5>
+
+                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                            Hapus Simpanan yang di setor oleh anggota
+                        </p>    
                     </div>
-                </form>
+
+                    <form method="POST" action="{{ route('delete-simpanan') }}">
+                        @csrf
+                        <div class="modal-body mt-8">
+                            <input type="text" name="id" id="simpananId_delete" hidden>
+                            <div>
+                                <div class="relative">
+                                    <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                                        Apakah anda yakin ingin menghapus simpanan ini?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer mt-6 flex items-center gap-3 sm:justify-end">
+                            <button type="button" onclick="closeModal()"
+                                class="btn modal-close-btn bg-danger-subtle text-danger flex w-full justify-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:w-auto"
+                                data-bs-dismiss="modal">
+                                Tidak
+                            </button>
+                            <button type="submit"
+                                class="btn btn-red btn-add-event flex w-full justify-center rounded-lg bg-red-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-600 sm:w-auto">
+                                Hapus
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -160,7 +292,7 @@
 
                         @if (auth()->check() && auth()->user()->hasRole('admin'))
                             <div class="grid grid-cols-1">
-                                <button onclick="openModal()"
+                                <button onclick="openModal('create')"
                                     class="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-center text-sm font-medium text-gray-700 shadow-theme-xs ring-1 ring-inset ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]">
                                     Tambah Simpanan
                                 </button>
@@ -287,7 +419,7 @@
                                                       <div class="flex space-x-2">
                                                             <!-- Edit Button -->
                                                             <button class="text-blue-500 hover:text-blue-700"
-                                                                onclick="openModal('updateIndexSahamEvent', {{ 2 }},{{ 2 }}, {{ 2}})"
+                                                                onclick="openModal('update', {{$simpanan}})"
                                                                 title="Edit">
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                     class="h-5 w-5" fill="none"
@@ -300,7 +432,7 @@
                                                             </button>
                                                              <!-- Delete Button -->
                                                             <button class="text-red-500 hover:text-red-700"
-                                                                onclick="openModal('updateIndexSahamEvent', {{ 2 }},{{ 2 }}, {{ 2}})"
+                                                                onclick="openModal('delete', {{$simpanan}})"
                                                                 title="Edit">
                                                                <svg xmlns="http://www.w3.org/2000/svg"
                                                                     class="h-5 w-5" fill="none"
@@ -328,12 +460,39 @@
 
     <script>
         function openModal(event, data) {
-            if (event = 'update') {
-                document.getElementsByName("simpanan_wajib")[0].value = data.simpanan_wajib;
-                document.getElementsByName("simpanan_pokok")[0].value = data.simpanan_pokok;
-                document.getElementsByName("simpanan_sukarela")[0].value = data.simpanan_sukarela;
-            }
+            
             document.getElementById("eventModal").style.display = "flex";
+
+            const createForm = document.getElementById("addSimpanan");
+            const updateForm = document.getElementById("updateSimpanan");
+            const deleteForm = document.getElementById("deleteSimpanan");
+
+            createForm.classList.add("hidden");
+            updateForm.classList.add("hidden");
+            deleteForm.classList.add("hidden");
+
+            switch (event) {
+                case "create":
+                    createForm.classList.remove("hidden");
+                    break;
+                case "update":
+                    updateForm.classList.remove("hidden");
+                 
+                    document.getElementById("saver_name").innerText = data.name;
+                    document.getElementById("simpananId").value = data.id;
+                    document.getElementsByName("simpanan_wajib")[0].value = data.simpanan_wajib;
+                    document.getElementsByName("simpanan_pokok")[0].value = data.simpanan_pokok;
+                    document.getElementsByName("simpanan_sukarela")[0].value = data.simpanan_sukarela;
+                    break;
+                case "delete":
+                    deleteForm.classList.remove("hidden");
+                
+                    document.getElementById("simpananId_delete").value = data.id;
+                    break;
+                // You can add more cases here if needed
+                default:
+                    break;
+            }
         }
 
         const closeModal = () => {

@@ -21,7 +21,7 @@ class SimpananController extends Controller
         if ($user->hasRole("ketua") || $user->hasRole("admin")) {
             $simpanan = Simpanan::join('anggota', 'anggota.id', '=', 'simpanan.id_anggota')
             ->join('users', 'users.id', '=', 'anggota.id_user')
-            ->select('users.name', 'simpanan.simpanan_wajib', 'simpanan.simpanan_pokok', 'simpanan.simpanan_sukarela', 'simpanan.jumlah')
+            ->select('simpanan.id', 'users.name', 'simpanan.simpanan_wajib', 'simpanan.simpanan_pokok', 'simpanan.simpanan_sukarela', 'simpanan.jumlah')
             ->get();
 
             $users = User::all();
@@ -113,6 +113,53 @@ class SimpananController extends Controller
             'simpanan_sukarela' => $req['simpanan_sukarela'],
             'jumlah' => $req['simpanan_wajib'] + $req['simpanan_pokok'] + $req['simpanan_sukarela'],
         ]);
+
+    
+        return redirect('simpanan');
+    }
+
+    public function simpananUpdate(Request $req)
+    {
+
+        $req->validate(
+            [
+                'simpanan_wajib' => 'required|numeric',
+                'simpanan_pokok' => 'required|numeric',
+                'simpanan_sukarela' => 'required|numeric',
+            ],
+            [
+                'simpanan_wajib.required' => 'Simpanan wajib, wajib diisi.',
+                'simpanan_pokok.required' => 'Simpanan pokok wajib diisi.',
+                'simpanan_sukarela.required' => 'Simpanan sukarela wajib diisi.',
+            ]
+        );
+
+        $simpanan = Simpanan::where("id", $req['id'])
+        ->update([
+            'simpanan_wajib' => $req['simpanan_wajib'],
+            'simpanan_pokok' => $req['simpanan_pokok'],
+            'simpanan_sukarela' => $req['simpanan_sukarela'],
+            'jumlah' => $req['simpanan_wajib'] + $req['simpanan_pokok'] + $req['simpanan_sukarela'],
+        ]);
+
+    
+        return redirect('simpanan');
+    }
+
+    public function simpananDelete(Request $req)
+    {
+        $req->validate(
+            [
+                'id' => 'required|numeric',
+            ],
+            [
+                'id.required' => 'Simpanan wajib, wajib diisi.',
+            ]
+        );
+
+     
+
+        $simpanan = Simpanan::where("id", $req['id'])->delete();
 
     
         return redirect('simpanan');

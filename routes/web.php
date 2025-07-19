@@ -47,7 +47,7 @@ Route::get('/pinjaman/{pinjaman_id}', [PinjamanController::class, 'pinjamanDetai
     ->middleware(['auth', 'verified'])
     ->name('detail-pinjaman');
 
-Route::patch('/update-angsuran/{ud}', [PinjamanController::class, 'updateAngsuran'])
+Route::patch('/update-angsuran/{id}', [PinjamanController::class, 'updateAngsuran'])
     ->middleware(['role:admin'])
     ->name('update-angsuran');
 
@@ -86,7 +86,15 @@ Route::get('/delete-admin/{id}', [AdminController::class, 'adminDelete'])
 Route::post('save-simpanan', [SimpananController::class, 'simpananSave'])
     ->middleware(['role:admin'])
     ->name('save-simpanan');
-    
+
+Route::post('update-simpanan', [SimpananController::class, 'simpananUpdate'])
+    ->middleware(['role:admin'])
+    ->name('update-simpanan');    
+
+Route::post('delete-simpanan', [SimpananController::class, 'simpananDelete'])
+    ->middleware(['role:admin'])
+    ->name('delete-simpanan');    
+
 Route::get('/shu', [PinjamanController::class, 'shuList'])
     ->middleware(['role:admin|ketua'])
     ->name('shu-list');
